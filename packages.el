@@ -51,3 +51,4 @@
 
 (package! multi-vterm)
 (package! org-pomodoro)
+(package! org-roam)

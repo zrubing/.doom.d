@@ -72,8 +72,6 @@
 
 (setq lsp-java-java-path "/usr/local/Cellar/openjdk@11/11.0.10/bin/java")
 
-(setq org-roam-directory (file-truename "~/org-roam-dir"))
-
 
 (setq lsp-java-vmargs '(
                           "-javaagent:/Users/admin/.m2/repository/org/projectlombok/lombok/1.18.20/lombok-1.18.20.jar"
@@ -86,10 +84,32 @@
                          :path "/usr/local/Cellar/openjdk@11/11.0.10"
                         :default t)])
 
-(setq org-roam-directory (file-truename "~/org-roam-dir"))
 
 
-(setq org-roam-dailies-directory "daily/")
+
+;; roam conf
+;;
+
+(use-package! org-roam
+  :ensure t
+  :init
+  (setq org-roam-v2-ack t)
+  :custom
+  (org-roam-directory (file-truename "~/org-roam-dir"))
+  (org-roam-dailies-directory "daily/")
+  (org-attach-directory "~/org-roam-dir/attach/")
+  :bind (
+         ("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n f" . org-roam-node-find)
+         :map org-mode-map
+         ("C-M-i" . completion-at-point))
+  :config
+  (org-roam-setup))
+
+
+
+
 
 (setq org-roam-dailies-capture-templates
       '(("d" "default" entry
@@ -97,8 +117,33 @@
          :if-new (file+head "%<%Y-%m-%d>.org"
                             "#+title: %<%Y-%m-%d>\n"))))
 
+
+(setq org-roam-mode-section-functions
+      (list #'org-roam-backlinks-section
+            #'org-roam-reflinks-section
+            ;; #'org-roam-unlinked-references-section
+            ))
+
+
+
 (setq url-proxy-services
           '(("http"  . "localhost:1081")
     	("https" . "localhost:1081")))
 
 (setq dash-docs-docsets (list "Spring Framework" "Rust"))
+
+
+(add-hook 'dired-mode-hook
+          (lambda ()
+            (define-key dired-mode-map
+              (kbd "C-c C-x a")
+              #'org-attach-dired-to-subtree)))
+
+
+(add-hook 'dired-mode-hook
+          (lambda ()
+            (define-key dired-mode-map (kbd "C-c C-x c")
+              (lambda ()
+                (interactive)
+                (let ((org-attach-method 'cp))
+                  (call-interactively #'org-attach-dired-to-subtree))))))
