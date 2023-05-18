@@ -81,6 +81,7 @@
 
 
 
+
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
 
@@ -208,3 +209,14 @@
 (use-package! kubernetes-evil
   :ensure t
   :after kubernetes)
+
+;; alias kn='f() { [ "$1" ] && kubectl config set-context --current --namespace $1 || kubectl config view --minify | grep namespace | cut -d" " -f6 ; } ; f'
+;;
+(setq shell-file-name "zsh")
+(setq shell-command-switch "-ic")
+
+(defun kubernetes-switch-namespace (item)
+  (interactive
+   (list (completing-read "Choose an item: " '("sdsx-farmland" "hn-xjj-project" "ysx-rice" "homestead-product-hbdz"))))
+    (shell-command (concat "kn " item))
+  )
