@@ -52,6 +52,14 @@
 
 
 (package! org-roam)
+(package! rime)
+(package! immersive-translate)
+(package! go-mode)
+;;(package! doom-modeline :pin "918730eff72e")
+;;(package! dired+)
+;;(package! dired-recent)
+(package! dired-sidebar)
+(package! telega)
 (package! org-modern
   :recipe (:host github :repo "minad/org-modern"
            :files ("org-modern.el")
@@ -61,9 +69,15 @@
 ;;            :files ("pangu-spacing.el")))
 
 
+;;https://github.com/purcell/exec-path-from-shell
+(package! exec-path-from-shell
+  :recipe (:host github :repo "purcell/exec-path-from-shell"))
+
 (package! mind-wave
   :recipe (:host github :repo "manateelazycat/mind-wave" :build nil))
 
+(package! bard
+  :recipe (:host github :repo "AllTheLife/Bard.el" :build nil))
 
 (package! eaf
   :recipe (:host github :repo "emacs-eaf/emacs-application-framework"

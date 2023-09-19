@@ -75,11 +75,9 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-(setq url-proxy-services
-      '(("http"  . "localhost:7890")
-    	("https" . "localhost:7890")))
-
-
+;; (setq url-proxy-services
+;;       '(("http"  . "localhost:1087")
+;;     	("https" . "localhost:1087")))
 
 
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
@@ -115,29 +113,41 @@
 ;; (setq exec-path (append exec-path '("/Users/admin/pypy3.9-v7.3.11-macos_arm64/bin")))
 ;; (setq lsp-bridge-python-command "pypy3")
 
-(add-load-path! "~/.config/emacs/.local/straight/repos/emacs-application-framework")
-(add-load-path! "~/.config/emacs/.local/straight/repos/eaf-browser")
-(add-load-path! "~/.config/emacs/.local/straight/repos/eaf-pdf-viewer")
-(add-load-path! "~/.config/emacs/.local/straight/repos/eaf-file-sender")
+;;(add-load-path! "~/.config/emacs/.local/straight/repos/emacs-application-framework")
+;;(add-load-path! "~/.config/emacs/.local/straight/repos/eaf-browser")
+;;(add-load-path! "~/.config/emacs/.local/straight/repos/eaf-pdf-viewer")
+;;(add-load-path! "~/.config/emacs/.local/straight/repos/eaf-file-sender")
 (add-load-path! "~/.config/emacs/.local/straight/repos/lsp-bridge")
 
-(add-load-path! "~/.config/emacs/.local/straight/repos/popweb/extension/dict")
-(require 'popweb-dict)
+;;(add-load-path! "~/.config/emacs/.local/straight/repos/popweb/extension/dict")
+;;(require 'popweb-dict)
 
-(add-load-path! "~/.config/emacs/.local/straight/repos/websocket-bridge")
-(add-load-path! "~/.config/emacs/.local/straight/repos/dictionary-overlay")
-(require 'websocket-bridge)
-(require 'dictionary-overlay)
+;;(add-load-path! "~/.config/emacs/.local/straight/repos/websocket-bridge")
+;;(add-load-path! "~/.config/emacs/.local/straight/repos/dictionary-overlay")
+;;(require 'websocket-bridge)
+;;(require 'dictionary-overlay)
 
 
-(require 'eaf)
-(require 'eaf-browser)
-(require 'eaf-file-sender)
-(require 'eaf-pdf-viewer)
+;;(require 'eaf)
+;;(require 'eaf-browser)
+;;(require 'eaf-file-sender)
+;;(require 'eaf-pdf-viewer)
+
+
+;;(add-load-path! "~/.config/emacs/.local/straight/repos/exec-path-from-shell")
+(use-package! exec-path-from-shell
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize))
+  (when (daemonp)
+    (exec-path-from-shell-initialize))
+
+
+  )
 
 
 ;; lombok support
-(setq lombok-path (substitute-in-file-name "$HOME/dotfiles/private/libraries/lombok-1.18.26.jar"))
+(setq lombok-path (substitute-in-file-name "$HOME/libraries/lombok.jar"))
 (setq lsp-bridge-jdtls-jvm-args (list (format "%s%s" "-javaagent:" lombok-path) "-XX:+OptimizeStringConcat" "-XX:MaxMetaspaceSize=1G" "-Xms512m" "-Xmx2048m" "-Xmn512m" "-Xss2m" "-XX:+UseG1GC" "-XX:+UseLargePages"))
 
 ;; (lsp-bridge-jdtls-project-cache-dir "/Users/admin/vscodeWorkspace/homestead-server-dz")
@@ -147,26 +157,52 @@
 (require 'lsp-bridge)
 (require 'lsp-bridge-jdtls)
 
+(global-lsp-bridge-mode)
+(define-key lsp-bridge-mode-map (kbd "s-j") 'lsp-bridge-popup-documentation-scroll-down)
+(define-key lsp-bridge-mode-map (kbd "s-k") 'lsp-bridge-popup-documentation-scroll-up)
+
+;; doom config
+(add-to-list '+lookup-definition-functions #'lsp-bridge-find-def)
+(add-to-list '+lookup-implementations-functions #'lsp-bridge-find-impl)
+(add-to-list '+lookup-references-functions #'lsp-bridge-find-references)
+(add-to-list '+lookup-documentation-functions #'lsp-bridge-popup-documentation)
+
+
+
 ;; (add-load-path! "~/.config/emacs/.local/straight/repos/ejc-sql")
 ;; (require 'ejc-sql)
 
-(global-lsp-bridge-mode)
 
 
 
-(setq eaf-proxy-type "http")
-(setq eaf-proxy-host "127.0.0.1")
-(setq eaf-proxy-port "7890")
+;; (setq eaf-proxy-type "http")
+;; (setq eaf-proxy-host "127.0.0.1")
+;; (setq eaf-proxy-port "1087")
 
 (add-to-list 'load-path "~/.config/emacs/.local/straight/repos/mind-wave")
 (require 'mind-wave)
 ;; (setq mind-wave-enable-log t)
+(add-to-list 'load-path "~/.config/emacs/.local/straight/repos/Bard.el")
+(require 'bard)
+;;(setq bard-http-proxy "http://127.0.0.1:1080") ;; You may need to set up a proxy if you are not in a region or country Google Bard allowed.
 
 
+
+;; https://github.com/emacs-eaf/emacs-application-framework/wiki/Evil
+(add-to-list 'load-path "~/.config/emacs/.local/straight/repos/emacs-application-framework/extension")
 (require 'eaf-evil)
-;; eaf会把C-SPC当成evil的leader-key，在你加载'eaf-evil之后使用eaf时就需要在eaf中键入C-SPC使用evil leader下的键。
-;; 我们只需要将这个键设置为 SPC或你自己的evil-leader-key即可
-(setq eaf-evil-leader-key "SPC")
+
+(define-key key-translation-map (kbd "SPC")
+    (lambda (prompt)
+      (if (derived-mode-p 'eaf-mode)
+          (pcase eaf--buffer-app-name
+            ("browser" (if  eaf-buffer-input-focus
+                           (kbd "SPC")
+                         (kbd eaf-evil-leader-key)))
+            ("pdf-viewer" (kbd eaf-evil-leader-key))
+            ("image-viewer" (kbd eaf-evil-leader-key))
+            (_  (kbd "SPC")))
+        (kbd "SPC"))))
 
 
 
@@ -205,6 +241,23 @@
   (setq kubernetes-poll-frequency 3600
         kubernetes-redraw-frequency 3600))
 
+;; (use-package! dired-sidebar
+;;   :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
+;;   :ensure t
+;;   :commands (dired-sidebar-toggle-sidebar)
+;;   :init
+;;   (add-hook 'dired-sidebar-mode-hook
+;;             (lambda ()
+;;               (unless (file-remote-p default-directory)
+;;                 (auto-revert-mode))))
+;;   :config
+;;   (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
+;;   (push 'rotate-windows dired-sidebar-toggle-hidden-commands)
+
+;;   (setq dired-sidebar-subtree-line-prefix "__")
+;;   (setq dired-sidebar-theme 'nerd)
+;;   (setq dired-sidebar-use-term-integration t)
+;;   (setq dired-sidebar-use-custom-font t))
 
 (use-package! kubernetes-evil
   :ensure t
@@ -213,10 +266,26 @@
 ;; alias kn='f() { [ "$1" ] && kubectl config set-context --current --namespace $1 || kubectl config view --minify | grep namespace | cut -d" " -f6 ; } ; f'
 ;;
 (setq shell-file-name "zsh")
-(setq shell-command-switch "-ic")
+
+(setq shell-command-switch "-lc")
 
 (defun kubernetes-switch-namespace (item)
   (interactive
    (list (completing-read "Choose an item: " '("sdsx-farmland" "hn-xjj-project" "ysx-rice" "homestead-product-hbdz"))))
     (shell-command (concat "kn " item))
   )
+
+
+;; (setq telega-proxies
+;;       (list
+;;        '(:server "127.0.0.1" :port 1087 :enable t
+;;                  :type (:@type "proxyTypeSocks5" :username nil :password nil))
+;;        ))
+
+(setq immersive-translate-backend 'trans)
+
+(use-package! rime
+  :custom
+  (default-input-method "rime"))
+
+(recentf-mode 1)
