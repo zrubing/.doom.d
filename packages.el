@@ -50,7 +50,7 @@
 ;(unpin! t)
 
 
-
+(package! benchmark-init)
 (package! org-roam)
 (package! rime)
 (package! immersive-translate)
@@ -58,7 +58,7 @@
 ;;(package! doom-modeline :pin "918730eff72e")
 ;;(package! dired+)
 ;;(package! dired-recent)
-(package! dired-sidebar)
+;; (package! dired-sidebar)
 (package! telega)
 (package! org-modern
   :recipe (:host github :repo "minad/org-modern"
@@ -84,18 +84,18 @@
                  :build nil))
 
 (package! eaf-browser
-  :recipe (:host github :repo "emacs-eaf/eaf-browser"))
+   :recipe (:host github :repo "emacs-eaf/eaf-browser" :build nil))
 
-(package! eaf-terminal
-  :recipe (:host github :repo "emacs-eaf/eaf-terminal"))
+;; (package! eaf-terminal
+;;   :recipe (:host github :repo "emacs-eaf/eaf-terminal"))
 
 (package! eaf-pdf-viewer
   :recipe (:host github :repo "emacs-eaf/eaf-pdf-viewer"))
 
 
 
-(package! eaf-file-sender
-  :recipe (:host github :repo "emacs-eaf/eaf-file-sender"))
+;; (package! eaf-file-sender
+;;   :recipe (:host github :repo "emacs-eaf/eaf-file-sender"))
 
 (package! kele.el
   :recipe (:host github :repo "jinnovation/kele.el"))
@@ -106,8 +106,8 @@
 
 
 
-(package! magit-popup
-  :recipe (:host github :repo "magit/magit-popup"))
+;; (package! magit-popup
+;;   :recipe (:host github :repo "magit/magit-popup"))
 
 (package! lsp-bridge
   :recipe (:host github :repo "manateelazycat/lsp-bridge"
@@ -116,15 +116,15 @@
 (package! typescript
   :recipe (:host github :repo "emacs-typescript/typescript.el"))
 
-(package! dap-mode
-  :recipe (:host github :repo "emacs-lsp/dap-mode" :build nil))
+;; (package! dap-mode
+;;   :recipe (:host github :repo "emacs-lsp/dap-mode" :build nil))
 
 (package! popweb
   :recipe (:host github :repo "manateelazycat/popweb"
                  :files ("*.el" "*.py" "*.js")))
 
-(package! websocket-bridge
-  :recipe (:host github :repo "ginqi7/websocket-bridge" :build nil))
+;; (package! websocket-bridge
+;;   :recipe (:host github :repo "ginqi7/websocket-bridge" :build nil))
 
 (package! dictionary-overlay
   :recipe (:host github :repo "ginqi7/dictionary-overlay"
@@ -139,8 +139,13 @@
 (package! kubernetes-evil
   :recipe (:host github :repo "kubernetes-el/kubernetes-el" :files ("*.el")))
 
-(package! ejc-sql
-  :recipe (:host github :repo "kostafey/ejc-sql" :build nil))
+;; (package! ejc-sql
+;;   :recipe (:host github :repo "kostafey/ejc-sql" :build nil))
 
 (package! rest-client
   :recipe (:host github :repo "pashky/restclient.el" :build nil))
+
+
+(package! minibuffer-modifier-keys)
+
+;;(package! alert)

@@ -109,75 +109,47 @@
 (setq org-agenda-diary-file "~/org-roam-dir/src/standard-diary") ;;2020-03-02 10:47:06
 (setq diary-file "~/org-roam-dir/src/standard-diary")
 
-;; (setq lsp-bridge-enable-profile t)
-;; (setq exec-path (append exec-path '("/Users/admin/pypy3.9-v7.3.11-macos_arm64/bin")))
-;; (setq lsp-bridge-python-command "pypy3")
 
-;;(add-load-path! "~/.config/emacs/.local/straight/repos/emacs-application-framework")
-;;(add-load-path! "~/.config/emacs/.local/straight/repos/eaf-browser")
-;;(add-load-path! "~/.config/emacs/.local/straight/repos/eaf-pdf-viewer")
-;;(add-load-path! "~/.config/emacs/.local/straight/repos/eaf-file-sender")
-(add-load-path! "~/.config/emacs/.local/straight/repos/lsp-bridge")
+(use-package! lsp-bridge
+    :load-path "~/.config/emacs/.local/straight/repos/lsp-bridge"
+    :custom
+    (lsp-bridge-code-action-enable-popup-menu nil)
 
-;;(add-load-path! "~/.config/emacs/.local/straight/repos/popweb/extension/dict")
-;;(require 'popweb-dict)
-
-;;(add-load-path! "~/.config/emacs/.local/straight/repos/websocket-bridge")
-;;(add-load-path! "~/.config/emacs/.local/straight/repos/dictionary-overlay")
-;;(require 'websocket-bridge)
-;;(require 'dictionary-overlay)
-
-
-;;(require 'eaf)
-;;(require 'eaf-browser)
-;;(require 'eaf-file-sender)
-;;(require 'eaf-pdf-viewer)
-
-
-;;(add-load-path! "~/.config/emacs/.local/straight/repos/exec-path-from-shell")
-(use-package! exec-path-from-shell
-  :config
-  (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize))
-  (when (daemonp)
-    (exec-path-from-shell-initialize))
-
-
+    (setq lombok-path (substitute-in-file-name "$HOME/libraries/lombok.jar"))
+    (setq lsp-bridge-jdtls-jvm-args (list (format "%s%s" "-javaagent:" lombok-path) "-XX:+OptimizeStringConcat" "-XX:MaxMetaspaceSize=1G" "-Xms512m" "-Xmx2048m" "-Xmn512m" "-Xss2m" "-XX:+UseG1GC" "-XX:+UseLargePages"))
+    :config
+    (require 'yasnippet)
+    (yas-global-mode 1)
+    (require 'lsp-bridge-jdtls)
+    (add-to-list '+lookup-definition-functions #'lsp-bridge-find-def)
+    (add-to-list '+lookup-implementations-functions #'lsp-bridge-find-impl)
+    (add-to-list '+lookup-references-functions #'lsp-bridge-find-references)
+    (add-to-list '+lookup-documentation-functions #'lsp-bridge-popup-documentation)
+    (add-to-list '+lookup-type-definition-functions #'lsp-bridge-find-type-def)
+    (define-key evil-normal-state-map "ga" #'lsp-bridge-code-action)
+    (global-lsp-bridge-mode)
+    (define-key lsp-bridge-mode-map (kbd "s-j") 'lsp-bridge-popup-documentation-scroll-down)
+    (define-key lsp-bridge-mode-map (kbd "s-k") 'lsp-bridge-popup-documentation-scroll-up)
   )
 
+(use-package! eaf
+  :load-path "~/.config/emacs/.local/straight/repos/emacs-application-framework"
+  )
 
-;; lombok support
-(setq lombok-path (substitute-in-file-name "$HOME/libraries/lombok.jar"))
-(setq lsp-bridge-jdtls-jvm-args (list (format "%s%s" "-javaagent:" lombok-path) "-XX:+OptimizeStringConcat" "-XX:MaxMetaspaceSize=1G" "-Xms512m" "-Xmx2048m" "-Xmn512m" "-Xss2m" "-XX:+UseG1GC" "-XX:+UseLargePages"))
+(use-package! eaf-pdf-viewer
+  :load-path "~/.config/emacs/.local/straight/repos/eaf-pdf-viewer")
 
-;; (lsp-bridge-jdtls-project-cache-dir "/Users/admin/vscodeWorkspace/homestead-server-dz")
-
-(require 'yasnippet)
-(yas-global-mode 1)
-(require 'lsp-bridge)
-(require 'lsp-bridge-jdtls)
-
-(global-lsp-bridge-mode)
-(define-key lsp-bridge-mode-map (kbd "s-j") 'lsp-bridge-popup-documentation-scroll-down)
-(define-key lsp-bridge-mode-map (kbd "s-k") 'lsp-bridge-popup-documentation-scroll-up)
-
-;; doom config
-(add-to-list '+lookup-definition-functions #'lsp-bridge-find-def)
-(add-to-list '+lookup-implementations-functions #'lsp-bridge-find-impl)
-(add-to-list '+lookup-references-functions #'lsp-bridge-find-references)
-(add-to-list '+lookup-documentation-functions #'lsp-bridge-popup-documentation)
+(use-package! eaf-browser
+  :load-path "~/.config/emacs/.local/straight/repos/eaf-browser"
+  :custom
+  (eaf-browser-continue-where-left-off t)
+  (eaf-browser-enable-adblocker t)
+  (browse-url-browser-function 'eaf-open-browser)
+  :config
+  (defalias 'browse-web #'eaf-open-browser)
+  (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
 
 
-
-;; (add-load-path! "~/.config/emacs/.local/straight/repos/ejc-sql")
-;; (require 'ejc-sql)
-
-
-
-
-;; (setq eaf-proxy-type "http")
-;; (setq eaf-proxy-host "127.0.0.1")
-;; (setq eaf-proxy-port "1087")
 
 (add-to-list 'load-path "~/.config/emacs/.local/straight/repos/mind-wave")
 (require 'mind-wave)
@@ -191,18 +163,6 @@
 ;; https://github.com/emacs-eaf/emacs-application-framework/wiki/Evil
 (add-to-list 'load-path "~/.config/emacs/.local/straight/repos/emacs-application-framework/extension")
 (require 'eaf-evil)
-
-(define-key key-translation-map (kbd "SPC")
-    (lambda (prompt)
-      (if (derived-mode-p 'eaf-mode)
-          (pcase eaf--buffer-app-name
-            ("browser" (if  eaf-buffer-input-focus
-                           (kbd "SPC")
-                         (kbd eaf-evil-leader-key)))
-            ("pdf-viewer" (kbd eaf-evil-leader-key))
-            ("image-viewer" (kbd eaf-evil-leader-key))
-            (_  (kbd "SPC")))
-        (kbd "SPC"))))
 
 
 
@@ -234,12 +194,12 @@
 ;;   )
 
 
-(use-package! kubernetes
-  :ensure t
-  :commands (kubernetes-overview)
-  :config
-  (setq kubernetes-poll-frequency 3600
-        kubernetes-redraw-frequency 3600))
+;; (use-package! kubernetes                ;
+;;   :ensure t
+;;   :commands (kubernetes-overview)
+;;   :config
+;;   (setq kubernetes-poll-frequency 3600
+;;         kubernetes-redraw-frequency 3600))
 
 ;; (use-package! dired-sidebar
 ;;   :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
@@ -259,9 +219,9 @@
 ;;   (setq dired-sidebar-use-term-integration t)
 ;;   (setq dired-sidebar-use-custom-font t))
 
-(use-package! kubernetes-evil
-  :ensure t
-  :after kubernetes)
+;; (use-package! kubernetes-evil
+;;   :ensure t
+;;   :after kubernetes)
 
 ;; alias kn='f() { [ "$1" ] && kubectl config set-context --current --namespace $1 || kubectl config view --minify | grep namespace | cut -d" " -f6 ; } ; f'
 ;;
@@ -269,11 +229,11 @@
 
 (setq shell-command-switch "-lc")
 
-(defun kubernetes-switch-namespace (item)
-  (interactive
-   (list (completing-read "Choose an item: " '("sdsx-farmland" "hn-xjj-project" "ysx-rice" "homestead-product-hbdz"))))
-    (shell-command (concat "kn " item))
-  )
+;; (defun kubernetes-switch-namespace (item)
+;;   (interactive
+;;    (list (completing-read "Choose an item: " '("sdsx-farmland" "hn-xjj-project" "ysx-rice" "homestead-product-hbdz"))))
+;;     (shell-command (concat "kn " item))
+;;   )
 
 
 ;; (setq telega-proxies
@@ -288,4 +248,26 @@
   :custom
   (default-input-method "rime"))
 
-(recentf-mode 1)
+;;(recentf-mode 1)
+
+(add-to-list 'doom-symbol-fallback-font-families "Symbols Nerd Font")
+
+(set-fontset-font
+ t
+ 'symbol
+ (cond
+  ((eq system-type 'windows-nt)
+   (cond
+    ((member "Segoe UI Symbol" (font-family-list)) "Segoe UI Symbol")))
+  ((eq system-type 'darwin)
+   (cond
+    ((member "Apple Symbols" (font-family-list)) "Apple Symbols")))
+  ((eq system-type 'gnu/linux)
+   (cond
+    ((member "Symbola" (font-family-list)) "Symbola")))))
+
+(use-package!
+ minibuffer-modifier-keys
+ :after
+ (minibuffer-modifier-keys-setup t))
+
