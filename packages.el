@@ -148,4 +148,5 @@
 
 (package! minibuffer-modifier-keys)
 
+(package! vue-mode)
 ;;(package! alert)

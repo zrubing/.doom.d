@@ -110,13 +110,34 @@
 (setq diary-file "~/org-roam-dir/src/standard-diary")
 
 
+
+(setq customize-lsp-langserver-dir "~/.config/doom/lsp-bridge-config/langserver")
+(setq customize-lsp-multiserver-dir "~/.config/doom/lsp-bridge-config/multiserver")
+
+
+(defun enable-lsp-bridge()
+  (interactive)
+  (when-let* ((project (project-current))
+              (project-root (cdr project)))
+    (setq-local lsp-bridge-user-langserver-dir customize-lsp-langserver-dir
+                lsp-bridge-user-multiserver-dir customize-lsp-multiserver-dir)
+    )
+  (lsp-bridge-mode))
+
+(setq lsp-bridge-get-multi-lang-server-by-project
+      (lambda (project-path filepath)
+        ;; If typescript file include deno.land url, then use Deno LSP server.
+        (save-excursion
+          (when (string-equal (file-name-extension filepath) "vue")
+            "volar_emmet"))))
+
 (use-package! lsp-bridge
     :load-path "~/.config/emacs/.local/straight/repos/lsp-bridge"
     :custom
     (lsp-bridge-code-action-enable-popup-menu nil)
 
     (setq lombok-path (substitute-in-file-name "$HOME/libraries/lombok.jar"))
-    (setq lsp-bridge-jdtls-jvm-args (list (format "%s%s" "-javaagent:" lombok-path) "-XX:+OptimizeStringConcat" "-XX:MaxMetaspaceSize=1G" "-Xms512m" "-Xmx2048m" "-Xmn512m" "-Xss2m" "-XX:+UseG1GC" "-XX:+UseLargePages"))
+    (setq lsp-bridge-jdtls-jvm-args (list (format "%s%s" "-javaagent:" lombok-path) "-Xms1G" "-Xmx2G"))
     :config
     (require 'yasnippet)
     (yas-global-mode 1)
@@ -127,9 +148,22 @@
     (add-to-list '+lookup-documentation-functions #'lsp-bridge-popup-documentation)
     (add-to-list '+lookup-type-definition-functions #'lsp-bridge-find-type-def)
     (define-key evil-normal-state-map "ga" #'lsp-bridge-code-action)
+
     (global-lsp-bridge-mode)
-    (define-key lsp-bridge-mode-map (kbd "s-j") 'lsp-bridge-popup-documentation-scroll-down)
-    (define-key lsp-bridge-mode-map (kbd "s-k") 'lsp-bridge-popup-documentation-scroll-up)
+    (define-key acm-mode-map (kbd "M-k") 'acm-doc-scroll-down)
+    (define-key acm-mode-map (kbd "M-j") 'acm-doc-scroll-up)
+    (define-key lsp-bridge-mode-map (kbd "M-k") 'lsp-bridge-popup-documentation-scroll-down)
+    (define-key lsp-bridge-mode-map (kbd "M-j") 'lsp-bridge-popup-documentation-scroll-up)
+
+
+        (defadvice load (after give-my-keybindings-priority)
+        "Try to ensure that my keybindings always have priority."
+        (when (not (eq (car (car minor-mode-map-alist)) 'acm-mode))
+        (let ((mykeys (assq 'acm-mode minor-mode-map-alist)))
+                (assq-delete-all 'acm-mode minor-mode-map-alist)
+                (add-to-list 'minor-mode-map-alist mykeys))))
+        (ad-activate 'load)
+
   )
 
 (use-package! eaf
@@ -137,7 +171,12 @@
   )
 
 (use-package! eaf-pdf-viewer
-  :load-path "~/.config/emacs/.local/straight/repos/eaf-pdf-viewer")
+  :load-path "~/.config/emacs/.local/straight/repos/eaf-pdf-viewer"
+  :custom
+  (setq eaf-pdf-dark-mode nil)
+
+  )
+
 
 (use-package! eaf-browser
   :load-path "~/.config/emacs/.local/straight/repos/eaf-browser"
@@ -227,7 +266,7 @@
 ;;
 (setq shell-file-name "zsh")
 
-(setq shell-command-switch "-lc")
+;;(setq shell-command-switch "-lc")
 
 ;; (defun kubernetes-switch-namespace (item)
 ;;   (interactive
