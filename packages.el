@@ -49,6 +49,9 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
+(package! counsel-etags)
+(package! org-download)
+(package! org-pomodoro)
 
 (package! benchmark-init)
 (package! org-roam)
@@ -82,6 +85,9 @@
 (package! eaf
   :recipe (:host github :repo "emacs-eaf/emacs-application-framework"
                  :build nil))
+
+(package! insert-translate-name
+  :recipe (:host github :repo "manateelazycat/insert-translated-name"))
 
 (package! eaf-browser
    :recipe (:host github :repo "emacs-eaf/eaf-browser" :build nil))
@@ -150,3 +156,4 @@
 
 (package! vue-mode)
 ;;(package! alert)
+(package! treesit-auto)

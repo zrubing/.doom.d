@@ -82,30 +82,49 @@
 
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
+(setq tramp-verbose 10)
+(setq directory-abbrev-alist '(("^/ktg-mes" . "/ssh:ktg-mes:~")))
 
-(use-package! org-roam
+
+
+(use-package! counsel-etags)
+(use-package! org-download)
+(use-package! org-pomodoro)
+
+(use-package! treesit-auto
+  :config
+  (setq treesit-auto-install t)
+  (setq treesit-font-lock-level 4)
+  (treesit-auto-add-to-auto-mode-alist)
+  (global-treesit-auto-mode))
+
+
+(use-package org-roam
   :ensure t
   :init
   (setq org-roam-v2-ack t)
   :custom
   (org-roam-directory (file-truename "~/org-roam-dir"))
-  (org-roam-dailies-directory "daily/")
-  (org-attach-directory "~/org-roam-dir/attach/")
-  (add-to-list 'org-tags-exclude-from-inheritance "project")
-
-  :bind (
-         ("C-c n l" . org-roam-buffer-toggle)
-         ("C-c n i" . org-roam-node-insert)
+  :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)
-         :map org-mode-map
-         ("C-M-i" . completion-at-point))
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today))
   :config
-  (org-roam-setup))
+  ;; If you're using a vertical completion framework, you might want a more informative completion interface
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (org-roam-db-autosync-mode)
+  ;; If using org-roam-protocol
+  (require 'org-roam-protocol))
+
 
 
 (setq org-agenda-include-diary t)
 (setq org-time-stamp-custom-formats '("<%Y-%m-%d %a %H:%M>"))
 
+(setq org-agenda-files '("~/org-roam-dir"))
 (setq org-agenda-diary-file "~/org-roam-dir/src/standard-diary") ;;2020-03-02 10:47:06
 (setq diary-file "~/org-roam-dir/src/standard-diary")
 
@@ -115,29 +134,29 @@
 (setq customize-lsp-multiserver-dir "~/.config/doom/lsp-bridge-config/multiserver")
 
 
-(defun enable-lsp-bridge()
-  (interactive)
-  (when-let* ((project (project-current))
-              (project-root (cdr project)))
-    (setq-local lsp-bridge-user-langserver-dir customize-lsp-langserver-dir
-                lsp-bridge-user-multiserver-dir customize-lsp-multiserver-dir)
-    )
-  (lsp-bridge-mode))
+;; (setq lsp-bridge-get-multi-lang-server-by-project
+;;       (lambda (project-path filepath)
+;;           (when (string-equal (file-name-extension filepath) "vue")
+;;             (message "hello world")
+;;             (setq-local lsp-bridge-user-langserver-dir customize-lsp-langserver-dir
+;;                         lsp-bridge-user-multiserver-dir customize-lsp-multiserver-dir)
+;;             "volar_emmet")))
 
-(setq lsp-bridge-get-multi-lang-server-by-project
-      (lambda (project-path filepath)
-        ;; If typescript file include deno.land url, then use Deno LSP server.
-        (save-excursion
-          (when (string-equal (file-name-extension filepath) "vue")
-            "volar_emmet"))))
+(use-package! insert-translated-name
+  :load-path "~/.config/emacs/.local/straight/repos/insert-translated-name")
+
+(setq treemacs-collapse-dirs 5)
 
 (use-package! lsp-bridge
     :load-path "~/.config/emacs/.local/straight/repos/lsp-bridge"
+    :init
+      (setq lombok-path (substitute-in-file-name "$HOME/libraries/lombok.jar"))
+      (setq lsp-bridge-jdtls-jvm-args (list (format "%s%s" "-javaagent:" lombok-path)))
     :custom
     (lsp-bridge-code-action-enable-popup-menu nil)
 
-    (setq lombok-path (substitute-in-file-name "$HOME/libraries/lombok.jar"))
-    (setq lsp-bridge-jdtls-jvm-args (list (format "%s%s" "-javaagent:" lombok-path) "-Xms1G" "-Xmx2G"))
+    (setq-local lsp-bridge-get-project-path-by-filepath 'projectile-project-root)
+
     :config
     (require 'yasnippet)
     (yas-global-mode 1)
@@ -148,12 +167,15 @@
     (add-to-list '+lookup-documentation-functions #'lsp-bridge-popup-documentation)
     (add-to-list '+lookup-type-definition-functions #'lsp-bridge-find-type-def)
     (define-key evil-normal-state-map "ga" #'lsp-bridge-code-action)
+    ;;(define-key lsp-bridge-mode-map (kbd "SPC c x") 'lsp-bridge-diagnostic)
 
     (global-lsp-bridge-mode)
+
     (define-key acm-mode-map (kbd "M-k") 'acm-doc-scroll-down)
     (define-key acm-mode-map (kbd "M-j") 'acm-doc-scroll-up)
     (define-key lsp-bridge-mode-map (kbd "M-k") 'lsp-bridge-popup-documentation-scroll-down)
     (define-key lsp-bridge-mode-map (kbd "M-j") 'lsp-bridge-popup-documentation-scroll-up)
+    (add-hook 'lsp-bridge-ref-mode-hook 'evil-emacs-state)
 
 
         (defadvice load (after give-my-keybindings-priority)
@@ -201,9 +223,7 @@
 
 ;; https://github.com/emacs-eaf/emacs-application-framework/wiki/Evil
 (add-to-list 'load-path "~/.config/emacs/.local/straight/repos/emacs-application-framework/extension")
-(require 'eaf-evil)
-
-
+;;(require 'eaf-evil)
 
 
 ;; (setq lsp-java-maven-download-source t)
@@ -264,7 +284,7 @@
 
 ;; alias kn='f() { [ "$1" ] && kubectl config set-context --current --namespace $1 || kubectl config view --minify | grep namespace | cut -d" " -f6 ; } ; f'
 ;;
-(setq shell-file-name "zsh")
+;;(setq shell-file-name "zsh")
 
 ;;(setq shell-command-switch "-lc")
 
@@ -280,14 +300,16 @@
 ;;        '(:server "127.0.0.1" :port 1087 :enable t
 ;;                  :type (:@type "proxyTypeSocks5" :username nil :password nil))
 ;;        ))
-
+(setq meow-use-clipboard t)
 (setq immersive-translate-backend 'trans)
 
 (use-package! rime
   :custom
   (default-input-method "rime"))
 
-;;(recentf-mode 1)
+(recentf-mode 1)
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)
+
 
 (add-to-list 'doom-symbol-fallback-font-families "Symbols Nerd Font")
 
