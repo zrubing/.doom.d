@@ -40,7 +40,7 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
+(setq org-directory "~/org-roam-dir")
 
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
@@ -84,7 +84,8 @@
 
 (setq tramp-verbose 10)
 (setq directory-abbrev-alist '(("^/ktg-mes" . "/ssh:ktg-mes:~")))
-
+(setq vterm-max-scrollback 100000)
+(setq vterm-kill-buffer-on-exit t)
 
 
 (use-package! counsel-etags)
@@ -150,7 +151,7 @@
 (use-package! lsp-bridge
     :load-path "~/.config/emacs/.local/straight/repos/lsp-bridge"
     :init
-      (setq lombok-path (substitute-in-file-name "$HOME/libraries/lombok.jar"))
+      (setq lombok-path (substitute-in-file-name "$HOME/.m2/repository/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar"))
       (setq lsp-bridge-jdtls-jvm-args (list (format "%s%s" "-javaagent:" lombok-path)))
     :custom
     (lsp-bridge-code-action-enable-popup-menu nil)
@@ -210,6 +211,16 @@
   (defalias 'browse-web #'eaf-open-browser)
   (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
 
+
+(require 'eaf-image-viewer)
+(require 'eaf-markdown-previewer)
+(require 'eaf-org-previewer)
+(require 'eaf-mindmap)
+(require 'eaf-file-browser)
+(require 'eaf-file-sender)
+(require 'eaf-airshare)
+(require 'eaf-jupyter)
+(require 'eaf-markmap)
 
 
 (add-to-list 'load-path "~/.config/emacs/.local/straight/repos/mind-wave")
@@ -284,7 +295,7 @@
 
 ;; alias kn='f() { [ "$1" ] && kubectl config set-context --current --namespace $1 || kubectl config view --minify | grep namespace | cut -d" " -f6 ; } ; f'
 ;;
-;;(setq shell-file-name "zsh")
+(setq shell-file-name "zsh")
 
 ;;(setq shell-command-switch "-lc")
 
@@ -304,6 +315,8 @@
 (setq immersive-translate-backend 'trans)
 
 (use-package! rime
+  :init
+  (setq rime-user-data-dir "~/.config/rime")
   :custom
   (default-input-method "rime"))
 
