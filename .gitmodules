@@ -1,0 +1,4 @@
+[submodule "lsp-bridge"]
+	path = lsp-bridge
+	url = https://github.com/zrubing/lsp-bridge
+	branch = self_langserver_conf

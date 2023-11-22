@@ -20,10 +20,11 @@
 ;;
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
-;;
+(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 13 :weight 'semi-light)
+      doom-variable-pitch-font (font-spec :family "DejaVu Sans Mono" :size 14))
 ;;(setq doom-font (font-spec :family "Fira Code" :size 14 :weight 'semi-light)
 ;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 14))
-;;
+;;(setq doom-font (font-spec :family "Fira Mono" :size 11))
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
 ;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
 ;; refresh your font settings. If Emacs still can't find your font, it likely
@@ -93,12 +94,11 @@
 (use-package! org-pomodoro)
 
 (use-package! treesit-auto
+  :custom
+  (treesit-auto-install 'prompt)
   :config
-  (setq treesit-auto-install t)
-  (setq treesit-font-lock-level 4)
-  (treesit-auto-add-to-auto-mode-alist)
+  (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
-
 
 (use-package org-roam
   :ensure t
@@ -131,28 +131,37 @@
 
 
 
-(setq customize-lsp-langserver-dir "~/.config/doom/lsp-bridge-config/langserver")
-(setq customize-lsp-multiserver-dir "~/.config/doom/lsp-bridge-config/multiserver")
-
-
-;; (setq lsp-bridge-get-multi-lang-server-by-project
-;;       (lambda (project-path filepath)
-;;           (when (string-equal (file-name-extension filepath) "vue")
-;;             (message "hello world")
-;;             (setq-local lsp-bridge-user-langserver-dir customize-lsp-langserver-dir
-;;                         lsp-bridge-user-multiserver-dir customize-lsp-multiserver-dir)
-;;             "volar_emmet")))
 
 (use-package! insert-translated-name
   :load-path "~/.config/emacs/.local/straight/repos/insert-translated-name")
 
 (setq treemacs-collapse-dirs 5)
 
+(use-package! vue-ts-mode
+  :load-path "~/.config/emacs/.local/straight/repos/vue-ts-mode"
+  :config
+  (setq treesit-language-source-alist
+        '((vue "https://github.com/ikatyang/tree-sitter-vue")
+          ;;(css "https://github.com/tree-sitter/tree-sitter-css")
+          ;;(typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+          ))
+  )
+
 (use-package! lsp-bridge
     :load-path "~/.config/emacs/.local/straight/repos/lsp-bridge"
     :init
+
+    (setq lsp-bridge-user-langserver-dir "~/.config/doom/lsp-bridge/langserver"
+                lsp-bridge-user-multiserver-dir "~/.config/doom/lsp-bridge/multiserver")
+
       (setq lombok-path (substitute-in-file-name "$HOME/.m2/repository/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar"))
       (setq lsp-bridge-jdtls-jvm-args (list (format "%s%s" "-javaagent:" lombok-path)))
+      (setq lsp-bridge-multi-lang-server-extension-list
+              '((("css" "less" "scss") . "css_emmet")
+              (("html") . "html_emmet")
+              (("vue") . "volar_emmet")))
+
+
     :custom
     (lsp-bridge-code-action-enable-popup-menu nil)
 
@@ -212,15 +221,15 @@
   (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
 
 
-(require 'eaf-image-viewer)
-(require 'eaf-markdown-previewer)
-(require 'eaf-org-previewer)
-(require 'eaf-mindmap)
-(require 'eaf-file-browser)
-(require 'eaf-file-sender)
-(require 'eaf-airshare)
-(require 'eaf-jupyter)
-(require 'eaf-markmap)
+;; (require 'eaf-image-viewer)
+;; (require 'eaf-markdown-previewer)
+;; (require 'eaf-org-previewer)
+;; (require 'eaf-mindmap)
+;; (require 'eaf-file-browser)
+;; (require 'eaf-file-sender)
+;; (require 'eaf-airshare)
+;; (require 'eaf-jupyter)
+;; (require 'eaf-markmap)
 
 
 (add-to-list 'load-path "~/.config/emacs/.local/straight/repos/mind-wave")

@@ -151,9 +151,11 @@
 (package! rest-client
   :recipe (:host github :repo "pashky/restclient.el" :build nil))
 
+(package! vue-ts-mode
+  :recipe (:host github :repo "8uff3r/vue-ts-mode" :build nil))
 
 (package! minibuffer-modifier-keys)
 
-(package! vue-mode)
+;;(package! vue-mode)
 ;;(package! alert)
 (package! treesit-auto)
