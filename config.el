@@ -84,9 +84,11 @@
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
 (setq tramp-verbose 10)
-(setq directory-abbrev-alist '(("^/ktg-mes" . "/ssh:ktg-mes:~")))
+;;(setq directory-abbrev-alist '(("^/ktg-mes" . "/ssh:ktg-mes:~")))
 (setq vterm-max-scrollback 100000)
 (setq vterm-kill-buffer-on-exit t)
+(setq vterm-buffer-name-string "vterm %s")
+
 
 
 (use-package! counsel-etags)
@@ -135,90 +137,116 @@
 (use-package! insert-translated-name
   :load-path "~/.config/emacs/.local/straight/repos/insert-translated-name")
 
-(setq treemacs-collapse-dirs 5)
 
-(use-package! vue-ts-mode
-  :load-path "~/.config/emacs/.local/straight/repos/vue-ts-mode"
+(use-package! treemacs
+  :init
   :config
-  (setq treesit-language-source-alist
-        '((vue "https://github.com/ikatyang/tree-sitter-vue")
-          ;;(css "https://github.com/tree-sitter/tree-sitter-css")
-          ;;(typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-          ))
+  (setq treemacs-collapse-dirs 5)
+  (treemacs-follow-mode t)
   )
+
+(use-package! web-mode
+  :config
+  (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
+  (setq web-mode-enable-auto-pairing nil)
+
+  )
+;; (use-package! vue-ts-mode
+;;   :load-path "~/.config/emacs/.local/straight/repos/vue-ts-mode"
+;;   :config
+;;   (setq treesit-language-source-alist
+;;         '((vue "https://github.com/ikatyang/tree-sitter-vue")
+;;           ;;(css "https://github.com/tree-sitter/tree-sitter-css")
+;;           ;;(typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+;;           ))
+;;   )
 
 (use-package! lsp-bridge
-    :load-path "~/.config/emacs/.local/straight/repos/lsp-bridge"
-    :init
+  :load-path "~/.config/emacs/.local/straight/repos/lsp-bridge"
+  :init
 
-    (setq lsp-bridge-user-langserver-dir "~/.config/doom/lsp-bridge/langserver"
-                lsp-bridge-user-multiserver-dir "~/.config/doom/lsp-bridge/multiserver")
+  (setq lsp-bridge-user-langserver-dir "~/.config/doom/lsp-bridge/langserver"
+        lsp-bridge-user-multiserver-dir "~/.config/doom/lsp-bridge/multiserver")
 
-      (setq lombok-path (substitute-in-file-name "$HOME/.m2/repository/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar"))
-      (setq lsp-bridge-jdtls-jvm-args (list (format "%s%s" "-javaagent:" lombok-path)))
-      (setq lsp-bridge-multi-lang-server-extension-list
-              '((("css" "less" "scss") . "css_emmet")
-              (("html") . "html_emmet")
-              (("vue") . "volar_emmet")))
+  (setq lombok-path (substitute-in-file-name "$HOME/.m2/repository/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar"))
+  (setq lsp-bridge-jdtls-jvm-args (list (format "%s%s" "-javaagent:" lombok-path)))
+  ;; (setq lsp-bridge-multi-lang-server-extension-list
+  ;;         '((("css" "less" "scss") . "css_emmet")
+  ;;         (("html") . "html_emmet")
+  ;;         (("vue") . "volar_emmet")))
 
-
-    :custom
-    (lsp-bridge-code-action-enable-popup-menu nil)
-
-    (setq-local lsp-bridge-get-project-path-by-filepath 'projectile-project-root)
-
-    :config
-    (require 'yasnippet)
-    (yas-global-mode 1)
-    (require 'lsp-bridge-jdtls)
-    (add-to-list '+lookup-definition-functions #'lsp-bridge-find-def)
-    (add-to-list '+lookup-implementations-functions #'lsp-bridge-find-impl)
-    (add-to-list '+lookup-references-functions #'lsp-bridge-find-references)
-    (add-to-list '+lookup-documentation-functions #'lsp-bridge-popup-documentation)
-    (add-to-list '+lookup-type-definition-functions #'lsp-bridge-find-type-def)
-    (define-key evil-normal-state-map "ga" #'lsp-bridge-code-action)
-    ;;(define-key lsp-bridge-mode-map (kbd "SPC c x") 'lsp-bridge-diagnostic)
-
-    (global-lsp-bridge-mode)
-
-    (define-key acm-mode-map (kbd "M-k") 'acm-doc-scroll-down)
-    (define-key acm-mode-map (kbd "M-j") 'acm-doc-scroll-up)
-    (define-key lsp-bridge-mode-map (kbd "M-k") 'lsp-bridge-popup-documentation-scroll-down)
-    (define-key lsp-bridge-mode-map (kbd "M-j") 'lsp-bridge-popup-documentation-scroll-up)
-    (add-hook 'lsp-bridge-ref-mode-hook 'evil-emacs-state)
+  (setq lsp-bridge-single-lang-server-extension-list
+        '(
+          (("vue") . "volar")
+          (("wxml") . "wxml-language-server")
+          (("html") . "vscode-html-language-server")
+          (("astro") . "astro-ls")
+          (("typ") . "typst-lsp")
+          ))
 
 
-        (defadvice load (after give-my-keybindings-priority)
-        "Try to ensure that my keybindings always have priority."
-        (when (not (eq (car (car minor-mode-map-alist)) 'acm-mode))
-        (let ((mykeys (assq 'acm-mode minor-mode-map-alist)))
-                (assq-delete-all 'acm-mode minor-mode-map-alist)
-                (add-to-list 'minor-mode-map-alist mykeys))))
-        (ad-activate 'load)
-
-  )
-
-(use-package! eaf
-  :load-path "~/.config/emacs/.local/straight/repos/emacs-application-framework"
-  )
-
-(use-package! eaf-pdf-viewer
-  :load-path "~/.config/emacs/.local/straight/repos/eaf-pdf-viewer"
   :custom
-  (setq eaf-pdf-dark-mode nil)
+  (lsp-bridge-code-action-enable-popup-menu nil)
 
-  )
+  (setq-local lsp-bridge-get-project-path-by-filepath 'projectile-project-root)
 
-
-(use-package! eaf-browser
-  :load-path "~/.config/emacs/.local/straight/repos/eaf-browser"
-  :custom
-  (eaf-browser-continue-where-left-off t)
-  (eaf-browser-enable-adblocker t)
-  (browse-url-browser-function 'eaf-open-browser)
   :config
-  (defalias 'browse-web #'eaf-open-browser)
-  (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
+  (require 'yasnippet)
+  (yas-global-mode 1)
+
+
+  (require 'lsp-bridge-jdtls)
+  (add-to-list '+lookup-definition-functions #'lsp-bridge-find-def)
+  (add-to-list '+lookup-implementations-functions #'lsp-bridge-find-impl)
+  (add-to-list '+lookup-references-functions #'lsp-bridge-find-references)
+  (add-to-list '+lookup-documentation-functions #'lsp-bridge-popup-documentation)
+  (add-to-list '+lookup-type-definition-functions #'lsp-bridge-find-type-def)
+  (define-key evil-normal-state-map "ga" #'lsp-bridge-code-action)
+  ;;(define-key lsp-bridge-mode-map (kbd "SPC c x") 'lsp-bridge-diagnostic)
+
+  (global-lsp-bridge-mode)
+
+  (define-key acm-mode-map (kbd "M-k") 'acm-doc-scroll-down)
+  (define-key acm-mode-map (kbd "M-j") 'acm-doc-scroll-up)
+  (define-key lsp-bridge-mode-map (kbd "M-k") 'lsp-bridge-popup-documentation-scroll-down)
+  (define-key lsp-bridge-mode-map (kbd "M-j") 'lsp-bridge-popup-documentation-scroll-up)
+  (add-hook 'lsp-bridge-ref-mode-hook 'evil-emacs-state)
+
+
+  (defadvice load (after give-my-keybindings-priority)
+    "Try to ensure that my keybindings always have priority."
+    (when (not (eq (car (car minor-mode-map-alist)) 'acm-mode))
+      (let ((mykeys (assq 'acm-mode minor-mode-map-alist)))
+        (assq-delete-all 'acm-mode minor-mode-map-alist)
+        (add-to-list 'minor-mode-map-alist mykeys))))
+  (ad-activate 'load)
+
+
+  ;;(setq-hook! 'java-mode-hook +format-with 'lsp-bridge-code-format)
+
+  )
+
+;; (use-package! eaf
+;;   :load-path "~/.config/emacs/.local/straight/repos/emacs-application-framework"
+;;   )
+
+;; (use-package! eaf-pdf-viewer
+;;   :load-path "~/.config/emacs/.local/straight/repos/eaf-pdf-viewer"
+;;   :custom
+;;   (setq eaf-pdf-dark-mode nil)
+
+;;   )
+
+
+;; (use-package! eaf-browser
+;;   :load-path "~/.config/emacs/.local/straight/repos/eaf-browser"
+;;   :custom
+;;   (eaf-browser-continue-where-left-off t)
+;;   (eaf-browser-enable-adblocker t)
+;;   (browse-url-browser-function 'eaf-open-browser)
+;;   :config
+;;   (defalias 'browse-web #'eaf-open-browser)
+;;   (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
 
 
 ;; (require 'eaf-image-viewer)
@@ -235,8 +263,8 @@
 (add-to-list 'load-path "~/.config/emacs/.local/straight/repos/mind-wave")
 (require 'mind-wave)
 ;; (setq mind-wave-enable-log t)
-(add-to-list 'load-path "~/.config/emacs/.local/straight/repos/Bard.el")
-(require 'bard)
+;; (add-to-list 'load-path "~/.config/emacs/.local/straight/repos/Bard.el")
+;; (require 'bard)
 ;;(setq bard-http-proxy "http://127.0.0.1:1080") ;; You may need to set up a proxy if you are not in a region or country Google Bard allowed.
 
 
@@ -260,6 +288,12 @@
 (setq org-file-apps
       '((auto-mode . emacs)
         ("\\.docx\\'" . "open -a /Applications/wpsoffice.app %s")))
+
+(setq org-file-apps
+      '((auto-mode . emacs)
+        ("\\.pdf\\'" . "zathura %s")))
+
+
 ;; (use-package! dap-mode
 ;;   :config
 ;;   (dap-register-debug-template "ysx-rice"
@@ -350,7 +384,73 @@
     ((member "Symbola" (font-family-list)) "Symbola")))))
 
 (use-package!
- minibuffer-modifier-keys
- :after
- (minibuffer-modifier-keys-setup t))
+    minibuffer-modifier-keys
+  :after
+  (minibuffer-modifier-keys-setup t))
 
+(use-package! dape
+
+  :load-path "~/.config/emacs/.local/straight/repos/dape"
+  ;; To use window configuration like gud (gdb-mi)
+  :init
+  (setq dape-buffer-window-arrangment 'gud)
+  :config
+  ;; Info buffers to the right
+  ;; (setq dape-buffer-window-arrangment 'right)
+
+  ;; To not display info and/or buffers on startup
+  ;; (remove-hook 'dape-on-start-hooks 'dape-info)
+  ;; (remove-hook 'dape-on-start-hooks 'dape-repl)
+
+  ;; To display info and/or repl buffers on stopped
+  (add-hook 'dape-on-stopped-hooks 'dape-info)
+  (add-hook 'dape-on-stopped-hooks 'dape-repl)
+
+  ;; By default dape uses gdb keybinding prefix
+  (setq dape-key-prefix "\C-x\C-a")
+
+  ;; Kill compile buffer on build success
+  ;; (add-hook 'dape-compile-compile-hooks 'kill-buffer)
+
+  ;; Save buffers on startup, useful for interpreted languages
+  ;; (add-hook 'dape-on-start-hooks
+  ;;           (defun dape--save-on-start ()
+  ;;             (save-some-buffers t t)))
+
+  ;; Projectile users
+  (setq dape-cwd-fn 'projectile-project-root)
+  )
+
+
+;; (use-package! dired-rsync
+;;   :bind (:map dired-mode-map
+;;               ("C-c C-r" . dired-rsync))
+
+;; (use-package dired-rsync-transient
+;;   :bind (:map dired-mode-map
+;;               ("C-c C-x" . dired-rsync-transient)))
+
+(use-package! window-numbering
+  :init
+  :hook (after-init . window-numbering-mode))
+
+
+
+
+
+;; credit: yorickvP on Github
+(setq wl-copy-process nil)
+(defun wl-copy (text)
+  (setq wl-copy-process (make-process :name "wl-copy"
+                                      :buffer nil
+                                      :command '("wl-copy" "-f" "-n")
+                                      :connection-type 'pipe
+                                      :noquery t))
+  (process-send-string wl-copy-process text)
+  (process-send-eof wl-copy-process))
+(defun wl-paste ()
+  (if (and wl-copy-process (process-live-p wl-copy-process))
+      nil ; should return nil if we're the current paste owner
+    (shell-command-to-string "wl-paste -n | tr -d \r")))
+(setq interprogram-cut-function 'wl-copy)
+(setq interprogram-paste-function 'wl-paste)

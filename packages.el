@@ -154,8 +154,21 @@
 (package! vue-ts-mode
   :recipe (:host github :repo "8uff3r/vue-ts-mode" :build nil))
 
+(package! dape
+  :recipe (:host github :repo "svaante/dape" :build nil))
+
+(package! web-mode)
+
 (package! minibuffer-modifier-keys)
 
 ;;(package! vue-mode)
 ;;(package! alert)
 (package! treesit-auto)
+
+
+(package! dired-rsync)
+
+(package! dired-rsync-transient)
+
+
+(package! window-numbering)
