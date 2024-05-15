@@ -95,6 +95,8 @@
 (use-package! org-download)
 (use-package! org-pomodoro)
 
+(use-package! ejc-sql)
+
 (use-package! treesit-auto
   :custom
   (treesit-auto-install 'prompt)
@@ -454,3 +456,6 @@
     (shell-command-to-string "wl-paste -n | tr -d \r")))
 (setq interprogram-cut-function 'wl-copy)
 (setq interprogram-paste-function 'wl-paste)
+
+
+(load! "ejc-sql-conf")

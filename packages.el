@@ -172,3 +172,8 @@
 
 
 (package! window-numbering)
+
+(package! ejc-sql)
+(package! flx-ido)
+
+(package! auto-complete)
