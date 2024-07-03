@@ -189,3 +189,5 @@
 (package! verb)
 
 (package! journalctl-mode)
+
+(package! eglot-java)
