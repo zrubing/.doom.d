@@ -50,6 +50,8 @@
 ;(unpin! t)
 
 (package! counsel-etags)
+(package! org :pin "39272e2165ad9c49cfa9b5d749a5bb528dbadd87")
+
 (package! org-download)
 (package! org-pomodoro)
 
@@ -163,7 +165,7 @@
 
 ;;(package! vue-mode)
 ;;(package! alert)
-(package! treesit-auto)
+;; (package! treesit-auto)
 
 
 (package! dired-rsync)
@@ -177,3 +179,9 @@
 (package! flx-ido)
 
 (package! auto-complete)
+
+(package! devdocs)
+
+(package! verb)
+
+(package! journalctl-mode)

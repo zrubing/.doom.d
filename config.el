@@ -93,16 +93,15 @@
 
 (use-package! counsel-etags)
 (use-package! org-download)
-(use-package! org-pomodoro)
 
 (use-package! ejc-sql)
 
-(use-package! treesit-auto
-  :custom
-  (treesit-auto-install 'prompt)
-  :config
-  (treesit-auto-add-to-auto-mode-alist 'all)
-  (global-treesit-auto-mode))
+;; (use-package! treesit-auto
+;;   :custom
+;;   (treesit-auto-install 'prompt)
+;;   :config
+;;   (treesit-auto-add-to-auto-mode-alist 'all)
+;;   (global-treesit-auto-mode))
 
 (use-package org-roam
   :ensure t
@@ -147,28 +146,34 @@
   (treemacs-follow-mode t)
   )
 
-(use-package! web-mode
-  :config
-  (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
-  (setq web-mode-enable-auto-pairing nil)
+;; (use-package! web-mode
+;;   :config
+;;   (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
+;;   (setq web-mode-enable-auto-pairing nil)
 
-  )
+;;   )
 ;; (use-package! vue-ts-mode
 ;;   :load-path "~/.config/emacs/.local/straight/repos/vue-ts-mode"
 ;;   :config
 ;;   (setq treesit-language-source-alist
-;;         '((vue "https://github.com/ikatyang/tree-sitter-vue")
-;;           ;;(css "https://github.com/tree-sitter/tree-sitter-css")
-;;           ;;(typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-;;           ))
+;;         ''((vue "https://github.com/tree-sitter-grammars/tree-sitter-vue")
+;;         (css "https://github.com/tree-sitter/tree-sitter-css")
+;;         (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+;;         )
 ;;   )
+;; )
+
+(global-tree-sitter-mode)
+
 
 (use-package! lsp-bridge
   :load-path "~/.config/emacs/.local/straight/repos/lsp-bridge"
   :init
 
-  (setq lsp-bridge-user-langserver-dir "~/.config/doom/lsp-bridge/langserver"
-        lsp-bridge-user-multiserver-dir "~/.config/doom/lsp-bridge/multiserver")
+  ;; (setq lsp-bridge-user-langserver-dir "~/.config/doom/lsp-bridge/langserver"
+  ;;       lsp-bridge-user-multiserver-dir "~/.config/doom/lsp-bridge/multiserver")
+
+  (setq lsp-bridge-enable-with-tramp nil)
 
   (setq lombok-path (substitute-in-file-name "$HOME/.m2/repository/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar"))
   (setq lsp-bridge-jdtls-jvm-args (list (format "%s%s" "-javaagent:" lombok-path)))
@@ -177,14 +182,14 @@
   ;;         (("html") . "html_emmet")
   ;;         (("vue") . "volar_emmet")))
 
-  (setq lsp-bridge-single-lang-server-extension-list
-        '(
-          (("vue") . "volar")
-          (("wxml") . "wxml-language-server")
-          (("html") . "vscode-html-language-server")
-          (("astro") . "astro-ls")
-          (("typ") . "typst-lsp")
-          ))
+  ;; (setq lsp-bridge-single-lang-server-extension-list
+  ;;       '(
+  ;;         (("vue") . "volar")
+  ;;         (("wxml") . "wxml-language-server")
+  ;;         (("html") . "vscode-html-language-server")
+  ;;         (("astro") . "astro-ls")
+  ;;         (("typ") . "typst-lsp")
+  ;;         ))
 
 
   :custom
@@ -309,12 +314,12 @@
 ;;   )
 
 
-;; (use-package! kubernetes                ;
-;;   :ensure t
-;;   :commands (kubernetes-overview)
-;;   :config
-;;   (setq kubernetes-poll-frequency 3600
-;;         kubernetes-redraw-frequency 3600))
+(use-package! kubernetes                ;
+  :ensure t
+  :commands (kubernetes-overview)
+  :config
+  (setq kubernetes-poll-frequency 3600
+        kubernetes-redraw-frequency 3600))
 
 ;; (use-package! dired-sidebar
 ;;   :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
@@ -432,12 +437,15 @@
 ;;   :bind (:map dired-mode-map
 ;;               ("C-c C-x" . dired-rsync-transient)))
 
-(use-package! window-numbering
+;; (use-package! window-numbering
+;;   :init
+;;   :hook (after-init . window-numbering-mode))
+
+
+
+(use-package! devdocs
   :init
-  :hook (after-init . window-numbering-mode))
-
-
-
+  (global-set-key (kbd "C-h D") 'devdocs-lookup))
 
 
 ;; credit: yorickvP on Github
@@ -457,5 +465,24 @@
 (setq interprogram-cut-function 'wl-copy)
 (setq interprogram-paste-function 'wl-paste)
 
+
+;; (setq projectile-mode-line "Projectile")
+(setq tramp-verbose 6)
+
+(setq remote-file-name-inhibit-cache nil)
+(setq vc-ignore-dir-regexp
+      (format "%s\\|%s"
+              vc-ignore-dir-regexp
+              tramp-file-name-regexp))
+
+(setq tramp-verbose 1)
+
+(setq docker-open-hook '())
+
+;;(use-package! journalctl-mode)
+
+(use-package org
+  :mode ("\\.org\\'" . org-mode)
+  :config (define-key org-mode-map (kbd "C-c C-r") verb-command-map))
 
 (load! "ejc-sql-conf")
