@@ -477,6 +477,14 @@
 
 (setq tramp-verbose 1)
 
+
+(use-package eglot-booster
+	:after eglot
+	:config
+        (eglot-booster-mode)
+        (company-mode)
+        )
+
 (setq docker-open-hook '())
 
 ;;(use-package! journalctl-mode)

@@ -159,6 +159,10 @@
 (package! dape
   :recipe (:host github :repo "svaante/dape" :build nil))
 
+(package! eglot-booster
+  :recipe (:host github :repo "jdtsmith/eglot-booster"))
+
+
 (package! web-mode)
 
 (package! minibuffer-modifier-keys)
