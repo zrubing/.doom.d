@@ -166,72 +166,72 @@
 (global-tree-sitter-mode)
 
 
-(use-package! lsp-bridge
-  :load-path "~/.config/emacs/.local/straight/repos/lsp-bridge"
-  :init
+;; (use-package! lsp-bridge
+;;   :load-path "~/.config/emacs/.local/straight/repos/lsp-bridge"
+;;   :init
 
-  ;; (setq lsp-bridge-user-langserver-dir "~/.config/doom/lsp-bridge/langserver"
-  ;;       lsp-bridge-user-multiserver-dir "~/.config/doom/lsp-bridge/multiserver")
+;;   ;; (setq lsp-bridge-user-langserver-dir "~/.config/doom/lsp-bridge/langserver"
+;;   ;;       lsp-bridge-user-multiserver-dir "~/.config/doom/lsp-bridge/multiserver")
 
-  (setq lsp-bridge-enable-with-tramp nil)
+;;   (setq lsp-bridge-enable-with-tramp nil)
 
-  (setq lombok-path (substitute-in-file-name "$HOME/.m2/repository/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar"))
-  (setq lsp-bridge-jdtls-jvm-args (list (format "%s%s" "-javaagent:" lombok-path)))
-  ;; (setq lsp-bridge-multi-lang-server-extension-list
-  ;;         '((("css" "less" "scss") . "css_emmet")
-  ;;         (("html") . "html_emmet")
-  ;;         (("vue") . "volar_emmet")))
+;;   (setq lombok-path (substitute-in-file-name "$HOME/.m2/repository/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar"))
+;;   (setq lsp-bridge-jdtls-jvm-args (list (format "%s%s" "-javaagent:" lombok-path)))
+;;   ;; (setq lsp-bridge-multi-lang-server-extension-list
+;;   ;;         '((("css" "less" "scss") . "css_emmet")
+;;   ;;         (("html") . "html_emmet")
+;;   ;;         (("vue") . "volar_emmet")))
 
-  ;; (setq lsp-bridge-single-lang-server-extension-list
-  ;;       '(
-  ;;         (("vue") . "volar")
-  ;;         (("wxml") . "wxml-language-server")
-  ;;         (("html") . "vscode-html-language-server")
-  ;;         (("astro") . "astro-ls")
-  ;;         (("typ") . "typst-lsp")
-  ;;         ))
-
-
-  :custom
-  (lsp-bridge-code-action-enable-popup-menu nil)
-
-  (setq-local lsp-bridge-get-project-path-by-filepath 'projectile-project-root)
-
-  :config
-  (require 'yasnippet)
-  (yas-global-mode 1)
+;;   ;; (setq lsp-bridge-single-lang-server-extension-list
+;;   ;;       '(
+;;   ;;         (("vue") . "volar")
+;;   ;;         (("wxml") . "wxml-language-server")
+;;   ;;         (("html") . "vscode-html-language-server")
+;;   ;;         (("astro") . "astro-ls")
+;;   ;;         (("typ") . "typst-lsp")
+;;   ;;         ))
 
 
-  (require 'lsp-bridge-jdtls)
-  (add-to-list '+lookup-definition-functions #'lsp-bridge-find-def)
-  (add-to-list '+lookup-implementations-functions #'lsp-bridge-find-impl)
-  (add-to-list '+lookup-references-functions #'lsp-bridge-find-references)
-  (add-to-list '+lookup-documentation-functions #'lsp-bridge-popup-documentation)
-  (add-to-list '+lookup-type-definition-functions #'lsp-bridge-find-type-def)
-  (define-key evil-normal-state-map "ga" #'lsp-bridge-code-action)
-  ;;(define-key lsp-bridge-mode-map (kbd "SPC c x") 'lsp-bridge-diagnostic)
+;;   :custom
+;;   (lsp-bridge-code-action-enable-popup-menu nil)
 
-  (global-lsp-bridge-mode)
+;;   (setq-local lsp-bridge-get-project-path-by-filepath 'projectile-project-root)
 
-  (define-key acm-mode-map (kbd "M-k") 'acm-doc-scroll-down)
-  (define-key acm-mode-map (kbd "M-j") 'acm-doc-scroll-up)
-  (define-key lsp-bridge-mode-map (kbd "M-k") 'lsp-bridge-popup-documentation-scroll-down)
-  (define-key lsp-bridge-mode-map (kbd "M-j") 'lsp-bridge-popup-documentation-scroll-up)
-  (add-hook 'lsp-bridge-ref-mode-hook 'evil-emacs-state)
+;;   :config
+;;   (require 'yasnippet)
+;;   (yas-global-mode 1)
 
 
-  (defadvice load (after give-my-keybindings-priority)
-    "Try to ensure that my keybindings always have priority."
-    (when (not (eq (car (car minor-mode-map-alist)) 'acm-mode))
-      (let ((mykeys (assq 'acm-mode minor-mode-map-alist)))
-        (assq-delete-all 'acm-mode minor-mode-map-alist)
-        (add-to-list 'minor-mode-map-alist mykeys))))
-  (ad-activate 'load)
+;;   (require 'lsp-bridge-jdtls)
+;;   (add-to-list '+lookup-definition-functions #'lsp-bridge-find-def)
+;;   (add-to-list '+lookup-implementations-functions #'lsp-bridge-find-impl)
+;;   (add-to-list '+lookup-references-functions #'lsp-bridge-find-references)
+;;   (add-to-list '+lookup-documentation-functions #'lsp-bridge-popup-documentation)
+;;   (add-to-list '+lookup-type-definition-functions #'lsp-bridge-find-type-def)
+;;   (define-key evil-normal-state-map "ga" #'lsp-bridge-code-action)
+;;   ;;(define-key lsp-bridge-mode-map (kbd "SPC c x") 'lsp-bridge-diagnostic)
+
+;;   (global-lsp-bridge-mode)
+
+;;   (define-key acm-mode-map (kbd "M-k") 'acm-doc-scroll-down)
+;;   (define-key acm-mode-map (kbd "M-j") 'acm-doc-scroll-up)
+;;   (define-key lsp-bridge-mode-map (kbd "M-k") 'lsp-bridge-popup-documentation-scroll-down)
+;;   (define-key lsp-bridge-mode-map (kbd "M-j") 'lsp-bridge-popup-documentation-scroll-up)
+;;   (add-hook 'lsp-bridge-ref-mode-hook 'evil-emacs-state)
 
 
-  ;;(setq-hook! 'java-mode-hook +format-with 'lsp-bridge-code-format)
+;;   (defadvice load (after give-my-keybindings-priority)
+;;     "Try to ensure that my keybindings always have priority."
+;;     (when (not (eq (car (car minor-mode-map-alist)) 'acm-mode))
+;;       (let ((mykeys (assq 'acm-mode minor-mode-map-alist)))
+;;         (assq-delete-all 'acm-mode minor-mode-map-alist)
+;;         (add-to-list 'minor-mode-map-alist mykeys))))
+;;   (ad-activate 'load)
 
-  )
+
+;;   ;;(setq-hook! 'java-mode-hook +format-with 'lsp-bridge-code-format)
+
+;;   )
 
 ;; (use-package! eaf
 ;;   :load-path "~/.config/emacs/.local/straight/repos/emacs-application-framework"
