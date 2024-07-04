@@ -510,3 +510,42 @@
     (define-key eglot-java-mode-map (kbd "C-c l T") #'eglot-java-project-build-task)
     (define-key eglot-java-mode-map (kbd "C-c l R") #'eglot-java-project-build-refresh))
   )
+
+(use-package! eglot
+  :config
+  :hook (((js-ts-mode json-ts-mode yaml-ts-mode typescript-ts-mode java-ts-mode mhtml-mode css-ts-mode vue-ts-mode) . eglot-ensure))
+  :preface
+  (defun vue-eglot-init-options ()
+    (let ((tsdk-path (expand-file-name
+                      "lib"
+                      (string-trim-right (shell-command-to-string "npm list --global --parseable typescript | head -n1")))))
+      `(:typescript (:tsdk ,tsdk-path
+                     :languageFeatures (:completion
+                                        (:defaultTagNameCase "both"
+    					 :defaultAttrNameCase "kebabCase"
+    					 :getDocumentNameCasesRequest nil
+    					 :getDocumentSelectionRequest nil)
+                                        :diagnostics
+                                        (:getDocumentVersionRequest nil))
+                     :documentFeatures (:documentFormatting
+                                        (:defaultPrintWidth 100
+    					 :getDocumentPrintWidthRequest nil)
+                                        :documentSymbol t
+                                        :documentColor t)))))
+  :config
+  (define-derived-mode vue-mode web-mode "Vue")
+  (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
+  (add-to-list 'eglot-server-programs
+               `(vue-mode . ("vue-language-server" "--stdio" :initializationOptions ,(vue-eglot-init-options))))
+
+  ;; project-find-function which uses projectile methods to find
+  ;; the projectile project associated with a directory.
+  ;; If projectile not loaded, or directory is not in a project,
+  ;; hopefully returns nil.
+  (defun me:project-finder (dir)
+    (if (fboundp 'projectile-project-root)
+        (let ((root (projectile-project-root dir)))
+          (and root (cons 'transient root)))))
+  (add-to-list 'project-find-functions #'me:project-finder)
+
+  )
