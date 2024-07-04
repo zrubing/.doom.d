@@ -169,7 +169,7 @@
 
 ;;(package! vue-mode)
 ;;(package! alert)
-;; (package! treesit-auto)
+(package! treesit-auto)
 
 
 (package! dired-rsync)

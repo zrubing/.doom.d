@@ -96,6 +96,10 @@
 
 (use-package! ejc-sql)
 
+(use-package treesit-auto
+  :config
+  (global-treesit-auto-mode))
+
 ;; (use-package! treesit-auto
 ;;   :custom
 ;;   (treesit-auto-install 'prompt)
@@ -163,7 +167,7 @@
 ;;   )
 ;; )
 
-(global-tree-sitter-mode)
+;; (global-tree-sitter-mode)
 
 
 ;; (use-package! lsp-bridge
@@ -497,6 +501,7 @@
 (use-package! eglot-java
   :config
   (add-hook 'java-mode-hook 'eglot-java-mode)
+  (add-hook 'java-ts-mode-hook 'eglot-java-mode)
   (with-eval-after-load 'eglot-java
     (define-key eglot-java-mode-map (kbd "C-c l n") #'eglot-java-file-new)
     (define-key eglot-java-mode-map (kbd "C-c l x") #'eglot-java-run-main)
