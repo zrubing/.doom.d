@@ -96,16 +96,13 @@
 
 (use-package! ejc-sql)
 
-(use-package treesit-auto
-  :config
-  (global-treesit-auto-mode))
 
-;; (use-package! treesit-auto
-;;   :custom
-;;   (treesit-auto-install 'prompt)
-;;   :config
-;;   (treesit-auto-add-to-auto-mode-alist 'all)
-;;   (global-treesit-auto-mode))
+(use-package! treesit-auto
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
 
 (use-package org-roam
   :ensure t
@@ -150,21 +147,15 @@
   (treemacs-follow-mode t)
   )
 
-;; (use-package! web-mode
-;;   :config
-;;   (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
-;;   (setq web-mode-enable-auto-pairing nil)
+(use-package! web-mode
+  :config
+  (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
+  (setq web-mode-enable-auto-pairing nil)
+  )
 
 ;;   )
 ;; (use-package! vue-ts-mode
 ;;   :load-path "~/.config/emacs/.local/straight/repos/vue-ts-mode"
-;;   :config
-;;   (setq treesit-language-source-alist
-;;         ''((vue "https://github.com/tree-sitter-grammars/tree-sitter-vue")
-;;         (css "https://github.com/tree-sitter/tree-sitter-css")
-;;         (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-;;         )
-;;   )
 ;; )
 
 ;; (global-tree-sitter-mode)
@@ -533,10 +524,10 @@
                                         :documentSymbol t
                                         :documentColor t)))))
   :config
-  (define-derived-mode vue-mode web-mode "Vue")
+  (define-derived-mode vue-mode vue-ts-mode "Vue")
   (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
-  (add-to-list 'eglot-server-programs
-               `(vue-mode . ("vue-language-server" "--stdio" :initializationOptions ,(vue-eglot-init-options))))
+  ;; (add-to-list 'eglot-server-programs
+  ;;              `(vue-ts-mode . ("vue-language-server" "--stdio" :initializationOptions ,(vue-eglot-init-options))))
 
   ;; project-find-function which uses projectile methods to find
   ;; the projectile project associated with a directory.
@@ -549,3 +540,11 @@
   (add-to-list 'project-find-functions #'me:project-finder)
 
   )
+
+(add-hook 'python-mode-hook
+          (function (lambda ()
+                      (setq evil-shift-width 4))))
+
+(setq! treesit-auto-langs '(python rust go vue java))
+
+(setq! evil-shift-width 4)
