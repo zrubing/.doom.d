@@ -511,18 +511,18 @@
                       "lib"
                       (string-trim-right (shell-command-to-string "npm list --global --parseable typescript | head -n1")))))
       `(:typescript (:tsdk ,tsdk-path
-                           :languageFeatures (:completion
-                                              (:defaultTagNameCase "both"
-    					                                           :defaultAttrNameCase "kebabCase"
-    					                                           :getDocumentNameCasesRequest nil
-    					                                           :getDocumentSelectionRequest nil)
-                                              :diagnostics
-                                              (:getDocumentVersionRequest nil))
-                           :documentFeatures (:documentFormatting
-                                              (:defaultPrintWidth 100
-    					                                          :getDocumentPrintWidthRequest nil)
-                                              :documentSymbol t
-                                              :documentColor t)))))
+                     :languageFeatures (:completion
+                                        (:defaultTagNameCase "both"
+    					 :defaultAttrNameCase "kebabCase"
+    					 :getDocumentNameCasesRequest nil
+    					 :getDocumentSelectionRequest nil)
+                                        :diagnostics
+                                        (:getDocumentVersionRequest nil))
+                     :documentFeatures (:documentFormatting
+                                        (:defaultPrintWidth 100
+    					 :getDocumentPrintWidthRequest nil)
+                                        :documentSymbol t
+                                        :documentColor t)))))
   :config
   (define-derived-mode vue-mode web-mode "Vue")
   (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
@@ -530,6 +530,15 @@
 
   (add-to-list 'eglot-server-programs
                `(vue-mode . ("vue-language-server" "--stdio" :initializationOptions ,(vue-eglot-init-options))))
+
+  ;;rust
+  (add-hook 'rust-mode-hook 'eglot-ensure)
+
+  (add-to-list 'eglot-server-programs
+               '((rust-ts-mode rust-mode) .
+                 ("rust-analyzer" :initializationOptions (:check (:command "clippy")))))
+
+
 
   ;; project-find-function which uses projectile methods to find
   ;; the projectile project associated with a directory.
@@ -550,3 +559,5 @@
 ;;(setq! treesit-auto-langs '(python rust go vue java))
 
 (setq! evil-shift-width 4)
+
+(with-eval-after-load 'company (define-key company-active-map (kbd "TAB") 'company-complete-selection) (define-key company-active-map (kbd "<tab>") 'company-complete-selection))
