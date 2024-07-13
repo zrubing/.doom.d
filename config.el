@@ -9,6 +9,9 @@
 (setq user-full-name "John Doe"
       user-mail-address "john@doe.com")
 
+(setq auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc"))
+
+
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
 ;; - `doom-font' -- the primary font to use
@@ -342,6 +345,38 @@
 ;;
 (setq shell-file-name "zsh")
 
+;; devcontainer
+(add-to-list 'tramp-remote-path "/root/.local/bin")
+
+
+
+(setq! enable-remote-dir-locals t)
+
+
+(defun my-reload-dir-locals-for-current-buffer ()
+  "reload dir locals for the current buffer"
+  (interactive)
+  (let ((enable-local-variables :all))
+    (hack-dir-local-variables-non-file-buffer)))
+(defun my-reload-dir-locals-for-all-buffer-in-this-directory ()
+  "For every buffer with the same `default-directory` as the
+current buffer's, reload dir-locals."
+  (interactive)
+  (let ((dir default-directory))
+    (dolist (buffer (buffer-list))
+      (with-current-buffer buffer
+        (when (equal default-directory dir)
+          (my-reload-dir-locals-for-current-buffer))))))
+
+(add-hook 'emacs-lisp-mode-hook
+          (defun enable-autoreload-for-dir-locals ()
+            (when (and (buffer-file-name)
+                       (equal dir-locals-file
+                              (file-name-nondirectory (buffer-file-name))))
+              (add-hook 'after-save-hook
+                        'my-reload-dir-locals-for-all-buffer-in-this-directory
+                        nil t))))
+
 ;;(setq shell-command-switch "-lc")
 
 ;; (defun kubernetes-switch-namespace (item)
@@ -444,25 +479,29 @@
 
 
 ;; credit: yorickvP on Github
-(setq wl-copy-process nil)
-(defun wl-copy (text)
-  (setq wl-copy-process (make-process :name "wl-copy"
-                                      :buffer nil
-                                      :command '("wl-copy" "-f" "-n")
-                                      :connection-type 'pipe
-                                      :noquery t))
-  (process-send-string wl-copy-process text)
-  (process-send-eof wl-copy-process))
-(defun wl-paste ()
-  (if (and wl-copy-process (process-live-p wl-copy-process))
-      nil ; should return nil if we're the current paste owner
-    (shell-command-to-string "wl-paste -n | tr -d \r")))
-(setq interprogram-cut-function 'wl-copy)
-(setq interprogram-paste-function 'wl-paste)
+;; (setq wl-copy-process nil)
+;; (defun wl-copy (text)
+;;   (setq wl-copy-process (make-process :name "wl-copy"
+;;                                       :buffer nil
+;;                                       :command '("wl-copy" "-f" "-n")
+;;                                       :connection-type 'pipe
+;;                                       :noquery t))
+;;   (process-send-string wl-copy-process text)
+;;   (process-send-eof wl-copy-process))
+;; (defun wl-paste ()
+;;   (if (and wl-copy-process (process-live-p wl-copy-process))
+;;       nil ; should return nil if we're the current paste owner
+;;     (shell-command-to-string "wl-paste -n | tr -d \r")))
+;; (setq interprogram-cut-function 'wl-copy)
+;; (setq interprogram-paste-function 'wl-paste)
 
 
 ;; (setq projectile-mode-line "Projectile")
 (setq tramp-verbose 6)
+
+;; (advice-add 'projectile-project-root :before-while
+;;   (lambda (&optional dir)
+;;     (not (file-remote-p (or dir default-directory)))))
 
 (setq remote-file-name-inhibit-cache nil)
 (setq vc-ignore-dir-regexp
@@ -533,6 +572,7 @@
 
   ;;rust
   (add-hook 'rust-mode-hook 'eglot-ensure)
+  (add-hook 'rust-ts-mode-hook 'eglot-ensure)
 
   (add-to-list 'eglot-server-programs
                '((rust-ts-mode rust-mode) .
@@ -544,11 +584,11 @@
   ;; the projectile project associated with a directory.
   ;; If projectile not loaded, or directory is not in a project,
   ;; hopefully returns nil.
-  (defun me:project-finder (dir)
-    (if (fboundp 'projectile-project-root)
-        (let ((root (projectile-project-root dir)))
-          (and root (cons 'transient root)))))
-  (add-to-list 'project-find-functions #'me:project-finder)
+  ;; (defun me:project-finder (dir)
+  ;;   (if (fboundp 'projectile-project-root)
+  ;;       (let ((root (projectile-project-root dir)))
+  ;;         (and root (cons 'transient root)))))
+  ;; (add-to-list 'project-find-functions #'me:project-finder)
 
   )
 
@@ -561,3 +601,58 @@
 (setq! evil-shift-width 4)
 
 (with-eval-after-load 'company (define-key company-active-map (kbd "TAB") 'company-complete-selection) (define-key company-active-map (kbd "<tab>") 'company-complete-selection))
+
+(use-package! gptel
+  :config
+  ;; OPTIONAL configuration
+  (setq! auth-source-debug t)
+  (setq! gptel-api-key (lambda()
+                         (gptel-api-key-from-auth-source "chatapi.onechats.top") ))
+
+  (defvar gptel--openai-proxy
+    (gptel-make-openai
+        "ChatGptProxy"
+      :key 'gptel-api-key
+      :host "chatapi.onechats.top"
+      :stream t
+      :models '("gpt-3.5-turbo" "gpt-4o"))
+    )
+
+  (defvar gptel--openai-proxy-claude
+    (gptel-make-openai
+        "ClaudeProxy"
+      :key 'gptel-api-key
+      :host "chatapi.onechats.top"
+      :stream t
+      :models '("claude-3-haiku-20240307" "claude-3-5-sonnet-20240620"))
+    )
+
+  ;; (defvar gptel--anthropic
+
+  ;;   (gptel-make-anthropic "ClaudeProxy"
+  ;;     :key 'gptel-api-key
+  ;;     :header
+  ;;     (lambda () (when-let (key (gptel--get-api-key))
+  ;;                  `(("Authorization" . ,(concat "Bearer " key)))))
+  ;;     :host "chatapi.onechats.top"
+  ;;     :stream t
+  ;;     :endpoint "/v1/chat/completions"
+  ;;     :models '("claude-3-haiku-20240307")
+  ;;     )
+
+
+  ;;   )
+
+  (defvar gptel--ollama
+    (gptel-make-ollama "Ollama"
+      :host "localhost:11434"
+      :stream t
+      :models '("scomper/minicpm-v2.5:latest" "gemma2:9b" "phi3:medium"))
+    )
+
+  (setq!
+   gptel-backend gptel--openai-proxy-claude
+   )
+
+  (setq! gptel-model "claude-3-haiku-20240307") )
+

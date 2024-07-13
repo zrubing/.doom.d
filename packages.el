@@ -192,3 +192,5 @@
 (package! journalctl-mode)
 
 (package! eglot-java)
+
+(package! gptel)
