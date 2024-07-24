@@ -661,35 +661,3 @@ current buffer's, reload dir-locals."
 
 
 
-;; (defun simendsjo/org-publish-include-attachments (plist)
-;;   "Fix published html for org-attach attached files.
-
-;; - Walks all html files
-;; - Copies attached files it finds to a local .attach folder
-;; - Fixes all src links to point to this new location"
-;;   (let ((pattern (concat "src=\"file://\\(" (regexp-quote org-attach-id-dir) "\\)/\\([^\"]*\\)"))
-;;         (pub-dir (plist-get plist :publishing-directory)))
-;;     (dolist (file (directory-files-recursively pub-dir "\.html$" t))
-;;       (let ((buffer (find-file-noselect file)))
-;;         (with-current-buffer buffer
-;;           (goto-char (point-min))
-;;           (while (re-search-forward pattern nil t)
-;;             (let* ((attach-part (match-string 1))
-;;                    (file-part (match-string 2))
-;;                    (srcfile (f-join attach-part file-part))
-;;                    (dstfile-rel (f-join ".attach" file-part))
-;;                    (dstfile (f-join pub-dir dstfile-rel)))
-;;               ;; Make sure the directory exists as copy/symlink assumes it.
-;;               (let ((dir (file-name-directory dstfile)))
-;;                 (unless (f-directory-p dir)
-;;                   (message "Attachment directory %s missing, creating it" dir)
-;;                   (make-directory dir t)))
-;;               ;; Copy/symlink attachment
-;;               (if IS-WINDOWS
-;;                   (copy-file srcfile dstfile)
-;;                 (make-symbolic-link srcfile dstfile t))
-;;               ;; Replace link to relative file
-;;               ;; I assume the .attach folder is added at the root, and thus add
-;;               ;; the / at the beginning
-;;               (replace-match (concat "src=\"/" dstfile-rel "\"")))))))))
-
