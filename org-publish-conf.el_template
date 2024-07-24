@@ -1,0 +1,26 @@
+
+(setq org-publish-project-alist
+      '(
+    ("r4l"
+     :base-directory "xxx_src"
+     :base-extension "org"
+     :publishing-directory "xxx_dest"
+     :recursive t
+     ;;:publishing-function org-md-publish-to-md
+     :publishing-function org-html-publish-to-html
+     :headline-levels 4             ; Just the default for this project.
+     :auto-preamble t
+     :exclude ".*"
+     :include ["2024-07-09.org"]
+     )
+
+    ("images"
+        :base-directory "xxx_src"
+        :base-extension "jpg\\|gif\\|png"
+        :publishing-directory "xxx_dest"
+        :publishing-function org-publish-attachment
+        )
+    ))
+
+
+(provide 'org-publish-conf)

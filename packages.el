@@ -170,7 +170,7 @@
 ;;(package! vue-mode)
 ;;(package! alert)
 (package! treesit-auto
-  :recipe (:host github :repo "renzmann/treesit-auto" :build nil))
+  :recipe (:host github :repo "renzmann/treesit-auto"))
 
 
 (package! dired-rsync)

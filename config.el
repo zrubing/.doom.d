@@ -527,6 +527,8 @@ current buffer's, reload dir-locals."
   :config (define-key org-mode-map (kbd "C-c C-r") verb-command-map))
 
 (load! "ejc-sql-conf")
+(load! "org-publish-conf")
+
 
 (use-package! eglot-java
   :config
@@ -606,6 +608,7 @@ current buffer's, reload dir-locals."
   :config
   ;; OPTIONAL configuration
   (setq! auth-source-debug t)
+  (setq! gptel-default-mode 'org-mode)
   (setq! gptel-api-key (lambda()
                          (gptel-api-key-from-auth-source "chatapi.onechats.top") ))
 
@@ -615,7 +618,7 @@ current buffer's, reload dir-locals."
       :key 'gptel-api-key
       :host "chatapi.onechats.top"
       :stream t
-      :models '("gpt-3.5-turbo" "gpt-4o"))
+      :models '("gpt-3.5-turbo" "gpt-4o" "gpt-4o-mini"))
     )
 
   (defvar gptel--openai-proxy-claude
@@ -624,7 +627,7 @@ current buffer's, reload dir-locals."
       :key 'gptel-api-key
       :host "chatapi.onechats.top"
       :stream t
-      :models '("claude-3-haiku-20240307" "claude-3-5-sonnet-20240620"))
+      :models '("deepseek-coder" "deepseek-chat" "gpt4o-mini" "claude-3-haiku-20240307" "claude-3-5-sonnet-20240620"))
     )
 
   ;; (defvar gptel--anthropic
@@ -647,7 +650,7 @@ current buffer's, reload dir-locals."
     (gptel-make-ollama "Ollama"
       :host "localhost:11434"
       :stream t
-      :models '("scomper/minicpm-v2.5:latest" "gemma2:9b" "phi3:medium"))
+      :models '("deepseek-coder-v2:latest" "scomper/minicpm-v2.5:latest" "gemma2:9b" "phi3:medium"))
     )
 
   (setq!
@@ -655,4 +658,38 @@ current buffer's, reload dir-locals."
    )
 
   (setq! gptel-model "claude-3-haiku-20240307") )
+
+
+
+;; (defun simendsjo/org-publish-include-attachments (plist)
+;;   "Fix published html for org-attach attached files.
+
+;; - Walks all html files
+;; - Copies attached files it finds to a local .attach folder
+;; - Fixes all src links to point to this new location"
+;;   (let ((pattern (concat "src=\"file://\\(" (regexp-quote org-attach-id-dir) "\\)/\\([^\"]*\\)"))
+;;         (pub-dir (plist-get plist :publishing-directory)))
+;;     (dolist (file (directory-files-recursively pub-dir "\.html$" t))
+;;       (let ((buffer (find-file-noselect file)))
+;;         (with-current-buffer buffer
+;;           (goto-char (point-min))
+;;           (while (re-search-forward pattern nil t)
+;;             (let* ((attach-part (match-string 1))
+;;                    (file-part (match-string 2))
+;;                    (srcfile (f-join attach-part file-part))
+;;                    (dstfile-rel (f-join ".attach" file-part))
+;;                    (dstfile (f-join pub-dir dstfile-rel)))
+;;               ;; Make sure the directory exists as copy/symlink assumes it.
+;;               (let ((dir (file-name-directory dstfile)))
+;;                 (unless (f-directory-p dir)
+;;                   (message "Attachment directory %s missing, creating it" dir)
+;;                   (make-directory dir t)))
+;;               ;; Copy/symlink attachment
+;;               (if IS-WINDOWS
+;;                   (copy-file srcfile dstfile)
+;;                 (make-symbolic-link srcfile dstfile t))
+;;               ;; Replace link to relative file
+;;               ;; I assume the .attach folder is added at the root, and thus add
+;;               ;; the / at the beginning
+;;               (replace-match (concat "src=\"/" dstfile-rel "\"")))))))))
 
