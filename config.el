@@ -290,9 +290,9 @@
  '((restclient . t)))
 
 (setq org-attach-store-link-p 'attached)
-(setq org-file-apps
-      '((auto-mode . emacs)
-        ("\\.docx\\'" . "open -a /Applications/wpsoffice.app %s")))
+;; (setq org-file-apps
+;;       '((auto-mode . emacs)
+;;         ("\\.docx\\'" . "open -a /Applications/wpsoffice.app %s")))
 
 (setq org-file-apps
       '((auto-mode . emacs)
@@ -511,12 +511,13 @@ current buffer's, reload dir-locals."
 
 (setq tramp-verbose 1)
 
+(global-pangu-spacing-mode 1)
 
 (use-package! eglot-booster
   :after eglot
   :config
   (eglot-booster-mode)
-  (company-mode))
+  (corfu-mode))
 
 (setq docker-open-hook '())
 
@@ -581,6 +582,14 @@ current buffer's, reload dir-locals."
                  ("rust-analyzer" :initializationOptions (:check (:command "clippy")))))
 
 
+  (add-to-list 'eglot-server-programs
+               `(c-ts-mode . ("clangd" "-log=verbose" :initializationOptions (:compilationDatabasePath "/workspaces/r4ldriver/linux_raspberrypi/build_4b/") )))
+
+
+  (with-eval-after-load 'eglot
+    (require 'eglot-x)
+    (eglot-x-setup))
+
 
   ;; project-find-function which uses projectile methods to find
   ;; the projectile project associated with a directory.
@@ -612,13 +621,23 @@ current buffer's, reload dir-locals."
   (setq! gptel-api-key (lambda()
                          (gptel-api-key-from-auth-source "chatapi.onechats.top") ))
 
+
+
   (defvar gptel--openai-proxy
     (gptel-make-openai
         "ChatGptProxy"
       :key 'gptel-api-key
       :host "chatapi.onechats.top"
       :stream t
-      :models '("gpt-3.5-turbo" "gpt-4o" "gpt-4o-mini"))
+      :models '("gpt-4o-mini-2024-07-18" "gpt-3.5-turbo" "gpt-4o"))
+    )
+
+  (defvar gptel--deepseek-proxy
+    (gptel-make-openai "DeepseekProxy"
+      :key (lambda() (gptel-api-key-from-auth-source "api.deepseek.com"))
+      :host "api.deepseek.com"
+      :stream t
+      :models '("deepseek-chat" "deepseek-coder"))
     )
 
   (defvar gptel--openai-proxy-claude
@@ -650,14 +669,43 @@ current buffer's, reload dir-locals."
     (gptel-make-ollama "Ollama"
       :host "localhost:11434"
       :stream t
-      :models '("deepseek-coder-v2:latest" "scomper/minicpm-v2.5:latest" "gemma2:9b" "phi3:medium"))
+      :models '("qwen2:1.5b" "deepseek-coder-v2:latest" "scomper/minicpm-v2.5:latest" "gemma2:9b" "phi3:medium"))
     )
 
+  ;; (setq!
+  ;;  gptel-backend gptel--openai-proxy
+  ;;  )
+
+  ;; (setq! gptel-model "gpt-4o-mini-2024-07-18") )
+  ;;
   (setq!
-   gptel-backend gptel--openai-proxy-claude
+   gptel-backend gptel--deepseek-proxy
    )
 
-  (setq! gptel-model "claude-3-haiku-20240307") )
+  (setq! gptel-model "deepseek-chat") )
 
 
 
+(use-package! go-translate
+  :config
+
+  ;; translate
+  (setq gt-langs '(en zh))
+  (setq gt-default-translator (gt-translator :engines (gt-google-engine)))
+
+  (setq gt-preset-translators
+        `((ts-1 . ,(gt-translator
+                    :taker (gt-taker :langs '(en zh) :text 'word)
+                    :engines (gt-google-engine)
+                    :render (gt-buffer-render)))
+          (ts-2 . ,(gt-translator
+                    :taker (gt-taker :langs '(en zh) :text 'sentence)
+                    :engines (gt-google-engine)
+                    :render (gt-insert-render)))
+          (ts-3 . ,(gt-translator
+                    :taker (gt-taker :langs '(en zh) :text 'buffer
+                                     :pick 'word :pick-pred (lambda (w) (length> w 6)))
+                    :engines (gt-google-engine)
+                    :render (gt-overlay-render :type 'help-echo)))))
+
+  )

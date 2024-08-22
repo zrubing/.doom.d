@@ -69,9 +69,7 @@
   :recipe (:host github :repo "minad/org-modern"
            :files ("org-modern.el")
            ))
-;; (package! pangu-spacing
-;;   :recipe (:host github :repo "coldnew/pangu-spacing"
-;;            :files ("pangu-spacing.el")))
+(package! pangu-spacing)
 
 
 ;;https://github.com/purcell/exec-path-from-shell
@@ -98,7 +96,7 @@
 ;;   :recipe (:host github :repo "emacs-eaf/eaf-terminal"))
 
 (package! eaf-pdf-viewer
-  :recipe (:host github :repo "emacs-eaf/eaf-pdf-viewer"))
+  :recipe (:host github :repo "emacs-eaf/eaf-pdf-viewer" :build nil))
 
 
 
@@ -161,6 +159,11 @@
 
 (package! eglot-booster
   :recipe (:host github :repo "jdtsmith/eglot-booster"))
+
+(package! eglot-x
+  :recipe (:host github :repo "nemethf/eglot-x"))
+(package! go-translate)
+
 
 
 (package! web-mode)
