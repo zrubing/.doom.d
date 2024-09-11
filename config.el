@@ -530,9 +530,10 @@ current buffer's, reload dir-locals."
 
 ;;(use-package! journalctl-mode)
 
-(use-package org
-  :mode ("\\.org\\'" . org-mode)
-  :config (define-key org-mode-map (kbd "C-c C-r") verb-command-map))
+(after! org
+  (define-key org-mode-map (kbd "C-c C-r") verb-command-map)
+  )
+
 
 ;; (load! "ejc-sql-conf")
 ;; (load! "org-publish-conf")
