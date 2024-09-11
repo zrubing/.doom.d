@@ -94,7 +94,7 @@
 
 
 
-(use-package! counsel-etags)
+;; (use-package! counsel-etags)
 (use-package! org-download)
 
 ;; (use-package! ejc-sql)
@@ -347,7 +347,7 @@
 (setq shell-file-name "zsh")
 
 ;; devcontainer
-(add-to-list 'tramp-remote-path "/root/.local/bin")
+;; (add-to-list 'tramp-remote-path "/root/.local/bin")
 
 
 
