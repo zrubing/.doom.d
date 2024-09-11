@@ -95,7 +95,7 @@
 
 
 ;; (use-package! counsel-etags)
-(use-package! org-download)
+;; (use-package! org-download)
 
 ;; (use-package! ejc-sql)
 
@@ -150,6 +150,12 @@
 ;;   (setq treemacs-collapse-dirs 5)
 ;;   (treemacs-follow-mode t)
 ;;   )
+;;
+
+(after! treemacs
+  (setq treemacs-collapse-dirs 5)
+  (treemacs-follow-mode t)
+  )
 
 ;; (use-package! web-mode
 ;;   :config
