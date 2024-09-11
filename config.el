@@ -265,8 +265,8 @@
 ;; (require 'eaf-markmap)
 
 
-(add-to-list 'load-path "~/.config/emacs/.local/straight/repos/mind-wave")
-(require 'mind-wave)
+;; (add-to-list 'load-path "~/.config/emacs/.local/straight/repos/mind-wave")
+;; (require 'mind-wave)
 ;; (setq mind-wave-enable-log t)
 ;; (add-to-list 'load-path "~/.config/emacs/.local/straight/repos/Bard.el")
 ;; (require 'bard)
@@ -275,7 +275,7 @@
 
 
 ;; https://github.com/emacs-eaf/emacs-application-framework/wiki/Evil
-(add-to-list 'load-path "~/.config/emacs/.local/straight/repos/emacs-application-framework/extension")
+;; (add-to-list 'load-path "~/.config/emacs/.local/straight/repos/emacs-application-framework/extension")
 ;;(require 'eaf-evil)
 
 
@@ -294,9 +294,9 @@
 ;;       '((auto-mode . emacs)
 ;;         ("\\.docx\\'" . "open -a /Applications/wpsoffice.app %s")))
 
-(setq org-file-apps
-      '((auto-mode . emacs)
-        ("\\.pdf\\'" . "zathura %s")))
+;; (setq org-file-apps
+;;       '((auto-mode . emacs)
+;;         ("\\.pdf\\'" . "zathura %s")))
 
 
 ;; (use-package! dap-mode
@@ -629,7 +629,7 @@ current buffer's, reload dir-locals."
       :key 'gptel-api-key
       :host "chatapi.onechats.top"
       :stream t
-      :models '("gpt-4o-mini-2024-07-18" "gpt-3.5-turbo" "gpt-4o"))
+      :models '("gpt-4o-mini" "gpt-3.5-turbo" "gpt-4o"))
     )
 
   (defvar gptel--deepseek-proxy
@@ -646,7 +646,7 @@ current buffer's, reload dir-locals."
       :key 'gptel-api-key
       :host "chatapi.onechats.top"
       :stream t
-      :models '("deepseek-coder" "deepseek-chat" "gpt4o-mini" "claude-3-haiku-20240307" "claude-3-5-sonnet-20240620"))
+      :models '("gpt4o-mini" "claude-3-haiku-20240307" "claude-3-5-sonnet-20240620"))
     )
 
   ;; (defvar gptel--anthropic
@@ -672,17 +672,18 @@ current buffer's, reload dir-locals."
       :models '("qwen2:1.5b" "deepseek-coder-v2:latest" "scomper/minicpm-v2.5:latest" "gemma2:9b" "phi3:medium"))
     )
 
-  ;; (setq!
-  ;;  gptel-backend gptel--openai-proxy
-  ;;  )
-
-  ;; (setq! gptel-model "gpt-4o-mini-2024-07-18") )
-  ;;
   (setq!
-   gptel-backend gptel--deepseek-proxy
+   gptel-backend gptel--openai-proxy
    )
 
-  (setq! gptel-model "deepseek-chat") )
+  (setq! gptel-model "gpt-4o-mini")
+
+  ;; (setq!
+  ;;  gptel-backend gptel--deepseek-proxy
+  ;;  )
+
+  ;; (setq! gptel-model "deepseek-coder")
+  )
 
 
 

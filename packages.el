@@ -50,7 +50,7 @@
 ;(unpin! t)
 
 (package! counsel-etags)
-(package! org :pin "39272e2165ad9c49cfa9b5d749a5bb528dbadd87")
+;; (package! org :pin "39272e2165ad9c49cfa9b5d749a5bb528dbadd87")
 
 (package! org-download)
 (package! org-pomodoro)
@@ -76,27 +76,27 @@
 (package! exec-path-from-shell
   :recipe (:host github :repo "purcell/exec-path-from-shell"))
 
-(package! mind-wave
-  :recipe (:host github :repo "manateelazycat/mind-wave" :build nil))
+;; (package! mind-wave
+;;   :recipe (:host github :repo "manateelazycat/mind-wave" :build nil))
 
-(package! bard
-  :recipe (:host github :repo "AllTheLife/Bard.el" :build nil))
+;; (package! bard
+;;   :recipe (:host github :repo "AllTheLife/Bard.el" :build nil))
 
-(package! eaf
-  :recipe (:host github :repo "emacs-eaf/emacs-application-framework"
-                 :build nil))
+;; (package! eaf
+;;   :recipe (:host github :repo "emacs-eaf/emacs-application-framework"
+;;                  :build nil))
 
 (package! insert-translate-name
   :recipe (:host github :repo "manateelazycat/insert-translated-name"))
 
-(package! eaf-browser
-   :recipe (:host github :repo "emacs-eaf/eaf-browser" :build nil))
+;; (package! eaf-browser
+;;    :recipe (:host github :repo "emacs-eaf/eaf-browser" :build nil))
 
 ;; (package! eaf-terminal
 ;;   :recipe (:host github :repo "emacs-eaf/eaf-terminal"))
 
-(package! eaf-pdf-viewer
-  :recipe (:host github :repo "emacs-eaf/eaf-pdf-viewer" :build nil))
+;; (package! eaf-pdf-viewer
+;;   :recipe (:host github :repo "emacs-eaf/eaf-pdf-viewer" :build nil))
 
 
 
@@ -115,9 +115,9 @@
 ;; (package! magit-popup
 ;;   :recipe (:host github :repo "magit/magit-popup"))
 
-(package! lsp-bridge
-  :recipe (:host github :repo "manateelazycat/lsp-bridge"
-                 :files ("*.el")))
+;; (package! lsp-bridge
+;;   :recipe (:host github :repo "manateelazycat/lsp-bridge"
+;;                  :files ("*.el")))
 
 (package! typescript
   :recipe (:host github :repo "emacs-typescript/typescript.el"))
@@ -125,16 +125,16 @@
 ;; (package! dap-mode
 ;;   :recipe (:host github :repo "emacs-lsp/dap-mode" :build nil))
 
-(package! popweb
-  :recipe (:host github :repo "manateelazycat/popweb"
-                 :files ("*.el" "*.py" "*.js")))
+;; (package! popweb
+;;   :recipe (:host github :repo "manateelazycat/popweb"
+;;                  :files ("*.el" "*.py" "*.js")))
 
 ;; (package! websocket-bridge
 ;;   :recipe (:host github :repo "ginqi7/websocket-bridge" :build nil))
 
-(package! dictionary-overlay
-  :recipe (:host github :repo "ginqi7/dictionary-overlay"
-           :build nil))
+;; (package! dictionary-overlay
+;;   :recipe (:host github :repo "ginqi7/dictionary-overlay"
+;;            :build nil))
 
 
 (package! websocket)
@@ -190,6 +190,7 @@
 
 (package! devdocs)
 
+;; http request
 (package! verb)
 
 (package! journalctl-mode)
@@ -197,3 +198,5 @@
 (package! eglot-java)
 
 (package! gptel)
+
+(package! pdf-tools)
