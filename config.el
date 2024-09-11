@@ -97,7 +97,7 @@
 (use-package! counsel-etags)
 (use-package! org-download)
 
-(use-package! ejc-sql)
+;; (use-package! ejc-sql)
 
 
 (use-package! treesit-auto
@@ -125,7 +125,8 @@
   (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
   (org-roam-db-autosync-mode)
   ;; If using org-roam-protocol
-  (require 'org-roam-protocol))
+  (require 'org-roam-protocol)
+  )
 
 
 
@@ -139,22 +140,22 @@
 
 
 
-(use-package! insert-translated-name
-  :load-path "~/.config/emacs/.local/straight/repos/insert-translated-name")
+;; (use-package! insert-translated-name
+;;   :load-path "~/.config/emacs/.local/straight/repos/insert-translated-name")
 
 
-(use-package! treemacs
-  :init
-  :config
-  (setq treemacs-collapse-dirs 5)
-  (treemacs-follow-mode t)
-  )
+;; (use-package! treemacs
+;;   :init
+;;   :config
+;;   (setq treemacs-collapse-dirs 5)
+;;   (treemacs-follow-mode t)
+;;   )
 
-(use-package! web-mode
-  :config
-  (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
-  (setq web-mode-enable-auto-pairing nil)
-  )
+;; (use-package! web-mode
+;;   :config
+;;   (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
+;;   (setq web-mode-enable-auto-pairing nil)
+;;   )
 
 ;;   )
 ;; (use-package! vue-ts-mode
@@ -391,8 +392,8 @@ current buffer's, reload dir-locals."
 ;;        '(:server "127.0.0.1" :port 1087 :enable t
 ;;                  :type (:@type "proxyTypeSocks5" :username nil :password nil))
 ;;        ))
-(setq meow-use-clipboard t)
-(setq immersive-translate-backend 'trans)
+;; (setq meow-use-clipboard t)
+;; (setq immersive-translate-backend 'trans)
 
 (use-package! rime
   :init
@@ -400,8 +401,8 @@ current buffer's, reload dir-locals."
   :custom
   (default-input-method "rime"))
 
-(recentf-mode 1)
-(global-set-key "\C-x\ \C-r" 'recentf-open-files)
+;; (recentf-mode 1)
+;; (global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
 
 (add-to-list 'doom-symbol-fallback-font-families "Symbols Nerd Font")
@@ -420,10 +421,10 @@ current buffer's, reload dir-locals."
    (cond
     ((member "Symbola" (font-family-list)) "Symbola")))))
 
-(use-package!
-    minibuffer-modifier-keys
-  :after
-  (minibuffer-modifier-keys-setup t))
+;; (use-package!
+;;     minibuffer-modifier-keys
+;;   :after
+;;   (minibuffer-modifier-keys-setup t))
 
 (use-package! dape
 
@@ -473,9 +474,9 @@ current buffer's, reload dir-locals."
 
 
 
-(use-package! devdocs
-  :init
-  (global-set-key (kbd "C-h D") 'devdocs-lookup))
+;; (use-package! devdocs
+;;   :init
+;;   (global-set-key (kbd "C-h D") 'devdocs-lookup))
 
 
 ;; credit: yorickvP on Github
@@ -519,7 +520,7 @@ current buffer's, reload dir-locals."
   (eglot-booster-mode)
   (corfu-mode))
 
-(setq docker-open-hook '())
+;; (setq docker-open-hook '())
 
 ;;(use-package! journalctl-mode)
 
@@ -527,8 +528,8 @@ current buffer's, reload dir-locals."
   :mode ("\\.org\\'" . org-mode)
   :config (define-key org-mode-map (kbd "C-c C-r") verb-command-map))
 
-(load! "ejc-sql-conf")
-(load! "org-publish-conf")
+;; (load! "ejc-sql-conf")
+;; (load! "org-publish-conf")
 
 
 (use-package! eglot-java
