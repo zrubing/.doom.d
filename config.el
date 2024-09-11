@@ -36,7 +36,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
+(setq doom-theme 'doom-monokai-pro)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -552,9 +552,11 @@ current buffer's, reload dir-locals."
     (define-key eglot-java-mode-map (kbd "C-c l R") #'eglot-java-project-build-refresh))
   )
 
+(after! eglot
+  (add-hook! 'go-ts-mode-hook 'eglot-ensure))
+
 (use-package! eglot
   :config
-  :hook (((js-ts-mode json-ts-mode yaml-ts-mode typescript-ts-mode java-ts-mode mhtml-mode css-ts-mode vue-ts-mode) . eglot-ensure))
   :preface
   (defun vue-eglot-init-options ()
     (let ((tsdk-path (expand-file-name
