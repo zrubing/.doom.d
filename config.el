@@ -36,7 +36,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-monokai-pro)
+(setq doom-theme 'doom-one)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -101,6 +101,7 @@
 
 
 (use-package! treesit-auto
+  :defer t
   :custom
   (treesit-auto-install 'prompt)
   :config
@@ -108,6 +109,7 @@
   (global-treesit-auto-mode))
 
 (use-package org-roam
+  :defer t
   :ensure t
   :init
   (setq org-roam-v2-ack t)
@@ -320,6 +322,7 @@
 
 
 (use-package! kubernetes                ;
+  :defer t
   :ensure t
   :commands (kubernetes-overview)
   :config
@@ -402,6 +405,7 @@ current buffer's, reload dir-locals."
 ;; (setq immersive-translate-backend 'trans)
 
 (use-package! rime
+  :defer t
   :init
   (setq rime-user-data-dir "~/.config/rime")
   :custom
@@ -433,7 +437,7 @@ current buffer's, reload dir-locals."
 ;;   (minibuffer-modifier-keys-setup t))
 
 (use-package! dape
-
+  :defer t
   :load-path "~/.config/emacs/.local/straight/repos/dape"
   ;; To use window configuration like gud (gdb-mi)
   :init
@@ -521,6 +525,7 @@ current buffer's, reload dir-locals."
 (global-pangu-spacing-mode 1)
 
 (use-package! eglot-booster
+  :defer t
   :after eglot
   :config
   (eglot-booster-mode)
@@ -540,6 +545,7 @@ current buffer's, reload dir-locals."
 
 
 (use-package! eglot-java
+  :defer t
   :config
   (add-hook 'java-mode-hook 'eglot-java-mode)
   (add-hook 'java-ts-mode-hook 'eglot-java-mode)
@@ -556,6 +562,7 @@ current buffer's, reload dir-locals."
   (add-hook! 'go-ts-mode-hook 'eglot-ensure))
 
 (use-package! eglot
+  :defer t
   :config
   :preface
   (defun vue-eglot-init-options ()
@@ -624,6 +631,7 @@ current buffer's, reload dir-locals."
 (with-eval-after-load 'company (define-key company-active-map (kbd "TAB") 'company-complete-selection) (define-key company-active-map (kbd "<tab>") 'company-complete-selection))
 
 (use-package! gptel
+  :defer t
   :config
   ;; OPTIONAL configuration
   (setq! auth-source-debug t)
@@ -698,8 +706,8 @@ current buffer's, reload dir-locals."
 
 
 (use-package! go-translate
+  :defer t
   :config
-
   ;; translate
   (setq gt-langs '(en zh))
   (setq gt-default-translator (gt-translator :engines (gt-google-engine)))
