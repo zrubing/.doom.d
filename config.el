@@ -101,7 +101,6 @@
 
 
 (use-package! treesit-auto
-  :defer t
   :custom
   (treesit-auto-install 'prompt)
   :config
@@ -558,9 +557,6 @@ current buffer's, reload dir-locals."
     (define-key eglot-java-mode-map (kbd "C-c l R") #'eglot-java-project-build-refresh))
   )
 
-(after! eglot
-  (add-hook! 'go-ts-mode-hook 'eglot-ensure))
-
 (use-package! eglot
   :defer t
   :config
@@ -624,6 +620,9 @@ current buffer's, reload dir-locals."
           (function (lambda ()
                       (setq evil-shift-width 4))))
 
+(add-hook! 'go-ts-mode-hook 'eglot-ensure)
+
+
 ;;(setq! treesit-auto-langs '(python rust go vue java))
 
 (setq! evil-shift-width 4)
@@ -647,7 +646,7 @@ current buffer's, reload dir-locals."
       :key 'gptel-api-key
       :host "chatapi.onechats.top"
       :stream t
-      :models '("gpt-4o-mini" "gpt-3.5-turbo" "gpt-4o"))
+      :models '("gpt-4o-mini" "o1-mini" "gpt-3.5-turbo" "gpt-4o"))
     )
 
   (defvar gptel--deepseek-proxy
