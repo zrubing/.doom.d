@@ -568,14 +568,14 @@ current buffer's, reload dir-locals."
       `(:typescript (:tsdk ,tsdk-path
                      :languageFeatures (:completion
                                         (:defaultTagNameCase "both"
-    					 :defaultAttrNameCase "kebabCase"
-    					 :getDocumentNameCasesRequest nil
-    					 :getDocumentSelectionRequest nil)
+                                         :defaultAttrNameCase "kebabCase"
+                                         :getDocumentNameCasesRequest nil
+                                         :getDocumentSelectionRequest nil)
                                         :diagnostics
                                         (:getDocumentVersionRequest nil))
                      :documentFeatures (:documentFormatting
                                         (:defaultPrintWidth 100
-    					 :getDocumentPrintWidthRequest nil)
+                                         :getDocumentPrintWidthRequest nil)
                                         :documentSymbol t
                                         :documentColor t)))))
   :config
