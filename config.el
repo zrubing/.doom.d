@@ -355,8 +355,10 @@
 (setq shell-file-name "zsh")
 
 ;; devcontainer
-;; (add-to-list 'tramp-remote-path "/root/.local/bin")
-
+;; https://github.com/emacs-pe/docker-tramp.el
+(after! tramp
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+  )
 
 
 (setq! enable-remote-dir-locals t)
@@ -546,8 +548,7 @@ current buffer's, reload dir-locals."
 (use-package! eglot-java
   :defer t
   :config
-  (add-hook 'java-mode-hook 'eglot-java-mode)
-  (add-hook 'java-ts-mode-hook 'eglot-java-mode)
+
   (with-eval-after-load 'eglot-java
     (define-key eglot-java-mode-map (kbd "C-c l n") #'eglot-java-file-new)
     (define-key eglot-java-mode-map (kbd "C-c l x") #'eglot-java-run-main)
@@ -581,14 +582,9 @@ current buffer's, reload dir-locals."
   :config
   (define-derived-mode vue-mode web-mode "Vue")
   (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
-  (add-hook 'vue-mode-hook #'eglot-ensure)
 
   (add-to-list 'eglot-server-programs
                `(vue-mode . ("vue-language-server" "--stdio" :initializationOptions ,(vue-eglot-init-options))))
-
-  ;;rust
-  (add-hook 'rust-mode-hook 'eglot-ensure)
-  (add-hook 'rust-ts-mode-hook 'eglot-ensure)
 
   (add-to-list 'eglot-server-programs
                '((rust-ts-mode rust-mode) .
@@ -621,6 +617,15 @@ current buffer's, reload dir-locals."
                       (setq evil-shift-width 4))))
 
 (add-hook! 'go-ts-mode-hook 'eglot-ensure)
+;;rust
+(add-hook! 'rust-mode-hook 'eglot-ensure)
+(add-hook! 'rust-ts-mode-hook 'eglot-ensure)
+
+;;vue
+(add-hook! 'vue-mode-hook #'eglot-ensure)
+;;java
+(add-hook! 'java-mode-hook 'eglot-java-mode)
+(add-hook! 'java-ts-mode-hook 'eglot-java-mode)
 
 
 ;;(setq! treesit-auto-langs '(python rust go vue java))
