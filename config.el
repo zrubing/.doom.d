@@ -671,21 +671,15 @@ current buffer's, reload dir-locals."
       :models '("gpt4o-mini" "claude-3-haiku-20240307" "claude-3-5-sonnet-20240620"))
     )
 
-  ;; (defvar gptel--anthropic
+  (defvar gptel--openai-proxy-github
+    (gptel-make-openai
+        "GithubProxy"
+      :key (lambda() (gptel-api-key-from-auth-source "models.inference.ai.azure.com"))
+      :host "models.inference.ai.azure.com"
+      :stream t
+      :models '("gpt-4o-mini" "gpt-4o"))
+    )
 
-  ;;   (gptel-make-anthropic "ClaudeProxy"
-  ;;     :key 'gptel-api-key
-  ;;     :header
-  ;;     (lambda () (when-let (key (gptel--get-api-key))
-  ;;                  `(("Authorization" . ,(concat "Bearer " key)))))
-  ;;     :host "chatapi.onechats.top"
-  ;;     :stream t
-  ;;     :endpoint "/v1/chat/completions"
-  ;;     :models '("claude-3-haiku-20240307")
-  ;;     )
-
-
-  ;;   )
 
   (defvar gptel--ollama
     (gptel-make-ollama "Ollama"
@@ -700,11 +694,6 @@ current buffer's, reload dir-locals."
 
   (setq! gptel-model "gpt-4o-mini")
 
-  ;; (setq!
-  ;;  gptel-backend gptel--deepseek-proxy
-  ;;  )
-
-  ;; (setq! gptel-model "deepseek-coder")
   )
 
 
