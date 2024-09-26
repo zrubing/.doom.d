@@ -673,9 +673,10 @@ current buffer's, reload dir-locals."
 
   (defvar gptel--openai-proxy-github
     (gptel-make-openai
-        "GithubProxy"
+        "GithubModels"
       :key (lambda() (gptel-api-key-from-auth-source "models.inference.ai.azure.com"))
       :host "models.inference.ai.azure.com"
+      :endpoint "/chat/completions"
       :stream t
       :models '("gpt-4o-mini" "gpt-4o"))
     )
@@ -689,7 +690,7 @@ current buffer's, reload dir-locals."
     )
 
   (setq!
-   gptel-backend gptel--openai-proxy
+   gptel-backend gptel--openai-proxy-github
    )
 
   (setq! gptel-model "gpt-4o-mini")
