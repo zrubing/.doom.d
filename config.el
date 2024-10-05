@@ -678,7 +678,7 @@ current buffer's, reload dir-locals."
       :host "models.inference.ai.azure.com"
       :endpoint "/chat/completions"
       :stream t
-      :models '("gpt-4o-mini" "gpt-4o"))
+      :models '("gpt-4o-mini" "gpt-4o" "Llama-3.2-90B-Vision-Instruct"))
     )
 
 
@@ -722,3 +722,7 @@ current buffer's, reload dir-locals."
                     :render (gt-overlay-render :type 'help-echo)))))
 
   )
+
+(use-package! rime
+  :custom
+  (default-input-method "rime"))

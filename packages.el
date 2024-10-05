@@ -57,7 +57,10 @@
 
 (package! benchmark-init)
 (package! org-roam)
-(package! rime)
+(package! rime
+  :recipe (:host github :repo "DogLooksGood/emacs-rime"
+                 :files ("*.el" "Makefile" "lib.c")))
+
 (package! immersive-translate)
 (package! go-mode)
 ;;(package! doom-modeline :pin "918730eff72e")
