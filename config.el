@@ -3,6 +3,7 @@
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
+(start-process-shell-command "renice-emacs" nil "sudo renice -20 $(pidof emacs)")
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
@@ -99,6 +100,7 @@
 
 ;; (use-package! ejc-sql)
 
+(setq org-noter-notes-search-path '("~/org-roam-dir/book-notes"))
 
 (use-package! treesit-auto
   :custom
@@ -559,7 +561,6 @@ current buffer's, reload dir-locals."
   )
 
 (use-package! eglot
-  :defer t
   :config
   :preface
   (defun vue-eglot-init-options ()
