@@ -185,3 +185,6 @@
 (package! verb)
 
 (package! journalctl-mode)
+
+
+(package! gptel)

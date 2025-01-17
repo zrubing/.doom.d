@@ -455,27 +455,23 @@
 
 (if (is-wayland)
 
-    (message "Running under wayland")
-
-  ;; credit: yorickvP on Github
-  (setq wl-copy-process nil)
-  (defun wl-copy (text)
-    (setq wl-copy-process (make-process :name "wl-copy"
-                                        :buffer nil
-                                        :command '("wl-copy" "-f" "-n")
-                                        :connection-type 'pipe
-                                        :noquery t))
-    (process-send-string wl-copy-process text)
-    (process-send-eof wl-copy-process))
-  (defun wl-paste ()
-    (if (and wl-copy-process (process-live-p wl-copy-process))
-        nil ; should return nil if we're the current paste owner
-      (shell-command-to-string "wl-paste -n | tr -d \r")))
-  (setq interprogram-cut-function 'wl-copy)
-  (setq interprogram-paste-function 'wl-paste)
-
-
-  )
+    (progn
+      ;; credit: yorickvP on Github
+      (setq wl-copy-process nil)
+      (defun wl-copy (text)
+        (setq wl-copy-process (make-process :name "wl-copy"
+                                            :buffer nil
+                                            :command '("wl-copy" "-f" "-n")
+                                            :connection-type 'pipe
+                                            :noquery t))
+        (process-send-string wl-copy-process text)
+        (process-send-eof wl-copy-process))
+      (defun wl-paste ()
+        (if (and wl-copy-process (process-live-p wl-copy-process))
+            nil ; should return nil if we're the current paste owner
+          (shell-command-to-string "wl-paste -n | tr -d \r")))
+      (setq interprogram-cut-function 'wl-copy)
+      (setq interprogram-paste-function 'wl-paste)))
 
 
 ;; (setq projectile-mode-line "Projectile")
@@ -498,3 +494,5 @@
   :config (define-key org-mode-map (kbd "C-c C-r") verb-command-map))
 
 (load! "ejc-sql-conf")
+
+(load! "gptel")
