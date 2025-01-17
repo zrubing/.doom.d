@@ -20,8 +20,8 @@
 ;;
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
-(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 13 :weight 'semi-light)
-      doom-variable-pitch-font (font-spec :family "DejaVu Sans Mono" :size 14))
+(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 13.0 :weight 'semi-light)
+      doom-variable-pitch-font (font-spec :family "DejaVu Sans Mono" :size 14.0))
 ;;(setq doom-font (font-spec :family "Fira Code" :size 14 :weight 'semi-light)
 ;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 14))
 ;;(setq doom-font (font-spec :family "Fira Mono" :size 11))
