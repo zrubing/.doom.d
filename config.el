@@ -367,6 +367,9 @@
 (use-package! rime
   :init
   (setq rime-user-data-dir "~/.config/rime")
+  (setq rime-emacs-module-header-root "~/.nix-profile/include"
+        rime-librime-root "~/.nix-profile"
+        rime-share-data-dir "~/.local/share/rime-data/share/rime-data")
   :custom
   (default-input-method "rime"))
 
