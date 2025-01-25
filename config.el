@@ -175,7 +175,7 @@
 
   (setq lsp-bridge-enable-with-tramp nil)
 
-  (setq lombok-path (substitute-in-file-name "$HOME/.m2/repository/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar"))
+  (setq lombok-path (substitute-in-file-name "$HOME/.local/share/javalib/lombok.jar"))
   (setq lsp-bridge-jdtls-jvm-args (list (format "%s%s" "-javaagent:" lombok-path)))
   ;; (setq lsp-bridge-multi-lang-server-extension-list
   ;;         '((("css" "less" "scss") . "css_emmet")
