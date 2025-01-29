@@ -21,7 +21,7 @@
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
 (setq doom-font (font-spec :family "DejaVu Sans Mono" :size 13.0 :weight 'semi-light)
-      doom-variable-pitch-font (font-spec :family "DejaVu Sans Mono" :size 14.0))
+      doom-variable-pitch-font (font-spec :family "DejaVu Sans Mono" :size 14))
 ;;(setq doom-font (font-spec :family "Fira Code" :size 14 :weight 'semi-light)
 ;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 14))
 ;;(setq doom-font (font-spec :family "Fira Mono" :size 11))
@@ -454,8 +454,11 @@
 
 (defun is-wayland ()
   "check if running under wayland"
-  (or (getenv "WAYLAND_DISPLAY")
-      (string-equal (getenv "XDG_SESSION_TYPE") "wayland")))
+  ;; (or (getenv "WAYLAND_DISPLAY")
+  ;;     (string-equal (getenv "XDG_SESSION_TYPE") "wayland"))
+  (cl-case window-system
+        (x nil)
+        (otherwise t)))
 
 (if (is-wayland)
 
@@ -500,3 +503,5 @@
 (load! "ejc-sql-conf")
 
 (load! "gptel")
+
+(load! "minuet-custom")

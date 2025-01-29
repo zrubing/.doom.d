@@ -188,3 +188,7 @@
 
 
 (package! gptel)
+
+(package! minuet
+  :recipe (:host github :repo "milanglacier/minuet-ai.el"
+           :build nil))
