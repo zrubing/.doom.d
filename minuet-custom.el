@@ -39,13 +39,9 @@
   ;; Not required when defining minuet-active-mode-map without evil state.
   (add-hook 'minuet-active-mode-hook #'evil-normalize-keymaps)
 
-  (minuet-set-optional-options minuet-openai-fim-compatible-options :max_tokens 256)
-
   (plist-put minuet-codestral-options :api-key (get-secret "mistral.ai"))
 
 
-  (minuet-set-optional-options minuet-openai-fim-compatible-options :max_tokens 256)
-  (minuet-set-optional-options minuet-openai-fim-compatible-options :top_p 0.9)
 
 
   )
