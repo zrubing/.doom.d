@@ -2,14 +2,12 @@
 ;;;
 
 (defun get-secret (host)
+  ;; Get the secret for the given host from the auth-source file.
 
-  ((lambda()
-    (let ((auth-info (auth-source-search :host host :require '(:secret))) )
-      (when auth-info
-        (let ((entry (car auth-info)))
-          (plist-get entry :secret))))))
-  )
-
+  (let ((auth-info (auth-source-search :host host :require '(:secret))))
+    (when auth-info
+      (let ((entry (car auth-info)))
+        (plist-get entry :secret)))))
 
 (use-package minuet
   :defer t
@@ -39,9 +37,11 @@
   ;; Not required when defining minuet-active-mode-map without evil state.
   (add-hook 'minuet-active-mode-hook #'evil-normalize-keymaps)
 
+
   (plist-put minuet-codestral-options :api-key (get-secret "mistral.ai"))
 
 
+  (minuet-set-optional-options minuet-openai-fim-compatible-options :top_p 0.9)
 
 
   )

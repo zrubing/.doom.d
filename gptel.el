@@ -44,7 +44,7 @@
       :host "models.inference.ai.azure.com"
       :endpoint "/chat/completions"
       :stream t
-      :models '("gpt-4o-mini" "gpt-4o" "Llama-3.2-90B-Vision-Instruct"))
+      :models '(gpt-4o-mini gpt-4o))
     )
 
 
@@ -55,11 +55,8 @@
       :models '("qwen2:1.5b" "deepseek-coder-v2:latest" "scomper/minicpm-v2.5:latest" "gemma2:9b" "phi3:medium"))
     )
 
-  (setq!
-   gptel-backend gptel--openai-proxy-github
-   )
-
-  (setq! gptel-model "gpt-4o-mini")
+  (setq! gptel-model 'gpt-4o-mini
+         gptel-backend gptel--openai-proxy-github)
 
   )
 
