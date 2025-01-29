@@ -1,4 +1,16 @@
 ;;; -*- lexical-binding: t; -*-
+;;;
+
+(defun get-secret (host)
+
+  ((lambda()
+    (let ((auth-info (auth-source-search :host host :require '(:secret))) )
+      (when auth-info
+        (let ((entry (car auth-info)))
+          (plist-get entry :secret))))))
+  )
+
+
 (use-package minuet
   :defer t
   :bind
@@ -21,7 +33,7 @@
   (add-hook 'prog-mode-hook #'minuet-auto-suggestion-mode)
 
   :config
-  (setq minuet-provider 'openai-fim-compatible)
+  (setq minuet-provider 'codestral)
 
   ;; Required when defining minuet-ative-mode-map in insert/normal states.
   ;; Not required when defining minuet-active-mode-map without evil state.
@@ -29,15 +41,7 @@
 
   (minuet-set-optional-options minuet-openai-fim-compatible-options :max_tokens 256)
 
-
-  (plist-put minuet-openai-fim-compatible-options :end-point "https://api.deepseek.com/beta/completions")
-  (plist-put minuet-openai-fim-compatible-options :api-key ((lambda()
-
-                                                              (let ((auth-info (auth-source-search :host "api.deepseek.com" :require '(:secret))) )
-                                                                (when auth-info
-                                                                  (let ((entry (car auth-info)))
-                                                                    (plist-get entry :secret)))))))
-  (plist-put minuet-openai-fim-compatible-options :model "deepseek-chat")
+  (plist-put minuet-codestral-options :api-key (get-secret "mistral.ai"))
 
 
   (minuet-set-optional-options minuet-openai-fim-compatible-options :max_tokens 256)
