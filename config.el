@@ -194,6 +194,7 @@
 
   :custom
   (lsp-bridge-code-action-enable-popup-menu nil)
+  (lsp-bridge-enable-inlay-hint t)
 
   (setq-local lsp-bridge-get-project-path-by-filepath 'projectile-project-root)
 
