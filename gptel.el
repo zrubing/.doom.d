@@ -34,7 +34,7 @@
       :key 'gptel-api-key
       :host "chatapi.onechats.top"
       :stream t
-      :models '("gpt4o-mini" "claude-3-haiku-20240307" "claude-3-5-sonnet-20240620"))
+      :models '(gpt4o-mini claude-3-haiku-20240307 claude-3-5-sonnet-20240620))
     )
 
   (defvar gptel--openai-proxy-github
@@ -57,7 +57,6 @@
 
   (setq! gptel-model 'gpt-4o-mini
          gptel-backend gptel--openai-proxy-github)
-
   )
 
 
