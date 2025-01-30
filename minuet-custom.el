@@ -9,7 +9,7 @@
       (let ((entry (car auth-info)))
         (plist-get entry :secret)))))
 
-(use-package minuet
+(use-package! minuet
   :defer t
   :bind
   (("M-y" . #'minuet-complete-with-minibuffer) ;; use minibuffer for completion

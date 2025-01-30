@@ -17,7 +17,7 @@
       :key 'gptel-api-key
       :host "chatapi.onechats.top"
       :stream t
-      :models '("gpt-4o-mini" "o1-mini" "gpt-3.5-turbo" "gpt-4o"))
+      :models '(gpt-4o-mini o1-mini gpt-3.5-turbo gpt-4o))
     )
 
   (defvar gptel--deepseek-proxy
@@ -44,7 +44,7 @@
       :host "models.inference.ai.azure.com"
       :endpoint "/chat/completions"
       :stream t
-      :models '(gpt-4o-mini gpt-4o))
+      :models '(gpt-4o-mini gpt-4o DeepSeek-R1))
     )
 
 

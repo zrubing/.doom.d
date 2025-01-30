@@ -505,3 +505,5 @@
 (load! "gptel")
 
 (load! "minuet-custom")
+
+(load! "aider")
