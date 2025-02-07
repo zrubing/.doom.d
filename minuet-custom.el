@@ -31,14 +31,16 @@
   (add-hook 'prog-mode-hook #'minuet-auto-suggestion-mode)
 
   :config
-  (setq minuet-provider 'codestral)
+  ;;(setq minuet-provider 'codestral)
+  ;;(plist-put minuet-codestral-options :api-key (get-secret "mistral.ai"))
+  (setq minute-provider 'openai-fim-compatible)
+
 
   ;; Required when defining minuet-ative-mode-map in insert/normal states.
   ;; Not required when defining minuet-active-mode-map without evil state.
   (add-hook 'minuet-active-mode-hook #'evil-normalize-keymaps)
 
 
-  (plist-put minuet-codestral-options :api-key (get-secret "mistral.ai"))
 
 
   (minuet-set-optional-options minuet-openai-fim-compatible-options :top_p 0.9)

@@ -2,6 +2,8 @@
 
 
 
+(use-package! ejc-sql)
+
 (add-hook 'ejc-sql-minor-mode-hook
           (lambda ()
             (auto-complete-mode t)

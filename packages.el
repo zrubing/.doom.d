@@ -57,7 +57,8 @@
 
 (package! benchmark-init)
 (package! org-roam)
-(package! rime)
+(package! rime
+  :recipe (:host github :repo "DogLooksGood/emacs-rime"  :files ("*.el" "Makefile" "lib.c" "*.so")))
 (package! immersive-translate)
 (package! go-mode)
 ;;(package! doom-modeline :pin "918730eff72e")
@@ -117,9 +118,15 @@
 ;; (package! magit-popup
 ;;   :recipe (:host github :repo "magit/magit-popup"))
 
-(package! lsp-bridge
-  :recipe (:host github :repo "manateelazycat/lsp-bridge"
-                 :files ("*.el")))
+(when (package! lsp-bridge
+        :recipe (:host github
+                 :repo "manateelazycat/lsp-bridge"
+                 :branch "master"
+                 :files ("*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources")
+                 ;; do not perform byte compilation or native compilation for lsp-bridge
+                 :build (:not compile)))
+  (package! markdown-mode)
+  (package! yasnippet))
 
 (package! typescript
   :recipe (:host github :repo "emacs-typescript/typescript.el"))
