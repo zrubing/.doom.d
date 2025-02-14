@@ -317,6 +317,13 @@
 ;;   :mode ("\\.org\\'" . org-mode)
 ;;   :config (define-key org-mode-map (kbd "C-c C-r") verb-command-map))
 
+(use-package! ultra-scroll
+  :init
+  (setq scroll-conservatively 101 ; important!
+        scroll-margin 0)
+  :config
+  (ultra-scroll-mode 1))
+
 (load! "ejc-sql-conf")
 
 (load! "gptel")

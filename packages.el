@@ -7,47 +7,47 @@
 
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
-;(package! some-package)
+                                        ;(package! some-package)
 
 ;; To install a package directly from a remote git repo, you must specify a
 ;; `:recipe'. You'll find documentation on what `:recipe' accepts here:
 ;; https://github.com/radian-software/straight.el#the-recipe-format
-;(package! another-package
-;  :recipe (:host github :repo "username/repo"))
+                                        ;(package! another-package
+                                        ;  :recipe (:host github :repo "username/repo"))
 
 ;; If the package you are trying to install does not contain a PACKAGENAME.el
 ;; file, or is located in a subdirectory of the repo, you'll need to specify
 ;; `:files' in the `:recipe':
-;(package! this-package
-;  :recipe (:host github :repo "username/repo"
-;           :files ("some-file.el" "src/lisp/*.el")))
+                                        ;(package! this-package
+                                        ;  :recipe (:host github :repo "username/repo"
+                                        ;           :files ("some-file.el" "src/lisp/*.el")))
 
 ;; If you'd like to disable a package included with Doom, you can do so here
 ;; with the `:disable' property:
-;(package! builtin-package :disable t)
+                                        ;(package! builtin-package :disable t)
 
 ;; You can override the recipe of a built in package without having to specify
 ;; all the properties for `:recipe'. These will inherit the rest of its recipe
 ;; from Doom or MELPA/ELPA/Emacsmirror:
-;(package! builtin-package :recipe (:nonrecursive t))
-;(package! builtin-package-2 :recipe (:repo "myfork/package"))
+                                        ;(package! builtin-package :recipe (:nonrecursive t))
+                                        ;(package! builtin-package-2 :recipe (:repo "myfork/package"))
 
 ;; Specify a `:branch' to install a package from a particular branch or tag.
 ;; This is required for some packages whose default branch isn't 'master' (which
 ;; our package manager can't deal with; see radian-software/straight.el#279)
-;(package! builtin-package :recipe (:branch "develop"))
+                                        ;(package! builtin-package :recipe (:branch "develop"))
 
 ;; Use `:pin' to specify a particular commit to install.
-;(package! builtin-package :pin "1a2b3c4d5e")
+                                        ;(package! builtin-package :pin "1a2b3c4d5e")
 
 
 ;; Doom's packages are pinned to a specific commit and updated from release to
 ;; release. The `unpin!' macro allows you to unpin single packages...
-;(unpin! pinned-package)
+                                        ;(unpin! pinned-package)
 ;; ...or multiple packages
-;(unpin! pinned-package another-pinned-package)
+                                        ;(unpin! pinned-package another-pinned-package)
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
-;(unpin! t)
+                                        ;(unpin! t)
 
 (package! counsel-etags)
 (package! org :pin "39272e2165ad9c49cfa9b5d749a5bb528dbadd87")
@@ -79,27 +79,27 @@
 (package! exec-path-from-shell
   :recipe (:host github :repo "purcell/exec-path-from-shell"))
 
-(package! mind-wave
-  :recipe (:host github :repo "manateelazycat/mind-wave" :build nil))
+;; (package! mind-wave
+;;   :recipe (:host github :repo "manateelazycat/mind-wave" :build nil))
 
-(package! bard
-  :recipe (:host github :repo "AllTheLife/Bard.el" :build nil))
+;; (package! bard
+;;   :recipe (:host github :repo "AllTheLife/Bard.el" :build nil))
 
-(package! eaf
-  :recipe (:host github :repo "emacs-eaf/emacs-application-framework"
-                 :build nil))
+;; (package! eaf
+;;   :recipe (:host github :repo "emacs-eaf/emacs-application-framework"
+;;                  :build nil))
 
-(package! insert-translate-name
-  :recipe (:host github :repo "manateelazycat/insert-translated-name"))
+;; (package! insert-translate-name
+;;   :recipe (:host github :repo "manateelazycat/insert-translated-name"))
 
-(package! eaf-browser
-   :recipe (:host github :repo "emacs-eaf/eaf-browser" :build nil))
+;; (package! eaf-browser
+;;    :recipe (:host github :repo "emacs-eaf/eaf-browser" :build nil))
 
 ;; (package! eaf-terminal
 ;;   :recipe (:host github :repo "emacs-eaf/eaf-terminal"))
 
-(package! eaf-pdf-viewer
-  :recipe (:host github :repo "emacs-eaf/eaf-pdf-viewer"))
+;; (package! eaf-pdf-viewer
+;;   :recipe (:host github :repo "emacs-eaf/eaf-pdf-viewer"))
 
 
 
@@ -134,16 +134,16 @@
 ;; (package! dap-mode
 ;;   :recipe (:host github :repo "emacs-lsp/dap-mode" :build nil))
 
-(package! popweb
-  :recipe (:host github :repo "manateelazycat/popweb"
-                 :files ("*.el" "*.py" "*.js")))
+;; (package! popweb
+;;   :recipe (:host github :repo "manateelazycat/popweb"
+;;                  :files ("*.el" "*.py" "*.js")))
 
 ;; (package! websocket-bridge
 ;;   :recipe (:host github :repo "ginqi7/websocket-bridge" :build nil))
 
-(package! dictionary-overlay
-  :recipe (:host github :repo "ginqi7/dictionary-overlay"
-           :build nil))
+;; (package! dictionary-overlay
+;;   :recipe (:host github :repo "ginqi7/dictionary-overlay"
+;;            :build nil))
 
 
 (package! websocket)
@@ -166,7 +166,7 @@
 (package! dape
   :recipe (:host github :repo "svaante/dape" :build nil))
 
-(package! web-mode)
+;; (package! web-mode)
 
 (package! minibuffer-modifier-keys)
 
@@ -201,3 +201,6 @@
            :build nil))
 
 (package! aider :recipe (:host github :repo "tninja/aider.el" :files ("aider.el" "aider-doom.el")))
+
+(package! ultra-scroll
+  :recipe (:host github :repo "jdtsmith/ultra-scroll" :files ("ultra-scroll.el")))
