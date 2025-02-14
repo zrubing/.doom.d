@@ -44,7 +44,7 @@
       :host "models.inference.ai.azure.com"
       :endpoint "/chat/completions"
       :stream t
-      :models '(gpt-4o-mini gpt-4o DeepSeek-R1))
+      :models '(DeepSeek-R1 gpt-4o-mini gpt-4o))
     )
 
 
