@@ -11,13 +11,14 @@
 (setq ejc-use-flx t)
 (setq ejc-flx-threshold 2)
 
+(setq ejc-result-table-impl 'ejc-result-mode)
 
 (add-hook 'ejc-sql-connected-hook
           (lambda ()
             (ejc-set-fetch-size 50)
             (ejc-set-max-rows 50)
             (ejc-set-show-too-many-rows-message t)
-            (ejc-set-column-width-limit 25)
+            (ejc-set-column-width-limit 48)
             (ejc-set-use-unicode t)))
 
 (load! "ejc-sql-connect-conf")

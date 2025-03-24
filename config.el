@@ -543,7 +543,10 @@ current buffer's, reload dir-locals."
   )
 
 
-;; (load! "ejc-sql-conf")
+(after! ejc-sql
+  (load! "ejc-sql-conf")
+  )
+
 ;; (load! "org-publish-conf")
 
 
@@ -558,6 +561,35 @@ current buffer's, reload dir-locals."
     (define-key eglot-java-mode-map (kbd "C-c l N") #'eglot-java-project-new)
     (define-key eglot-java-mode-map (kbd "C-c l T") #'eglot-java-project-build-task)
     (define-key eglot-java-mode-map (kbd "C-c l R") #'eglot-java-project-build-refresh))
+
+  (setq eglot-java-user-init-opts-fn 'custom-eglot-java-init-opts)
+
+  (let* ((lombok-path (substitute-in-file-name "$HOME/.m2/repository/org/projectlombok/lombok"))
+         (args '(
+                 "-Xmx1G"
+                 "--add-modules=ALL-SYSTEM"
+                 "--add-opens"
+                 "java.base/java.util=ALL-UNNAMED"
+                 "--add-opens"
+                 "java.base/java.lang=ALL-UNNAMED"
+
+                 "-noverify"
+                 "-XX:+UseG1GC"
+                 "-XX:+UseStringDeduplication"
+                 ))
+         )
+    (push (concat "-javaagent:" lombok-path "/1.18.30/lombok-1.18.30.jar") args)
+    (setq eglot-java-eclipse-jdt-args
+          args))
+
+  (defun custom-eglot-java-init-opts (server eglot-java-eclipse-jdt)
+    "Custom options that will be merged with any default settings."
+    '(:settings
+      (:java
+       (:format
+        (:settings
+         (:url "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml")
+         :enabled t)))))
   )
 
 (use-package! eglot
