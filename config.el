@@ -277,25 +277,25 @@
     (x t)
     (otherwise t)))
 
-(if (is-wayland)
+;; (if (is-wayland)
 
-    (progn
-      ;; credit: yorickvP on Github
-      (setq wl-copy-process nil)
-      (defun wl-copy (text)
-        (setq wl-copy-process (make-process :name "wl-copy"
-                                            :buffer nil
-                                            :command '("wl-copy" "-f" "-n")
-                                            :connection-type 'pipe
-                                            :noquery t))
-        (process-send-string wl-copy-process text)
-        (process-send-eof wl-copy-process))
-      (defun wl-paste ()
-        (if (and wl-copy-process (process-live-p wl-copy-process))
-            nil ; should return nil if we're the current paste owner
-          (shell-command-to-string "wl-paste -n | tr -d \r")))
-      (setq interprogram-cut-function 'wl-copy)
-      (setq interprogram-paste-function 'wl-paste)))
+;;     (progn
+;;       ;; credit: yorickvP on Github
+;;       (setq wl-copy-process nil)
+;;       (defun wl-copy (text)
+;;         (setq wl-copy-process (make-process :name "wl-copy"
+;;                                             :buffer nil
+;;                                             :command '("wl-copy" "-f" "-n")
+;;                                             :connection-type 'pipe
+;;                                             :noquery t))
+;;         (process-send-string wl-copy-process text)
+;;         (process-send-eof wl-copy-process))
+;;       (defun wl-paste ()
+;;         (if (and wl-copy-process (process-live-p wl-copy-process))
+;;             nil ; should return nil if we're the current paste owner
+;;           (shell-command-to-string "wl-paste -n | tr -d \r")))
+;;       (setq interprogram-cut-function 'wl-copy)
+;;       (setq interprogram-paste-function 'wl-paste)))
 
 
 ;; ;; (setq projectile-mode-line "Projectile")
@@ -323,6 +323,43 @@
         scroll-margin 0)
   :config
   (ultra-scroll-mode 1))
+
+(use-package! apheleia
+  :after lsp-bridge
+  :config
+  ;; don't mess up with lsp-mode
+  (setq +format-with-lsp nil)
+  (setq apheleia-remote-algorithm 'remote))
+
+(after! tramp
+  (add-to-list 'tramp-remote-path "~/.nix-profile/bin")
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
+
+(use-package! topsy
+  :after lsp-bridge
+  :config
+  ;; display a bar to remind editing remote file
+  (setcdr (assoc nil topsy-mode-functions)
+          (lambda ()
+            (when (lsp-bridge-is-remote-file) "[LBR] REMOTE FILE")))
+
+  ;; do not activate when the current major mode is org-mode
+  (add-hook 'lsp-bridge-mode-hook (lambda ()
+                                    (unless (derived-mode-p 'org-mode)
+                                      (topsy-mode 1)))))
+
+(after! vterm
+  (defun my/set-vterm-shell ()
+    (when (string-prefix-p "/docker:" (file-remote-p default-directory))
+      (when (eq major-mode 'vterm-mode)
+        (let ((shell (if (string-prefix-p "/docker:" (file-remote-p default-directory))
+                         "/bin/bash"
+                       (or (getenv "SHELL") "/bin/bash"))))
+          (vterm-send-string (format "exec %s\n" shell))
+          (vterm-send-string "clear\n")))))
+
+  (add-hook 'vterm-mode-hook #'my/set-vterm-shell))
+
 
 (load! "ejc-sql-conf")
 

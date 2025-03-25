@@ -6,10 +6,6 @@
   ;;  :defer t
 
   ;; (setq lsp-bridge-enable-with-tramp nil)
-
-  ;; (setq lombok-path (substitute-in-file-name "$HOME/.local/share/javalib/lombok.jar"))
-  ;; (setq lsp-bridge-jdtls-jvm-args (list (format "%s%s" "-javaagent:" lombok-path)))
-
   ;; :custom
   ;; (lsp-bridge-code-action-enable-popup-menu nil)
 
@@ -19,6 +15,11 @@
   (setq lsp-bridge-enable-inlay-hint t)
   (setq lsp-bridge-enable-log nil)
   (global-lsp-bridge-mode)
+
+
+  (setq lombok-path (substitute-in-file-name "$HOME/.local/share/javalib/lombok.jar"))
+  (setq lsp-bridge-jdtls-jvm-args (list (format "%s%s" "-javaagent:" lombok-path)))
+
 
 
   ;; (require 'lsp-bridge-jdtls)

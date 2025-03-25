@@ -25,7 +25,7 @@
       :key (lambda() (gptel-api-key-from-auth-source "api.deepseek.com"))
       :host "api.deepseek.com"
       :stream t
-      :models '("deepseek-chat" "deepseek-coder"))
+      :models '("deepseek-reasoner" "deepseek-chat" "deepseek-coder"))
     )
 
   (defvar gptel--openai-proxy-claude

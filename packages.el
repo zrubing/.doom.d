@@ -196,11 +196,14 @@
 
 (package! gptel)
 
+(package! topsy)
+
 (package! minuet
   :recipe (:host github :repo "milanglacier/minuet-ai.el"
            :build nil))
 
-(package! aider :recipe (:host github :repo "tninja/aider.el" :files ("aider.el" "aider-doom.el")))
+(package! aider :recipe (:host github :repo "tninja/aider.el" :files ("*.el")))
+
 
 (package! ultra-scroll
   :recipe (:host github :repo "jdtsmith/ultra-scroll" :files ("ultra-scroll.el")))
