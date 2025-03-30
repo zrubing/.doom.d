@@ -161,7 +161,7 @@
   :recipe (:host github :repo "pashky/restclient.el" :build nil))
 
 (package! vue-ts-mode
-  :recipe (:host github :repo "8uff3r/vue-ts-mode" :build nil))
+  :recipe (:host github :repo "8uff3r/vue-ts-mode" :files ("*.el")))
 
 (package! dape
   :recipe (:host github :repo "svaante/dape" :build nil))
@@ -170,7 +170,7 @@
 
 (package! minibuffer-modifier-keys)
 
-;;(package! vue-mode)
+(package! vue-mode)
 ;;(package! alert)
 ;; (package! treesit-auto)
 

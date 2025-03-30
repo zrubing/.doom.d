@@ -14,7 +14,7 @@
   :config
   (setq lsp-bridge-enable-inlay-hint t)
   (setq lsp-bridge-enable-log nil)
-  (global-lsp-bridge-mode)
+  ;;(global-lsp-bridge-mode)
 
 
   (setq lombok-path (substitute-in-file-name "$HOME/.local/share/javalib/lombok.jar"))
@@ -50,6 +50,9 @@
 
 
   (setq-hook! 'java-mode-hook +format-with 'lsp-bridge-code-format)
+
+
+  (my/enable-global-lsp-bridge-mode)
 
   )
 

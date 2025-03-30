@@ -3,6 +3,8 @@
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
+(load! "+functions")
+
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
@@ -360,6 +362,15 @@
 
   (add-hook 'vterm-mode-hook #'my/set-vterm-shell))
 
+(use-package! vue-mode)
+
+;; (use-package! vue-ts-mode
+;;   :config
+;;   (setq treesit-language-source-alist
+;;         '((vue "https://github.com/ikatyang/tree-sitter-vue")
+;;           (css "https://github.com/tree-sitter/tree-sitter-css")
+;;           (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")))
+;;   )
 
 (load! "ejc-sql-conf")
 
