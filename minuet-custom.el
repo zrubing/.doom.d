@@ -31,19 +31,33 @@
   (add-hook 'prog-mode-hook #'minuet-auto-suggestion-mode)
 
   :config
-  ;;(setq minuet-provider 'codestral)
-  ;;(plist-put minuet-codestral-options :api-key (get-secret "mistral.ai"))
-  (setq minute-provider 'openai-fim-compatible)
+  (setq minuet-provider 'openai-compatible)
+  (setq minuet-request-timeout 3.5)
+  (setq minuet-auto-suggestion-throttle-delay 1.5) ;; Increase to reduce costs and avoid rate limits
+  (setq minuet-auto-suggestion-debounce-delay 0.6) ;; Increase to reduce costs and avoid rate limits
 
+  ;;(plist-put minuet-openai-compatible-options :end-point "https://openrouter.ai/api/v1/chat/completions")
+  ;;(plist-put minuet-openai-compatible-options :api-key (get-secret "openrouter.ai"))
+  ;;(plist-put minuet-openai-compatible-options :model "qwen/qwen-2.5-coder-32b-instruct:free")
+  ;;(plist-put minuet-openai-compatible-options :model "meta-llama/llama-4-scout:free")
+  (plist-put minuet-openai-compatible-options :end-point "https://api.siliconflow.cn/v1/chat/completions")
+  (plist-put minuet-openai-compatible-options :api-key (get-secret "siliconflow.cn"))
+  ;;(plist-put minuet-openai-compatible-options :model "Qwen/Qwen2.5-Coder-7B-Instruct")
+  (plist-put minuet-openai-compatible-options :model "Qwen/Qwen2.5-Coder-32B-Instruct")
+
+
+
+
+  ;; Prioritize throughput for faster completion
+  (minuet-set-optional-options minuet-openai-compatible-options :provider '(:sort "throughput"))
+  (minuet-set-optional-options minuet-openai-compatible-options :max_tokens 128)
+  (minuet-set-optional-options minuet-openai-compatible-options :top_p 0.9)
 
   ;; Required when defining minuet-ative-mode-map in insert/normal states.
   ;; Not required when defining minuet-active-mode-map without evil state.
   (add-hook 'minuet-active-mode-hook #'evil-normalize-keymaps)
 
 
-
-
-  (minuet-set-optional-options minuet-openai-fim-compatible-options :top_p 0.9)
 
 
   )

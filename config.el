@@ -376,7 +376,7 @@
 
 (load! "gptel")
 
-;;(load! "minuet-custom")
+(load! "minuet-custom")
 
 (load! "aider")
 
