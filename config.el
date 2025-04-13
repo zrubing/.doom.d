@@ -381,6 +381,10 @@
 
 (load! "minuet-custom")
 
-(load! "aider")
+;;(load! "aider")
+
+(load! "aidermacs")
+
+(load! "emigo")
 
 (load! "lsp-bridge")

@@ -200,10 +200,16 @@
 
 (package! minuet
   :recipe (:host github :repo "milanglacier/minuet-ai.el"
-           ))
+                 ))
 
 (package! aider :recipe (:host github :repo "tninja/aider.el" :files ("*.el")))
 
+(package! aidermacs :recipe (:host github :repo "MatthewZMD/aidermacs" :files ("*.el")))
 
 (package! ultra-scroll
   :recipe (:host github :repo "jdtsmith/ultra-scroll" :files ("ultra-scroll.el")))
+
+(package! emigo :recipe (:host github :repo "MatthewZMD/emigo"
+                         :files ("*.el" "*.py" "queries")
+                         :build (:not compile)
+                         ))
