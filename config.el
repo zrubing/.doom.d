@@ -5,8 +5,20 @@
 
 (load! "+functions")
 
+(add-to-list 'treesit-extra-load-path "~/.config/tree-sitter-libs")
 
 (setq split-width-threshold 50)
+
+(setq major-mode-remap-alist
+ '((yaml-mode . yaml-ts-mode)
+   (bash-mode . bash-ts-mode)
+   (js2-mode . js-ts-mode)
+   (typescript-mode . typescript-ts-mode)
+   (css-mode . css-ts-mode)
+   (java-mode . java-ts-mode)
+   (vue-mode . vue-ts-mode)
+   (markdown-mode . markdown-ts-mode)
+   (python-mode . python-ts-mode)))
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
@@ -365,15 +377,7 @@
 
   (add-hook 'vterm-mode-hook #'my/set-vterm-shell))
 
-(use-package! vue-mode)
-
-;; (use-package! vue-ts-mode
-;;   :config
-;;   (setq treesit-language-source-alist
-;;         '((vue "https://github.com/ikatyang/tree-sitter-vue")
-;;           (css "https://github.com/tree-sitter/tree-sitter-css")
-;;           (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")))
-;;   )
+;;(use-package! vue-mode)
 
 (load! "ejc-sql-conf")
 
@@ -388,3 +392,6 @@
 (load! "emigo")
 
 (load! "lsp-bridge")
+
+(use-package! vue-ts-mode
+  :config)

@@ -18,7 +18,9 @@
 
 
   (setq lombok-path (substitute-in-file-name "$HOME/.local/share/javalib/lombok.jar"))
+  (setq tsdk-path (substitute-in-file-name "$HOME/.config/lsp-bridge-lib/typescript-lib"))
   (setq lsp-bridge-jdtls-jvm-args (list (format "%s%s" "-javaagent:" lombok-path)))
+  (setq lsp-bridge-tsdk-path tsdk-path)
 
 
 
