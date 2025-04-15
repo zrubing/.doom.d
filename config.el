@@ -385,9 +385,9 @@
 
 (load! "minuet-custom")
 
-;;(load! "aider")
+(load! "aider")
 
-(load! "aidermacs")
+;;(load! "aidermacs")
 
 (load! "emigo")
 
