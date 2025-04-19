@@ -10,15 +10,15 @@
 (setq split-width-threshold 50)
 
 (setq major-mode-remap-alist
- '((yaml-mode . yaml-ts-mode)
-   (bash-mode . bash-ts-mode)
-   (js2-mode . js-ts-mode)
-   (typescript-mode . typescript-ts-mode)
-   (css-mode . css-ts-mode)
-   (java-mode . java-ts-mode)
-   (vue-mode . vue-ts-mode)
-   (markdown-mode . markdown-ts-mode)
-   (python-mode . python-ts-mode)))
+      '((yaml-mode . yaml-ts-mode)
+        (bash-mode . bash-ts-mode)
+        (js2-mode . js-ts-mode)
+        (typescript-mode . typescript-ts-mode)
+        (css-mode . css-ts-mode)
+        (java-mode . java-ts-mode)
+        (vue-mode . vue-ts-mode)
+        (markdown-mode . markdown-ts-mode)
+        (python-mode . python-ts-mode)))
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
@@ -206,7 +206,11 @@
   ;;       rime-librime-root "~/.nix-profile"
   ;;       rime-share-data-dir "~/.local/share/rime-data/share/rime-data")
   :custom
-  (default-input-method "rime"))
+  (default-input-method "rime")
+  :bind
+  (:map rime-mode-map
+        ("C-`" . 'rime-send-keybinding))
+  )
 
 (use-package! telega
   :init
@@ -236,40 +240,6 @@
 ;;     minibuffer-modifier-keys
 ;;   :after
 ;;   (minibuffer-modifier-keys-setup t))
-
-;; (use-package! dape
-
-;;   :defer t
-;;   :load-path "~/.config/emacs/.local/straight/repos/dape"
-;;   ;; To use window configuration like gud (gdb-mi)
-;;   :init
-;;   (setq dape-buffer-window-arrangment 'gud)
-;;   :config
-;;   ;; Info buffers to the right
-;;   ;; (setq dape-buffer-window-arrangment 'right)
-
-;;   ;; To not display info and/or buffers on startup
-;;   ;; (remove-hook 'dape-on-start-hooks 'dape-info)
-;;   ;; (remove-hook 'dape-on-start-hooks 'dape-repl)
-
-;;   ;; To display info and/or repl buffers on stopped
-;;   (add-hook 'dape-on-stopped-hooks 'dape-info)
-;;   (add-hook 'dape-on-stopped-hooks 'dape-repl)
-
-;;   ;; By default dape uses gdb keybinding prefix
-;;   (setq dape-key-prefix "\C-x\C-a")
-
-;;   ;; Kill compile buffer on build success
-;;   ;; (add-hook 'dape-compile-compile-hooks 'kill-buffer)
-
-;;   ;; Save buffers on startup, useful for interpreted languages
-;;   ;; (add-hook 'dape-on-start-hooks
-;;   ;;           (defun dape--save-on-start ()
-;;   ;;             (save-some-buffers t t)))
-
-;;   ;; Projectile users
-;;   (setq dape-cwd-fn 'projectile-project-root)
-;;   )
 
 
 ;; ;; (use-package! dired-rsync
@@ -392,6 +362,8 @@
 (load! "emigo")
 
 (load! "lsp-bridge")
+
+(load! "dape")
 
 (use-package! vue-ts-mode
   :config)
