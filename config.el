@@ -12,6 +12,7 @@
 (setq major-mode-remap-alist
       '((yaml-mode . yaml-ts-mode)
         (bash-mode . bash-ts-mode)
+        (php-mode . php-ts-mode)
         (js2-mode . js-ts-mode)
         (typescript-mode . typescript-ts-mode)
         (css-mode . css-ts-mode)
@@ -36,7 +37,7 @@
 ;;
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
-(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 13.0 :weight 'semi-light)
+(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 12.0 :weight 'semi-light)
       doom-variable-pitch-font (font-spec :family "DejaVu Sans Mono" :size 14))
 ;;(setq doom-font (font-spec :family "Fira Code" :size 14 :weight 'semi-light)
 ;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 14))
@@ -300,9 +301,9 @@
 
 ;; ;;(use-package! journalctl-mode)
 
-;; (use-package org
-;;   :mode ("\\.org\\'" . org-mode)
-;;   :config (define-key org-mode-map (kbd "C-c C-r") verb-command-map))
+(use-package org
+  :mode ("\\.org\\'" . org-mode)
+  :config (define-key org-mode-map (kbd "C-c C-r") verb-command-map))
 
 (use-package! ultra-scroll
   :init
@@ -318,9 +319,9 @@
   (setq +format-with-lsp nil)
   (setq apheleia-remote-algorithm 'remote))
 
-(after! tramp
-  (add-to-list 'tramp-remote-path "~/.nix-profile/bin")
-  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
+;; (after! tramp
+;;   (add-to-list 'tramp-remote-path "~/.nix-profile/bin")
+;;   (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
 (use-package! topsy
   :after lsp-bridge
@@ -352,9 +353,6 @@
 (load! "ejc-sql-conf")
 
 (load! "gptel")
-
-(load! "minuet-custom")
-
 (load! "aider")
 
 ;;(load! "aidermacs")
@@ -364,6 +362,9 @@
 (load! "lsp-bridge")
 
 (load! "dape")
+
+
+(load! "minuet-custom")
 
 (use-package! vue-ts-mode
   :config)

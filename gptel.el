@@ -55,8 +55,8 @@
       :models '("qwen2:1.5b" "deepseek-coder-v2:latest" "scomper/minicpm-v2.5:latest" "gemma2:9b" "phi3:medium"))
     )
 
-  (setq! gptel-model 'DeepSeek-R1
-         gptel-backend gptel--openai-proxy-github)
+  (setq! gptel-model 'deepseek-chat
+         gptel-backend gptel--deepseek-proxy)
   )
 
 

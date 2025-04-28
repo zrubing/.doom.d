@@ -14,3 +14,4 @@
                        (setq-local lsp-bridge-user-langserver-dir (concat confdir "/langserver")
                                    lsp-bridge-user-multiserver-dir (concat confdir "/multiserver")))
                      (lsp-bridge-mode 1)))))
+

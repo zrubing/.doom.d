@@ -11,9 +11,10 @@
 
   ;; (setq-local lsp-bridge-get-project-path-by-filepath 'projectile-project-root)
 
+  (require 'lsp-bridge-jdtls)
   :config
   (setq lsp-bridge-enable-inlay-hint t)
-  (setq lsp-bridge-enable-log nil)
+  ;;(setq lsp-bridge-enable-debug t)
   ;;(global-lsp-bridge-mode)
 
 
@@ -22,6 +23,7 @@
   (setq lsp-bridge-jdtls-jvm-args (list (format "%s%s" "-javaagent:" lombok-path)))
   (setq lsp-bridge-tsdk-path tsdk-path)
 
+  ;;(setq lsp-bridge-php-lsp-server 'phpactor)
 
 
   ;; (require 'lsp-bridge-jdtls)
@@ -51,7 +53,7 @@
   (ad-activate 'load)
 
 
-  (setq-hook! 'java-mode-hook +format-with 'lsp-bridge-code-format)
+  (setq-hook! 'java-ts-mode-hook +format-with 'lsp-bridge-code-format)
 
 
   (my/enable-global-lsp-bridge-mode)
