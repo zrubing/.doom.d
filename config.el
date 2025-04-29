@@ -319,9 +319,9 @@
   (setq +format-with-lsp nil)
   (setq apheleia-remote-algorithm 'remote))
 
-;; (after! tramp
-;;   (add-to-list 'tramp-remote-path "~/.nix-profile/bin")
-;;   (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
+(after! tramp
+  (add-to-list 'tramp-remote-path "~/.nix-profile/bin")
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
 (use-package! topsy
   :after lsp-bridge

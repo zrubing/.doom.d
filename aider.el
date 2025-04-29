@@ -15,13 +15,14 @@
   ;;   (setenv "DEEPSEEK_API_KEY" (encode-coding-string api-key 'utf-8)))
 
 
-  (setq aider-args '("--model" "volcengine/deepseek-v3-250324" "--no-auto-commits"))
   (let ((api-key (funcall (plist-get (car (auth-source-search :host "work.console.volcengine.com")) :secret))))
     (setenv "VOLCENGINE_API_KEY" (encode-coding-string api-key 'utf-8)))
-
+  (setq aider-args '("--model" "volcengine/deepseek-v3-250324" "--no-auto-commits"))
 
 
   ;; (setq aider-args '("--model" "openrouter/google/gemini-2.5-pro-preview-03-25" "--no-auto-commits"))
+  ;;(setq aider-args '("--model" "openrouter/qwen/qwen3-32b" "--no-auto-commits"))
+  ;;(setq aider-args '("--model" "openrouter/qwen/qwen3-235b-a22b" "--no-auto-commits"))
   (let ((api-key (funcall (plist-get (car (auth-source-search :host "openrouter.ai")) :secret))))
     (setenv "OPENROUTER_API_KEY" (encode-coding-string api-key 'utf-8)))
 

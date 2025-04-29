@@ -43,6 +43,10 @@
   (plist-put minuet-openai-compatible-options :end-point "https://openrouter.ai/api/v1/chat/completions")
   (plist-put minuet-openai-compatible-options :api-key "OPENROUTER_API_KEY")
   (plist-put minuet-openai-compatible-options :model "google/gemini-2.0-flash-lite-001")
+  ;;(plist-put minuet-openai-compatible-options :model "qwen/qwen3-8b:free")
+
+
+
 
   ;;(plist-put minuet-openai-compatible-options :model "meta-llama/llama-4-scout:free")
   ;; (plist-put minuet-openai-compatible-options :end-point "https://api.siliconflow.cn/v1/chat/completions")
