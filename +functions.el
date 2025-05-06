@@ -5,7 +5,9 @@
   "Add custom lsp-bridge language server configurations and enable lsp-bridge-mode"
   (dolist (hook (append lsp-bridge-default-mode-hooks acm-backend-capf-mode-hooks))
     (add-hook hook (lambda ()
-                     (setq confdir "~/.lsp")
+                     (setq confdir (or (let ((local-conf (expand-file-name "lsp-bridge-config")))
+                                         (when (file-directory-p local-conf) local-conf))
+                                       "~/.lsp"))
                      ;; check if a directory named ".lsp" exists in the projects root
                      (when-let (proot (projectile-project-root))
                        (let ((d (concat proot ".lsp/")))

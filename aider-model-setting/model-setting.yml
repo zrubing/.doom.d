@@ -5,5 +5,22 @@
 
 - name: openai/qwen3-30b-a3b
   extra_params:
+    stream: True
     extra_body:
       enable_thinking: False
+
+- name: openai/qwen3-235b-a22b
+  extra_params:
+    stream: True
+    extra_body:
+      enable_thinking: False
+    max_tokens: 8192
+    top_p: 0.8
+  use_temperature: 0.6
+
+
+- name: deepseek/deepseek-chat
+  extra_params:
+    stream: True
+    top_p: 0.8
+  use_temperature: 0.6

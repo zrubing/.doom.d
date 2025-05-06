@@ -165,6 +165,7 @@
 
 (package! dape
   :recipe (:host github :repo "svaante/dape" :build nil))
+(package! repeat)
 
 ;; (package! web-mode)
 

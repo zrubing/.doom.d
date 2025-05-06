@@ -361,7 +361,10 @@
 
 (load! "lsp-bridge")
 
-(load! "dape")
+(after! lsp-bridge
+
+)
+
 
 
 (load! "minuet-custom")

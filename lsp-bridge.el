@@ -55,6 +55,20 @@
 
   (setq-hook! 'java-ts-mode-hook +format-with 'lsp-bridge-code-format)
 
+  ;; (defun lsp-bridge-has-lsp-server-p ()
+  ;;   "Check if current buffer has an active lsp-bridge server."
+  ;;   (and (bound-and-true-p lsp-bridge-mode)
+  ;;        (lsp-bridge-get-server)))
+
+  ;; (defun lsp-bridge-capable-p (command)
+  ;;   "Check if lsp-bridge server supports COMMAND."
+  ;;   (when-let ((server (lsp-bridge-get-server)))
+  ;;     (member command (lsp-bridge-get-server-commands server))))
+
+  ;; (defun lsp-bridge-get-server-commands (server)
+  ;;   "Get list of supported commands from SERVER."
+  ;;   (when server
+  ;;     (plist-get (lsp-bridge-get-server-capabilities server) :executeCommandProvider)))
 
   (my/enable-global-lsp-bridge-mode)
 

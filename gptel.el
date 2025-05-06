@@ -15,7 +15,7 @@
     :endpoint "/chat/completions"
     :stream t
     :key 'gptel-api-key
-    :models '((gpt-4.1-mini gpt-4.1-nano gpt-4.1)))
+    :models '(gpt-4.1-mini gpt-4.1-nano gpt-4.1))
 
 
   (gptel-make-openai "Claude Proxy" ;Any name you want
