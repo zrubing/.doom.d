@@ -55,6 +55,9 @@
 
   (setq-hook! 'java-ts-mode-hook +format-with 'lsp-bridge-code-format)
 
+  (add-to-list 'lsp-bridge-default-mode-hooks
+               'vue-ts-mode-hook)
+
   ;; (defun lsp-bridge-has-lsp-server-p ()
   ;;   "Check if current buffer has an active lsp-bridge server."
   ;;   (and (bound-and-true-p lsp-bridge-mode)

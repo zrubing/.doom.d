@@ -40,13 +40,19 @@
   (let ((api-key (funcall (plist-get (car (auth-source-search :host "openrouter.ai")) :secret))))
     (setenv "OPENROUTER_API_KEY" (encode-coding-string api-key 'utf-8)))
 
-  (plist-put minuet-openai-compatible-options :end-point "https://openrouter.ai/api/v1/chat/completions")
-  (plist-put minuet-openai-compatible-options :api-key "OPENROUTER_API_KEY")
+  ;; (plist-put minuet-openai-compatible-options :end-point "https://openrouter.ai/api/v1/chat/completions")
+  ;; (plist-put minuet-openai-compatible-options :api-key "OPENROUTER_API_KEY")
   ;;(plist-put minuet-openai-compatible-options :model "google/gemini-2.0-flash-lite-001")
-  (plist-put minuet-openai-compatible-options :model "inception/mercury-coder-small-beta")
+  ;;(plist-put minuet-openai-compatible-options :model "inception/mercury-coder-small-beta")
+  ;;(plist-put minuet-openai-compatible-options :model "qwen/qwen2.5-coder-7b-instruct")
+
   ;;(plist-put minuet-openai-compatible-options :model "qwen/qwen3-8b:free")
 
-
+  (setq minuet-context-window 512)
+  (plist-put minuet-openai-fim-compatible-options :end-point "http://localhost:11434/v1/completions")
+  (plist-put minuet-openai-fim-compatible-options :model "qwen2.5-coder:1.5b")
+  (plist-put minuet-openai-fim-compatible-options :name "Ollama")
+  (plist-put minuet-openai-fim-compatible-options :api-key "TERM")
 
   ;;(plist-put minuet-openai-compatible-options :model "meta-llama/llama-4-scout:free")
   ;; (plist-put minuet-openai-compatible-options :end-point "https://api.siliconflow.cn/v1/chat/completions")
@@ -59,7 +65,7 @@
 
   ;; Prioritize throughput for faster completion
   (minuet-set-optional-options minuet-openai-compatible-options :provider '(:sort "throughput"))
-  (minuet-set-optional-options minuet-openai-compatible-options :max_tokens 128)
+  (minuet-set-optional-options minuet-openai-compatible-options :max_tokens 56)
   (minuet-set-optional-options minuet-openai-compatible-options :top_p 0.9)
 
   ;; Required when defining minuet-ative-mode-map in insert/normal states.

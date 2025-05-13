@@ -348,6 +348,7 @@
 
   (add-hook 'vterm-mode-hook #'my/set-vterm-shell))
 
+
 ;;(use-package! vue-mode)
 
 (load! "ejc-sql-conf")
@@ -365,9 +366,14 @@
 
 )
 
+;;(load! "dape")
 
 
 (load! "minuet-custom")
 
 (use-package! vue-ts-mode
-  :config)
+  :config
+  ;; setup formatter to be used by `SPC c f`
+  (after! apheleia
+    (setf (alist-get 'vue-ts-mode apheleia-mode-alist) '(prettier)))
+  )
