@@ -1,3 +1,5 @@
 ejc-sql-connect-conf.el
 .aider*
 .env
+
+mcp-conf.el

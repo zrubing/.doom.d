@@ -10,9 +10,9 @@
   ;;  (setenv "OPENAI_API_KEY" (encode-coding-string api-key 'utf-8)))
 
 
-  ;; (setenv "OPENAI_API_BASE" "https://dashscope.aliyuncs.com/compatible-mode/v1")
-  ;; (let ((api-key (funcall (plist-get (car (auth-source-search :host "bailian.console.aliyun.com")) :secret))))
-  ;;   (setenv "OPENAI_API_KEY" (encode-coding-string api-key 'utf-8)))
+  (setenv "OPENAI_API_BASE" "https://dashscope.aliyuncs.com/compatible-mode/v1")
+  (let ((api-key (funcall (plist-get (car (auth-source-search :host "bailian.console.aliyun.com")) :secret))))
+    (setenv "OPENAI_API_KEY" (encode-coding-string api-key 'utf-8)))
 
 
   (let ((api-key (funcall (plist-get (car (auth-source-search :host "api.deepseek.com")) :secret))))
@@ -40,9 +40,10 @@
 
     ;;(setq aider-args `("--model" "openai/gpt-4.1" "--no-auto-commits" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
 
-    ;;(setq aider-args `("--model" "volcengine/deepseek-v3-250324" "--no-auto-commits" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
-    (setq aider-args `("--model" "deepseek/deepseek-chat" "--no-auto-commits" "--edit-format" "diff" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
-    ;;(setq aider-args `("--model" "openrouter/google/gemini-2.5-pro-preview" "--no-auto-commits" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
+    (setq aider-args `("--model" "volcengine/deepseek-v3-250324" "--no-auto-commits" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
+    ;;(setq aider-args `("--model" "deepseek/deepseek-chat" "--no-auto-commits" "--edit-format" "diff" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
+    ;;(setq aider-args `("--model" "openrouter/google/gemini-2.5-pro-preview" "--no-auto-commits" "--edit-format" "diff" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
+    ;;(setq aider-args `("--model" "openrouter/google/gemini-2.5-flash-preview-05-20" "--edit-format" "diff" "--no-auto-commits" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
     ;;(setq aider-args `("--model" "openrouter/openai/gpt-4.1" "--no-auto-commits" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
     ;;(setq aider-args `("--model" "openrouter/deepseek/deepseek-chat-v3-0324:free" "--no-auto-commits" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
     ;;(setq aider-args `("--model" "openai/qwen-turbo-2025-04-28" "--no-auto-commits" "--model-metadata-file" ,model-settings-file))

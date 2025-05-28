@@ -214,3 +214,4 @@
                          :files ("*.el" "*.py" "queries")
                          :build (:not compile)
                          ))
+(package! mcp :recipe (:host github :repo "lizqwerscott/mcp.el" :files ("*.el")))

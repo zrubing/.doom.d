@@ -377,3 +377,5 @@
   (after! apheleia
     (setf (alist-get 'vue-ts-mode apheleia-mode-alist) '(prettier)))
   )
+
+(load! "mcp")
