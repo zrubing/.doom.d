@@ -40,7 +40,7 @@
   (setq! deepseek-config
          (gptel-make-deepseek "DeepSeek"       ;Any name you want
            :stream t                           ;for streaming responses
-           :models '("deepseek-chat" "deepseek-coder")
+           :models '("deepseek-chat" "deepseek-reasoner")
            :key (lambda() (gptel-api-key-from-auth-source "api.deepseek.com")))
          )
   (setq! openrouter-config

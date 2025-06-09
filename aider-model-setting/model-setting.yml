@@ -33,3 +33,15 @@
     stream: True
   #   top_p: 0.8
   # use_temperature: 0.6
+
+
+# https://aider.chat/docs/config/adv-model-settings.html#model-settings
+# https://aider.chat/docs/config/reasoning.html#basic-usage
+
+- name: openrouter/google/gemini-2.5-pro-preview
+  edit_format: diff-fenced
+  weak_model_name: openrouter/google/gemini-2.0-flash-001
+  use_repo_map: true
+  overeager: true
+  accepts_settings:
+  - thinking_tokens

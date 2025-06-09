@@ -194,6 +194,10 @@
 
 (package! journalctl-mode)
 
+(package! transient
+  :pin "df5856bb960933c91ec391de79f75ecd2cb55e52")
+(package! magit
+  :pin "0c134614665c70552aff6786844e4792365ff7e5")
 
 (package! gptel)
 
