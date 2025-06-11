@@ -1,3 +1,11 @@
+
+
+- name: volcengine/doubao-seed-1-6-250615
+  extra_params:
+    extra_body:
+      thinking:
+        type: disabled
+
 - name: openrouter/qwen/qwen3-30b-a3b
   extra_params:
     extra_body:

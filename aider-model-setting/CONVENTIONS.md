@@ -1,3 +1,1 @@
-- reply in Chinese
 - 中文回复
-- 中文注释

@@ -11,6 +11,9 @@
 
   ;; (setq-local lsp-bridge-get-project-path-by-filepath 'projectile-project-root)
 
+
+  (add-to-list 'auto-mode-alist '("\\.php\\'" . php-ts-mode))
+
   (require 'lsp-bridge-jdtls)
   :config
   (setq lsp-bridge-enable-inlay-hint t)

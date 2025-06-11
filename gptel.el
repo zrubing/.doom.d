@@ -62,11 +62,23 @@
 
 
   (gptel-make-preset 'deepseek-with-fetch                      ;preset name, a symbol
-                     :description "deepseek chat with fetch tool" ;for your reference
-                     :backend deepseek-config                     ;gptel backend or backend name
-                     :model 'deepseek-chat
-                     :tools '("fetch")) ;gptel tools or tool names
+    :description "deepseek chat with fetch tool" ;for your reference
+    :backend deepseek-config                     ;gptel backend or backend name
+    :model 'deepseek-chat
+    :tools '("fetch")) ;gptel tools or tool names
   )
+
+
+(defun my/gptel-write-buffer ()
+  "Save buffer to disk when starting gptel"
+  (unless (buffer-file-name (current-buffer))
+    (let ((suffix (format-time-string "%Y%m%dT%H%M" (current-time)))
+          (chat-dir "~/org-roam-dir/chat"))
+      (unless (file-directory-p chat-dir)
+        (make-directory chat-dir :parents))
+      (write-file (expand-file-name (concat "gptel-" suffix ".org") chat-dir)))))
+
+(add-hook 'gptel-mode-hook #'my/gptel-write-buffer)
 
 
 
