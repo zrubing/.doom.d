@@ -50,7 +50,7 @@
                                         ;(unpin! t)
 
 (package! counsel-etags)
-(package! org :pin "39272e2165ad9c49cfa9b5d749a5bb528dbadd87")
+(package! org)
 
 (package! org-download)
 (package! org-pomodoro)
@@ -180,10 +180,12 @@
 
 (package! dired-rsync-transient)
 
+;; (package! go-translate)
 
 (package! window-numbering)
 
 (package! ejc-sql)
+
 (package! flx-ido)
 
 (package! auto-complete)
@@ -194,10 +196,10 @@
 
 (package! journalctl-mode)
 
-(package! transient
-  :pin "df5856bb960933c91ec391de79f75ecd2cb55e52")
-(package! magit
-  :pin "0c134614665c70552aff6786844e4792365ff7e5")
+;; (package! transient
+;;   :pin "df5856bb960933c91ec391de79f75ecd2cb55e52")
+;; (package! magit
+;;   :pin "0c134614665c70552aff6786844e4792365ff7e5")
 
 (package! gptel)
 
@@ -207,7 +209,7 @@
   :recipe (:host github :repo "milanglacier/minuet-ai.el"
                  ))
 
-(package! aider :recipe (:host github :repo "tninja/aider.el" :files ("*.el")))
+(package! aider :recipe (:host github :repo "tninja/aider.el" :files ("*.el") :build nil))
 
 (package! aidermacs :recipe (:host github :repo "MatthewZMD/aidermacs" :files ("*.el")))
 
@@ -219,3 +221,5 @@
                          :build (:not compile)
                          ))
 (package! mcp :recipe (:host github :repo "lizqwerscott/mcp.el" :files ("*.el")))
+
+(package! csv-mode)

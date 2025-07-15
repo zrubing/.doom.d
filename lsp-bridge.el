@@ -76,6 +76,8 @@
   ;;   (when server
   ;;     (plist-get (lsp-bridge-get-server-capabilities server) :executeCommandProvider)))
 
+  ;; (setq lsp-bridge-python-multi-lsp-server "ty_ruff")
+
   (my/enable-global-lsp-bridge-mode)
 
   )

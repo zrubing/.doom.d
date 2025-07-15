@@ -145,7 +145,8 @@
 ;; (setq org-agenda-include-diary t)
 ;; (setq org-time-stamp-custom-formats '("<%Y-%m-%d %a %H:%M>"))
 
-;; (setq org-agenda-files '("~/org-roam-dir"))
+(setq org-agenda-files (directory-files-recursively "~/org-roam-dir/" "\\.org$"))
+
 ;; (setq org-agenda-diary-file "~/org-roam-dir/src/standard-diary") ;;2020-03-02 10:47:06
 ;; (setq diary-file "~/org-roam-dir/src/standard-diary")
 
@@ -358,13 +359,13 @@
 
 ;;(load! "aidermacs")
 
-(load! "emigo")
+;;(load! "emigo")
 
 (load! "lsp-bridge")
 
 (after! lsp-bridge
 
-)
+  )
 
 ;;(load! "dape")
 
@@ -379,3 +380,10 @@
   )
 
 (load! "mcp")
+
+;; (use-package! go-translate
+;;   :config
+;;   (setq gt-langs '(en zh))
+;;   (setq gt-default-translator (gt-translator :engines (gt-youdao-dict-engine)))
+
+;;   )
