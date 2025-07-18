@@ -9,14 +9,25 @@
   (setq! gptel-api-key (lambda()
                          (gptel-api-key-from-auth-source "chatapi.onechats.top") ))
 
+  (setq! gptel-temperature 0)
+  (setq! bailian-config
+         (gptel-make-openai "bailian-config"
+           :host "dashscope.aliyuncs.com"
+           :endpoint "/compatible-mode/v1/chat/completions"
+           :stream t
+           :protocol "https"
+           :key (lambda() (gptel-api-key-from-auth-source "bailian.console.aliyun.com"))
+           :models '(Moonshot-Kimi-K2-Instruct)
+           )
+         )
 
   (setq onechats-config
         (gptel-make-openai "OpenAI Proxy" ;Any name you want
-          :host "chatapi.onechats.top"
+          :host "chatapi.onechats.ai"
           :endpoint "/chat/completions"
           :stream t
           :key 'gptel-api-key
-          :models '(gpt-4.1-mini gpt-4.1-nano gpt-4.1))
+          :models '(kimi-k2))
         )
 
   (setq claude-config
@@ -57,8 +68,12 @@
                      ))
          )
 
-  (setq! gptel-model 'deepseek-chat
-         gptel-backend deepseek-config)
+  ;; (setq! gptel-model 'deepseek-chat
+  ;;        gptel-backend deepseek-config)
+
+  (setq! gptel-model 'Moonshot-Kimi-K2-Instruct
+         gptel-backend bailian-config)
+
 
 
   (gptel-make-preset 'deepseek-with-fetch                      ;preset name, a symbol

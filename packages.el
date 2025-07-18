@@ -209,7 +209,7 @@
   :recipe (:host github :repo "milanglacier/minuet-ai.el"
                  ))
 
-(package! aider :recipe (:host github :repo "tninja/aider.el" :files ("*.el") :build nil))
+(package! aider :recipe (:host github :repo "tninja/aider.el" :files ("*.el") ))
 
 (package! aidermacs :recipe (:host github :repo "MatthewZMD/aidermacs" :files ("*.el")))
 

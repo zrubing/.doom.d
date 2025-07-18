@@ -23,6 +23,13 @@
   use_temperature: 0.7
 
 
+- name: openai/openai/kimi-k2-0711-preview
+  extra_params:
+    stream: True
+    temperature: 0
+  use_temperature: 0
+
+
 
 - name: openai/qwen3-235b-a22b
   extra_params:
