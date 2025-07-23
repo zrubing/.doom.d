@@ -350,6 +350,11 @@
   (add-hook 'vterm-mode-hook #'my/set-vterm-shell))
 
 
+(use-package! eat
+  :config
+  (setq eat-enable-directory-tracking t)
+  (setq eat-shell "zsh"))
+
 ;;(use-package! vue-mode)
 
 (load! "ejc-sql-conf")
@@ -387,3 +392,4 @@
 ;;   (setq gt-default-translator (gt-translator :engines (gt-youdao-dict-engine)))
 
 ;;   )
+

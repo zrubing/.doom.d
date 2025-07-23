@@ -21,6 +21,16 @@
            )
          )
 
+  (setq! volcengine-config
+         (gptel-make-openai "volcengine-config"
+           :host "ark.cn-beijing.volces.com"
+           :endpoint "/api/v3/chat/completions"
+           :stream t
+           :protocol "https"
+           :key (lambda() (gptel-api-key-from-auth-source "work.console.volcengine.com"))
+           :models '(kimi-k2-250711)
+           ))
+
   (setq onechats-config
         (gptel-make-openai "OpenAI Proxy" ;Any name you want
           :host "chatapi.onechats.ai"
@@ -71,8 +81,8 @@
   ;; (setq! gptel-model 'deepseek-chat
   ;;        gptel-backend deepseek-config)
 
-  (setq! gptel-model 'Moonshot-Kimi-K2-Instruct
-         gptel-backend bailian-config)
+  (setq! gptel-model 'kimi-k2-250711
+         gptel-backend volcengine-config)
 
 
 
