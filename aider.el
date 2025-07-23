@@ -68,12 +68,12 @@
 
     ;; bailian
     ;; (setq aider-args `("--model" "openai/Moonshot-Kimi-K2-Instruct" "--edit-format" "diff" "--chat-language" "chinese" "--no-auto-commits" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
-    (setq aider-args `("--model" "openai/qwen3-coder-480b-a35b-instruct" "--env-file" ,(expand-file-name "blank_env" model-dir) "--edit-format" "diff" "--chat-language" "chinese" "--no-auto-commits" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
+    ;; (setq aider-args `("--model" "openai/qwen3-coder-480b-a35b-instruct" "--env-file" ,(expand-file-name "blank_env" model-dir) "--edit-format" "diff" "--chat-language" "chinese" "--no-auto-commits" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
 
     ;;(setq aider-args `("--model" "openai/gpt-4.1" "--no-auto-commits" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
 
     ;; volcengine
-    ;;(setq aider-args `("--model" "volcengine/kimi-k2-250711" "--edit-format" "diff" "--chat-language" "chinese" "--no-auto-commits" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
+    (setq aider-args `("--model" "volcengine/kimi-k2-250711" "--edit-format" "diff" "--chat-language" "chinese" "--no-auto-commits" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
     ;;(setq aider-args `("--model" "volcengine/deepseek-v3-250324" "--edit-format" "diff" "--chat-language" "chinese" "--no-auto-commits" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
     ;;(setq aider-args `("--model" "volcengine/doubao-seed-1-6-250615" "--edit-format" "diff" "--no-auto-commits" "--chat-language" "chinese" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
     ;;(setq aider-args `("--model" "volcengine/deepseek-r1-250528" "--no-auto-commits" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
