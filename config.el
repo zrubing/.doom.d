@@ -355,6 +355,10 @@
   (setq eat-enable-directory-tracking t)
   (setq eat-shell "zsh"))
 
+(after! dape
+  (setq dape-debug t)
+  )
+
 ;;(use-package! vue-mode)
 
 (load! "ejc-sql-conf")
@@ -372,7 +376,7 @@
 
   )
 
-;;(load! "dape")
+(load! "dape")
 
 
 (load! "minuet-custom")

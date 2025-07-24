@@ -3,3 +3,4 @@ ejc-sql-connect-conf.el
 .env
 
 mcp-conf.el
+custom.el

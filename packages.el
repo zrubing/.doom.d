@@ -163,8 +163,8 @@
 (package! vue-ts-mode
   :recipe (:host github :repo "8uff3r/vue-ts-mode" :files ("*.el")))
 
-(package! dape
-  :recipe (:host github :repo "svaante/dape" :build nil))
+;; (package! dape
+;;   :recipe (:host github :repo "svaante/dape" :build nil))
 (package! repeat)
 
 ;; (package! web-mode)
