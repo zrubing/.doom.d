@@ -91,6 +91,73 @@
     :backend deepseek-config                     ;gptel backend or backend name
     :model 'deepseek-chat
     :tools '("fetch")) ;gptel tools or tool names
+
+
+  (require 'shr)
+  (defvar shr-external-rendering-functions)
+
+  ;; web tools
+
+  (gptel-make-tool
+   :name "read_url"
+   :function (lambda (url)
+	       (with-current-buffer (+gptel-url-retrieve url)
+	         (goto-char (point-min))
+	         (forward-paragraph)
+	         (let ((dom (libxml-parse-html-region (point) (point-max))))
+		   (run-at-time 0 nil #'kill-buffer (current-buffer))
+		   (with-temp-buffer
+		     (shr-insert-document dom)
+		     (buffer-substring-no-properties (point-min) (point-max))))))
+   :description "Fetch and read the contents of a URL"
+   :args (list '(:name "url"
+		 :type string
+		 :description "The URL to read"))
+   :category "web")
+
+  (defvar url-http-response-status)
+
+  (defun +gptel-url-retrieve (url)
+    (message "Retrieving %s..." url)
+    (let ((buffer (url-retrieve-synchronously url t t 20)))
+      (unless buffer
+        "Retrieving %s...failed" url)
+      (with-current-buffer buffer
+        (message "Retrieving %s...%s" url url-http-response-status)
+        (when (>= url-http-response-status 400)
+	  (error "HTTP Error %s: %s" url-http-response-status
+	         (with-current-buffer buffer
+		   (buffer-string)))))
+      buffer))
+
+  (defun +gptel-insert-link (dom)
+    (shr-generic dom)
+    (when-let* ((href (dom-attr dom 'href)))
+      (or (string-match-p ".*duckduckgo\\.com.*" href)
+          (string-match-p "\\`\\(/\\|:\\)" href)
+          (shr-insert (format " (%s)" href)))))
+  (defun +gptel-search-ddg (query)
+    (let ((url (format "https://html.duckduckgo.com/html/?q=%s" query)))
+      (with-current-buffer (+gptel-url-retrieve url)
+        (goto-char (point-min))
+        (forward-paragraph)
+        (let ((dom (libxml-parse-html-region (point) (point-max))))
+          (run-at-time 0 nil #'kill-buffer (current-buffer))
+          (with-temp-buffer
+            (let ((shr-external-rendering-functions '((a . +gptel-insert-link))))
+              (shr-insert-document dom))
+            (buffer-substring-no-properties (point-min) (point-max)))))))
+
+  (gptel-make-tool
+   :name "search_web"
+   :function #'+gptel-search-ddg
+   :description "Perform a web search using the DuckDuckGo search engine"
+   :args (list '(:name "query"
+                 :type string
+                 :description "The search query string.  When searching the web, one should always use English rather than their native language."))
+   :category "web")
+
+
   )
 
 
@@ -104,6 +171,8 @@
       (write-file (expand-file-name (concat "gptel-" suffix ".org") chat-dir)))))
 
 (add-hook 'gptel-mode-hook #'my/gptel-write-buffer)
+
+
 
 
 

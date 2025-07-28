@@ -145,7 +145,7 @@
 ;; (setq org-agenda-include-diary t)
 ;; (setq org-time-stamp-custom-formats '("<%Y-%m-%d %a %H:%M>"))
 
-(setq org-agenda-files (directory-files-recursively "~/org-roam-dir/" "\\.org$"))
+(setq org-agenda-files (directory-files-recursively "~/org-roam-dir/daily/" "^2025-.*\\.org$"))
 
 ;; (setq org-agenda-diary-file "~/org-roam-dir/src/standard-diary") ;;2020-03-02 10:47:06
 ;; (setq diary-file "~/org-roam-dir/src/standard-diary")
@@ -359,6 +359,13 @@
   (setq dape-debug t)
   )
 
+(use-package! direnv
+  :config
+  (after! direnv
+
+    (direnv-mode)
+    )
+  )
 ;;(use-package! vue-mode)
 
 (load! "ejc-sql-conf")
