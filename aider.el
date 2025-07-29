@@ -94,6 +94,13 @@
 
     )
 
+  ;; hook报错，先移除
+  (add-hook 'aider-mode-hook
+            (lambda ()
+              (advice-remove #'comint-output-filter #'doom--comint-enable-undo-a)))
+
+
+
   ;;(setq aider-args '("--model" "volcengine/deepseek-v3-250324" "--no-auto-commits" ""))
   (global-set-key (kbd "C-c a") 'aider-transient-menu))
 (provide 'aider)
