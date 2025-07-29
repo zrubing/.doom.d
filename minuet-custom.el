@@ -48,18 +48,16 @@
 
   ;;(plist-put minuet-openai-compatible-options :model "qwen/qwen3-8b:free")
 
-  (setq minuet-context-window 512)
-  (plist-put minuet-openai-fim-compatible-options :end-point "http://localhost:11434/v1/completions")
-  (plist-put minuet-openai-fim-compatible-options :model "qwen2.5-coder:1.5b")
-  (plist-put minuet-openai-fim-compatible-options :name "Ollama")
-  (plist-put minuet-openai-fim-compatible-options :api-key "TERM")
+  (setq minuet-context-window 1024)
+  ;; (plist-put minuet-openai-fim-compatible-options :end-point "http://localhost:11434/v1/completions")
+  ;; (plist-put minuet-openai-fim-compatible-options :model "qwen2.5-coder:1.5b")
+  ;; (plist-put minuet-openai-fim-compatible-options :name "Ollama")
+  ;; (plist-put minuet-openai-fim-compatible-options :api-key "TERM")
 
-  ;;(plist-put minuet-openai-compatible-options :model "meta-llama/llama-4-scout:free")
-  ;; (plist-put minuet-openai-compatible-options :end-point "https://api.siliconflow.cn/v1/chat/completions")
-  ;; (plist-put minuet-openai-compatible-options :api-key (get-secret "siliconflow.cn"))
-  ;; ;;(plist-put minuet-openai-compatible-options :model "Qwen/Qwen2.5-Coder-7B-Instruct")
-  ;; (plist-put minuet-openai-compatible-options :model "Qwen/Qwen2.5-Coder-32B-Instruct")
 
+  (plist-put minuet-openai-compatible-options :model "qwen3-coder-plus")
+  (plist-put minuet-openai-compatible-options :end-point "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions")
+  (plist-put minuet-openai-compatible-options :api-key (get-secret "work.bailian.console.aliyun.com"))
 
 
 
