@@ -11,7 +11,7 @@
     stream: True
     temperature: 0
     max_tokens: 128000
-  use_temperature: 0.1
+  use_temperature: 0
 
 # bailian
 - name: openai/qwen3-coder-480b-a35b-instruct
