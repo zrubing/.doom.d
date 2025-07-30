@@ -95,11 +95,18 @@
     )
 
   ;; hook报错，先移除
-  (add-hook 'aider-mode-hook
-            (lambda ()
-              (advice-remove #'comint-output-filter #'doom--comint-enable-undo-a)))
+  ;; (add-hook 'aider-mode-hook
+  ;;           (lambda ()
+  ;;             (advice-remove #'comint-output-filter #'doom--comint-enable-undo-a)))
 
+  (add-hook! 'aider-mode-hook
+    (defun +aider-remove-doom-advice-h ()
+      (advice-remove #'comint-output-filter #'doom--comint-enable-undo-a)
+      (advice-remove #'comint-output-filter #'doom--comint-protect-output-in-visual-modes-a)
+      (remove-hook 'comint-output-filter-functions #'doom--comint-protect-output-in-visual-modes-a)))
 
+  (add-hook! 'aider-comint-mode-hook
+    #'+aider-remove-doom-advice-h)
 
   ;;(setq aider-args '("--model" "volcengine/deepseek-v3-250324" "--no-auto-commits" ""))
   (global-set-key (kbd "C-c a") 'aider-transient-menu))
