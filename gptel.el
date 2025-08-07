@@ -31,6 +31,17 @@
            :models '(kimi-k2-250711)
            ))
 
+  (setq! moonshot-config
+         (gptel-make-openai "moonshot-config"
+           :host "https://api.moonshot.cn/v1"
+           :endpoint "/chat/completions "
+           :stream t
+           :protocol "https"
+           :key (lambda() (gptel-api-key-from-auth-source "api.moonshot.cn"))
+           :models '(kimi-k2-0711-preview kimi-k2-turbo-preview)
+           ))
+
+
   (setq onechats-config
         (gptel-make-openai "OpenAI Proxy" ;Any name you want
           :host "chatapi.onechats.ai"
