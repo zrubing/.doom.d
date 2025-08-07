@@ -87,10 +87,10 @@
 
 
   (gptel-make-preset 'deepseek-with-fetch                      ;preset name, a symbol
-    :description "deepseek chat with fetch tool" ;for your reference
-    :backend deepseek-config                     ;gptel backend or backend name
-    :model 'deepseek-chat
-    :tools '("fetch")) ;gptel tools or tool names
+                     :description "deepseek chat with fetch tool" ;for your reference
+                     :backend deepseek-config                     ;gptel backend or backend name
+                     :model 'deepseek-chat
+                     :tools '("fetch")) ;gptel tools or tool names
 
 
   (require 'shr)
@@ -101,18 +101,18 @@
   (gptel-make-tool
    :name "read_url"
    :function (lambda (url)
-	       (with-current-buffer (+gptel-url-retrieve url)
-	         (goto-char (point-min))
-	         (forward-paragraph)
-	         (let ((dom (libxml-parse-html-region (point) (point-max))))
-		   (run-at-time 0 nil #'kill-buffer (current-buffer))
-		   (with-temp-buffer
-		     (shr-insert-document dom)
-		     (buffer-substring-no-properties (point-min) (point-max))))))
+               (with-current-buffer (+gptel-url-retrieve url)
+                 (goto-char (point-min))
+                 (forward-paragraph)
+                 (let ((dom (libxml-parse-html-region (point) (point-max))))
+                   (run-at-time 0 nil #'kill-buffer (current-buffer))
+                   (with-temp-buffer
+                     (shr-insert-document dom)
+                     (buffer-substring-no-properties (point-min) (point-max))))))
    :description "Fetch and read the contents of a URL"
    :args (list '(:name "url"
-		 :type string
-		 :description "The URL to read"))
+                 :type string
+                 :description "The URL to read"))
    :category "web")
 
   (defvar url-http-response-status)
