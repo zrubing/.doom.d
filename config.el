@@ -349,6 +349,9 @@
 
   (add-hook 'vterm-mode-hook #'my/set-vterm-shell))
 
+(after! direnv
+  (direnv-mode)
+  )
 
 (use-package! eat
   :config
@@ -396,6 +399,8 @@
   )
 
 (load! "mcp")
+
+(load! "claude-code-ide")
 
 ;; (use-package! go-translate
 ;;   :config

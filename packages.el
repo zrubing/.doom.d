@@ -232,3 +232,12 @@
                    ("integration" "integration/*")
                    (:exclude ".dir-locals.el" "*-tests.el"))))
 (package! direnv)
+
+(package! claude-code-ide
+  :recipe (:host github :repo "manzaltu/claude-code-ide.el"
+           :files ("*.el" "*.sh")
+           :build (:not compile)))
+
+(package! emacs-web-server
+  :recipe (:host github :repo "skeeto/emacs-web-server" :files ("*.el"))
+  )
