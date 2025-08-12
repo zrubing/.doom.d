@@ -205,6 +205,7 @@
 
 (package! topsy)
 
+(package! treemacs :pin "5fa84199501fd43e5573b1277a2b1699c7473cc1")
 (package! persp-mode :pin "f146ddccaf598feb402664bc6848b60321b2dc78")
 (package! diff-hl
   :pin "39f076efa85110c4bcc9b73994f30a7d52312c98")

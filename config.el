@@ -369,6 +369,13 @@
     (direnv-mode)
     )
   )
+
+(with-eval-after-load 'vterm
+  ;; 解除 M-0 到 M-9 的绑定
+  (dolist (key '("0" "1" "2" "3" "4" "5" "6" "7" "8" "9"))
+    (define-key vterm-mode-map (kbd (concat "M-" key)) nil)))
+
+
 ;;(use-package! vue-mode)
 
 (load! "ejc-sql-conf")
