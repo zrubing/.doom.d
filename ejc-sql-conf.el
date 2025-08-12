@@ -9,6 +9,10 @@
             (auto-complete-mode t)
             (ejc-ac-setup)))
 
+(after! ejc-sql
+  (global-set-key (kbd "C-c eb") 'ejc-get-temp-editor-buffer)
+  )
+
 
 (setq ejc-use-flx t)
 (setq ejc-flx-threshold 2)
