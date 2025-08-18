@@ -40,11 +40,12 @@
   (let ((api-key (funcall (plist-get (car (auth-source-search :host "openrouter.ai")) :secret))))
     (setenv "OPENROUTER_API_KEY" (encode-coding-string api-key 'utf-8)))
 
-  ;; (plist-put minuet-openai-compatible-options :end-point "https://openrouter.ai/api/v1/chat/completions")
-  ;; (plist-put minuet-openai-compatible-options :api-key "OPENROUTER_API_KEY")
+  (plist-put minuet-openai-compatible-options :end-point "https://openrouter.ai/api/v1/chat/completions")
+  (plist-put minuet-openai-compatible-options :api-key "OPENROUTER_API_KEY")
   ;;(plist-put minuet-openai-compatible-options :model "google/gemini-2.0-flash-lite-001")
   ;;(plist-put minuet-openai-compatible-options :model "inception/mercury-coder-small-beta")
-  ;;(plist-put minuet-openai-compatible-options :model "qwen/qwen2.5-coder-7b-instruct")
+  (plist-put minuet-openai-compatible-options :model "qwen/qwen3-8b")
+
 
   ;;(plist-put minuet-openai-compatible-options :model "qwen/qwen3-8b:free")
 
@@ -55,9 +56,9 @@
   ;; (plist-put minuet-openai-fim-compatible-options :api-key "TERM")
 
 
-  (plist-put minuet-openai-compatible-options :model "qwen3-coder-plus")
-  (plist-put minuet-openai-compatible-options :end-point "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions")
-  (plist-put minuet-openai-compatible-options :api-key (get-secret "work.bailian.console.aliyun.com"))
+  ;; (plist-put minuet-openai-compatible-options :model "qwen3-coder-plus")
+  ;; (plist-put minuet-openai-compatible-options :end-point "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions")
+  ;; (plist-put minuet-openai-compatible-options :api-key (get-secret "work.bailian.console.aliyun.com"))
 
 
 

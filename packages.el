@@ -205,10 +205,11 @@
 
 (package! topsy)
 
-(package! treemacs :pin "5fa84199501fd43e5573b1277a2b1699c7473cc1")
-(package! persp-mode :pin "f146ddccaf598feb402664bc6848b60321b2dc78")
-(package! diff-hl
-  :pin "39f076efa85110c4bcc9b73994f30a7d52312c98")
+;;(package! treemacs :pin "5fa84199501fd43e5573b1277a2b1699c7473cc1")
+;;(package! persp-mode :pin "f146ddccaf598feb402664bc6848b60321b2dc78")
+;; (package! persp-mode :pin "40e9993a9711cba5fb56dfec81a507fabeba9668")
+;; (package! diff-hl :pin "39f076efa85110c4bcc9b73994f30a7d52312c98")
+
 
 (package! minuet
   :recipe (:host github :repo "milanglacier/minuet-ai.el"
@@ -236,7 +237,8 @@
                    ("terminfo/65" "terminfo/65/*")
                    ("integration" "integration/*")
                    (:exclude ".dir-locals.el" "*-tests.el"))))
-(package! direnv)
+;;(package! direnv)
+(package! envrc)
 
 (package! claude-code-ide
   :recipe (:host github :repo "manzaltu/claude-code-ide.el"

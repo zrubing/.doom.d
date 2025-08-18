@@ -37,8 +37,8 @@
 ;;
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
-(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 12.0 :weight 'semi-light)
-      doom-variable-pitch-font (font-spec :family "DejaVu Sans Mono" :size 14))
+(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 11.0 :weight 'semi-light)
+      doom-variable-pitch-font (font-spec :family "DejaVu Sans Mono" :size 13))
 ;;(setq doom-font (font-spec :family "Fira Code" :size 14 :weight 'semi-light)
 ;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 14))
 ;;(setq doom-font (font-spec :family "Fira Mono" :size 11))
@@ -181,6 +181,10 @@
 ;; (setq org-file-apps
 ;;       '((auto-mode . emacs)
 ;;         ("\\.docx\\'" . "open -a /Applications/wpsoffice.app %s")))
+
+(setq org-file-apps
+      '((auto-mode . emacs)
+        ("\\.docx\\'" . "libreoffice %s")))
 
 ;; (setq org-file-apps
 ;;       '((auto-mode . emacs)
@@ -349,9 +353,6 @@
 
   (add-hook 'vterm-mode-hook #'my/set-vterm-shell))
 
-(after! direnv
-  (direnv-mode)
-  )
 
 (use-package! eat
   :config
@@ -362,19 +363,15 @@
   (setq dape-debug t)
   )
 
-(use-package! direnv
-  :config
-  (after! direnv
-
-    (direnv-mode)
-    )
+(after! envrc
+  (envrc-global-mode)
   )
 
 (with-eval-after-load 'vterm
+  (setq vterm-shell "bash")
   ;; 解除 M-0 到 M-9 的绑定
   (dolist (key '("0" "1" "2" "3" "4" "5" "6" "7" "8" "9"))
     (define-key vterm-mode-map (kbd (concat "M-" key)) nil)))
-
 
 ;;(use-package! vue-mode)
 
