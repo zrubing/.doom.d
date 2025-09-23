@@ -21,6 +21,29 @@
            )
          )
 
+  (setq! default-api-master-jsx
+         (gptel-make-openai "default-api-master-jsx"
+           :host "api.master-jsx.top"
+           :endpoint "/v1/chat/completions"
+           :stream t
+           :protocol "https"
+           :key (lambda() (gptel-api-key-from-auth-source "default.me.api.master-jsx.top"))
+           :models '(grok-code-fast-1)
+           )
+         )
+
+  (setq! microsoft-api-master-jsx
+         (gptel-make-openai "microsoft-api-master-jsx"
+           :host "api.master-jsx.top"
+           :endpoint "/v1/chat/completions"
+           :stream t
+           :protocol "https"
+           :key (lambda() (gptel-api-key-from-auth-source "microsoft.me.api.master-jsx.top"))
+           :models '(gpt-5-chat-latest)
+           )
+         )
+
+
   (setq! volcengine-config
          (gptel-make-openai "volcengine-config"
            :host "ark.cn-beijing.volces.com"
@@ -28,7 +51,7 @@
            :stream t
            :protocol "https"
            :key (lambda() (gptel-api-key-from-auth-source "work.console.volcengine.com"))
-           :models '(kimi-k2-250711)
+           :models '(kimi-k2-250905)
            ))
 
   (setq! moonshot-config
@@ -82,26 +105,51 @@
            :stream t
            :key (lambda() (gptel-api-key-from-auth-source "openrouter.ai"))                   ;can be a function that returns the key
            :models '(
-                     google/gemini-2.5-pro-preview
-                     qwen/qwen3-235b-a22b:free
-                     qwen/qwen3-8b:free
-                     deepseek/deepseek-chat-v3-0324:free
+                     x-ai/grok-4-fast:free
                      ))
          )
 
   ;; (setq! gptel-model 'deepseek-chat
   ;;        gptel-backend deepseek-config)
 
-  (setq! gptel-model 'kimi-k2-250711
-         gptel-backend volcengine-config)
+  ;; (setq! gptel-model 'kimi-k2-250711
+  ;;        gptel-backend volcengine-config)
+
+  ;; (setq! gptel-model 'grok-code-fast-1
+  ;;        gptel-backend default-api-master-jsx)
+
+  (setq! gptel-model 'gpt-5-chat-latest
+         gptel-backend microsoft-api-master-jsx)
 
 
+
+
+  (gptel-make-preset 'instruction
+    :system (concat "- 高可用\n"
+                    "- KISS原则\n"
+                    "- 清晰\n"))
 
   (gptel-make-preset 'deepseek-with-fetch                      ;preset name, a symbol
-                     :description "deepseek chat with fetch tool" ;for your reference
-                     :backend deepseek-config                     ;gptel backend or backend name
-                     :model 'deepseek-chat
-                     :tools '("fetch")) ;gptel tools or tool names
+    :description "deepseek chat with fetch tool" ;for your reference
+    :backend deepseek-config                     ;gptel backend or backend name
+    :model 'deepseek-chat
+    :tools '("fetch")) ;gptel tools or tool names
+
+
+  (gptel-make-preset 'kimi-with-mcp-mysql-hinihao-ai-dev                     ;preset name, a symbol
+    :description "kimi with mysql mcp" ;for your reference
+    :backend volcengine-config                     ;gptel backend or backend name
+    :model 'kimi-k2-250905
+    :post (lambda () (gptel-mcp-connect '("mysql-hinihao-ai-dev")))
+    ) ;gptel tools or tool names
+
+
+  (gptel-make-preset 'kimi-with-mcp-mysql-hinihao-ai-prod                     ;preset name, a symbol
+    :description "kimi with mysql mcp" ;for your reference
+    :backend volcengine-config                     ;gptel backend or backend name
+    :model 'kimi-k2-250905
+    :post (lambda () (gptel-mcp-connect '("mysql-hinihao-ai-prod")))
+    ) ;gptel tools or tool names
 
 
   (require 'shr)

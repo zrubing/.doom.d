@@ -248,3 +248,12 @@
 (package! emacs-web-server
   :recipe (:host github :repo "skeeto/emacs-web-server" :files ("*.el"))
   )
+
+(package! grid-table
+  :recipe (:host github :repo "yibie/grid-table" :files ("*.el" "plugins")))
+
+;; (package! copilot
+;;   :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
+
+(unpin! org-roam)
+(package! org-roam-ui)

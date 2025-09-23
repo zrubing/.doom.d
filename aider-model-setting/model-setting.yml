@@ -13,6 +13,14 @@
     max_tokens: 128000
   use_temperature: 0
 
+- name: openai/gpt-5-chat-latest
+  extra_params:
+    stream: True
+    temperature: 0
+    max_tokens: 16384
+  use_temperature: 0.1
+
+
 # bailian
 - name: openai/qwen3-coder-480b-a35b-instruct
   extra_params:

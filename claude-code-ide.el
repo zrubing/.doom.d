@@ -7,6 +7,7 @@
   (after! claude-code-ide
     (claude-code-ide-emacs-tools-setup)
     (setq claude-code-ide-terminal-backend 'eat)
+    (setq claude-code-ide-cli-extra-flags "--dangerously-skip-permissions")
     )
   )
 
