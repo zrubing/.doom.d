@@ -28,7 +28,10 @@
            :stream t
            :protocol "https"
            :key (lambda() (gptel-api-key-from-auth-source "default.me.api.master-jsx.top"))
-           :models '(grok-code-fast-1)
+           :models '(grok-code-fast-1
+                     gpt5-codex
+                     qwen3-coder-plus-2025-09-23
+                     qwen3-max-2025-09-23)
            )
          )
 
@@ -106,6 +109,7 @@
            :key (lambda() (gptel-api-key-from-auth-source "openrouter.ai"))                   ;can be a function that returns the key
            :models '(
                      x-ai/grok-4-fast:free
+                     x-ai/grok-code-fast-1
                      ))
          )
 
@@ -125,31 +129,31 @@
 
 
   (gptel-make-preset 'instruction
-    :system (concat "- 高可用\n"
-                    "- KISS原则\n"
-                    "- 清晰\n"))
+                     :system (concat "- 高可用\n"
+                                     "- KISS原则\n"
+                                     "- 清晰\n"))
 
   (gptel-make-preset 'deepseek-with-fetch                      ;preset name, a symbol
-    :description "deepseek chat with fetch tool" ;for your reference
-    :backend deepseek-config                     ;gptel backend or backend name
-    :model 'deepseek-chat
-    :tools '("fetch")) ;gptel tools or tool names
+                     :description "deepseek chat with fetch tool" ;for your reference
+                     :backend deepseek-config                     ;gptel backend or backend name
+                     :model 'deepseek-chat
+                     :tools '("fetch")) ;gptel tools or tool names
 
 
   (gptel-make-preset 'kimi-with-mcp-mysql-hinihao-ai-dev                     ;preset name, a symbol
-    :description "kimi with mysql mcp" ;for your reference
-    :backend volcengine-config                     ;gptel backend or backend name
-    :model 'kimi-k2-250905
-    :post (lambda () (gptel-mcp-connect '("mysql-hinihao-ai-dev")))
-    ) ;gptel tools or tool names
+                     :description "kimi with mysql mcp" ;for your reference
+                     :backend volcengine-config                     ;gptel backend or backend name
+                     :model 'kimi-k2-250905
+                     :post (lambda () (gptel-mcp-connect '("mysql-hinihao-ai-dev")))
+                     ) ;gptel tools or tool names
 
 
   (gptel-make-preset 'kimi-with-mcp-mysql-hinihao-ai-prod                     ;preset name, a symbol
-    :description "kimi with mysql mcp" ;for your reference
-    :backend volcengine-config                     ;gptel backend or backend name
-    :model 'kimi-k2-250905
-    :post (lambda () (gptel-mcp-connect '("mysql-hinihao-ai-prod")))
-    ) ;gptel tools or tool names
+                     :description "kimi with mysql mcp" ;for your reference
+                     :backend volcengine-config                     ;gptel backend or backend name
+                     :model 'kimi-k2-250905
+                     :post (lambda () (gptel-mcp-connect '("mysql-hinihao-ai-prod")))
+                     ) ;gptel tools or tool names
 
 
   (require 'shr)

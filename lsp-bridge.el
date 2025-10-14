@@ -14,6 +14,8 @@
 
   (add-to-list 'auto-mode-alist '("\\.php\\'" . php-ts-mode))
 
+  (setq lsp-bridge-log-level 'debug)
+
   (require 'lsp-bridge-jdtls)
   :config
   (setq lsp-bridge-enable-inlay-hint t)
@@ -58,8 +60,8 @@
 
   (setq-hook! 'java-ts-mode-hook +format-with 'lsp-bridge-code-format)
 
-  (add-to-list 'lsp-bridge-default-mode-hooks
-               'vue-ts-mode-hook)
+  ;; (add-to-list 'lsp-bridge-default-mode-hooks
+  ;;              'vue-ts-mode-hook)
 
   ;; (defun lsp-bridge-has-lsp-server-p ()
   ;;   "Check if current buffer has an active lsp-bridge server."

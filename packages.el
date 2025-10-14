@@ -237,7 +237,7 @@
                    ("terminfo/65" "terminfo/65/*")
                    ("integration" "integration/*")
                    (:exclude ".dir-locals.el" "*-tests.el"))))
-;;(package! direnv)
+;; (package! direnv)
 (package! envrc)
 
 (package! claude-code-ide
@@ -257,3 +257,10 @@
 
 (unpin! org-roam)
 (package! org-roam-ui)
+
+(package! eglot)
+(package! lsp-proxy :recipe (:host github :repo "jadestrong/lsp-proxy"
+                             :files ("*.el")
+                             :build (:not compile)
+                             ))
+(package! company-box)

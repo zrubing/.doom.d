@@ -338,10 +338,17 @@
 
   ;; do not activate when the current major mode is org-mode
   (add-hook 'lsp-bridge-mode-hook (lambda ()
-                                    (unless (derived-mode-p 'org-mode)
-                                      (topsy-mode 1)))))
+                                    (unless (derived-mode-p 'org-mode 'vue-ts-mode)
+                                      (topsy-mode 1))))
+  )
 
 (after! vterm
+
+  ;; rime输入法
+  (add-hook 'vterm-mode-hook
+            (lambda ()
+              (define-key vterm-mode-map (kbd "C-\\") nil)))
+
   (defun my/set-vterm-shell ()
     (when (string-prefix-p "/docker:" (file-remote-p default-directory))
       (when (eq major-mode 'vterm-mode)
@@ -385,6 +392,8 @@
 ;;(load! "emigo")
 
 (load! "lsp-bridge")
+(load! "lsp-proxy")
+
 
 (after! lsp-bridge
 
@@ -393,7 +402,7 @@
 (load! "dape")
 
 
-(load! "minuet-custom")
+;; (load! "minuet-custom")
 
 (use-package! vue-ts-mode
   :config
@@ -424,16 +433,21 @@
 ;;               ("C-<tab>" . 'copilot-accept-completion-by-word)))
 
 (use-package! websocket
-    :after org-roam)
+  :after org-roam)
 
 (use-package! org-roam-ui
-    :after org-roam ;; or :after org
-;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-;;         a hookable mode anymore, you're advised to pick something yourself
-;;         if you don't care about startup time, use
-;;  :hook (after-init . org-roam-ui-mode)
-    :config
-    (setq org-roam-ui-sync-theme t
-          org-roam-ui-follow t
-          org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start t))
+  :after org-roam ;; or :after org
+  ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+  ;;         a hookable mode anymore, you're advised to pick something yourself
+  ;;         if you don't care about startup time, use
+  ;;  :hook (after-init . org-roam-ui-mode)
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t))
+
+
+;; (use-package! direnv
+;;  :config
+;;  (direnv-mode))
