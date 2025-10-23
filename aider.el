@@ -54,8 +54,8 @@
   ;;(setq aider-args '("--model" "openrouter/qwen/qwen3-32b" "--no-auto-commits"))
   ;;(setq aider-args '("--model" "openrouter/qwen/qwen3-235b-a22b" "--no-auto-commits"))
   ;; ---------------------- open router -------------------
-  (let ((api-key (funcall (plist-get (car (auth-source-search :host "openrouter.ai")) :secret))))
-    (setenv "OPENROUTER_API_KEY" (encode-coding-string api-key 'utf-8)))
+  ;; (let ((api-key (funcall (plist-get (car (auth-source-search :host "openrouter.ai")) :secret))))
+  ;;   (setenv "OPENROUTER_API_KEY" (encode-coding-string api-key 'utf-8)))
 
   ;; (setq aider-args '("--model" "gemini-2.5-pro" "--no-auto-commits"))
   ;; (let ((api-key (funcall (plist-get (car (auth-source-search :host "google.com")) :secret))))
@@ -82,9 +82,9 @@
 
     ;; api-max-jsx.top
     ;; (setq aider-args `("--model" "openai/grok-4-fast-non-reasoning" "--edit-format" "diff" "--chat-language" "chinese" "--no-auto-commits" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
-    (setq aider-args `("--model" "openai/grok-4-fast-reasoning" "--edit-format" "diff" "--chat-language" "chinese" "--no-auto-commits" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
-    ;; (setq aider-args `("--model" "openai/gpt-5-chat-latest" "--edit-format" "diff" "--chat-language" "chinese" "--no-auto-commits" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
-    ;; (setq aider-args `("--model" "openai/gpt-5-codex" "--edit-format" "diff" "--chat-language" "chinese" "--no-auto-commits" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
+    ;; (setq aider-args `("--model" "openai/grok-4-fast-reasoning" "--edit-format" "diff" "--chat-language" "chinese" "--no-auto-commits" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
+    ;;(setq aider-args `("--model" "openai/gpt-5-chat-latest" "--edit-format" "diff" "--chat-language" "chinese" "--no-auto-commits" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
+    (setq aider-args `("--model" "openai/gpt-5-codex" "--edit-format" "diff" "--chat-language" "chinese" "--no-auto-commits" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
     ;; (setq aider-args `("--model" "openai/qwen3-max-2025-09-23" "--edit-format" "diff" "--chat-language" "chinese" "--no-auto-commits" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
     ;; (setq aider-args `("--model" "openai/qwen3-coder-plus-2025-09-23" "--edit-format" "diff" "--chat-language" "chinese" "--no-auto-commits" "--read" ,(expand-file-name "CONVENTIONS.md" model-dir) "--model-settings-file" ,model-settings-file))
 
