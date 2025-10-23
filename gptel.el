@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t; -*-
 
-(use-package! gptel
+(after! gptel
   :defer t
   :config
   ;; OPTIONAL configuration
@@ -10,150 +10,132 @@
                          (gptel-api-key-from-auth-source "chatapi.onechats.top") ))
 
   (setq! gptel-temperature 0)
-  (setq! bailian-config
-         (gptel-make-openai "bailian-config"
-           :host "dashscope.aliyuncs.com"
-           :endpoint "/compatible-mode/v1/chat/completions"
-           :stream t
-           :protocol "https"
-           :key (lambda() (gptel-api-key-from-auth-source "bailian.console.aliyun.com"))
-           :models '(Moonshot-Kimi-K2-Instruct)
-           )
-         )
+  
 
-  (setq! default-api-master-jsx
-         (gptel-make-openai "default-api-master-jsx"
+  ;; 模型统一配置表
+  (setq +gptel-models
+        '((default-api-master-jsx
+           :type openai
            :host "api.master-jsx.top"
            :endpoint "/v1/chat/completions"
            :stream t
            :protocol "https"
-           :key (lambda() (gptel-api-key-from-auth-source "default.me.api.master-jsx.top"))
-           :models '(grok-code-fast-1
-                     gpt5-codex
-                     qwen3-coder-plus-2025-09-23
-                     qwen3-max-2025-09-23)
-           )
-         )
-
-  (setq! microsoft-api-master-jsx
-         (gptel-make-openai "microsoft-api-master-jsx"
+           :key-key "default.me.api.master-jsx.top"
+           :models (grok-4-fast-non-reasoning grok-4-fast-reasoning gpt-5-codex))
+          (microsoft-api-master-jsx
+           :type openai
            :host "api.master-jsx.top"
            :endpoint "/v1/chat/completions"
            :stream t
            :protocol "https"
-           :key (lambda() (gptel-api-key-from-auth-source "microsoft.me.api.master-jsx.top"))
-           :models '(gpt-5-chat-latest)
-           )
-         )
-
-
-  (setq! volcengine-config
-         (gptel-make-openai "volcengine-config"
+           :key-key "microsoft.me.api.master-jsx.top"
+           :models (gpt-5-chat-latest))
+          (volcengine-config
+           :type openai
            :host "ark.cn-beijing.volces.com"
            :endpoint "/api/v3/chat/completions"
            :stream t
            :protocol "https"
-           :key (lambda() (gptel-api-key-from-auth-source "work.console.volcengine.com"))
-           :models '(kimi-k2-250905)
-           ))
-
-  (setq! moonshot-config
-         (gptel-make-openai "moonshot-config"
+           :key-key "work.console.volcengine.com"
+           :models (kimi-k2-250905))
+          (moonshot-config
+           :type openai
            :host "https://api.moonshot.cn/v1"
            :endpoint "/chat/completions "
            :stream t
            :protocol "https"
-           :key (lambda() (gptel-api-key-from-auth-source "api.moonshot.cn"))
-           :models '(kimi-k2-0711-preview kimi-k2-turbo-preview)
-           ))
-
-
-  (setq onechats-config
-        (gptel-make-openai "OpenAI Proxy" ;Any name you want
-          :host "chatapi.onechats.ai"
-          :endpoint "/chat/completions"
-          :stream t
-          :key 'gptel-api-key
-          :models '(kimi-k2))
-        )
-
-  (setq claude-config
-        (gptel-make-openai "Claude Proxy" ;Any name you want
-          :host "chatapi.onechats.top"
-          :endpoint "/chat/completions"
-          :stream t
-          :key 'gptel-api-key
-          :models '(claude-3-haiku-20240307 claude-3-5-sonnet-20240620))
-        )
-
-  (setq! githubmodels-config
-         (gptel-make-openai "Github Models" ;Any name you want
-           :host "models.inference.ai.azure.com"
-           :endpoint "/chat/completions?api-version=2024-05-01-preview"
+           :key-key "api.moonshot.cn"
+           :models (kimi-k2-0905-preview kimi-k2-turbo-preview))
+          (deepseek-config
+           :type deepseek
            :stream t
-           :key (lambda() (gptel-api-key-from-auth-source "models.inference.ai.azure.com"))
-           :models '(DeepSeek-R1 gpt-4o-mini gpt-4o gpt-4o))
-         )
+           :key-key "api.deepseek.com"
+           :models (deepseek-chat deepseek-reasoner))))
 
-  (setq! deepseek-config
-         (gptel-make-deepseek "DeepSeek"       ;Any name you want
-           :stream t                           ;for streaming responses
-           :models '("deepseek-chat" "deepseek-reasoner")
-           :key (lambda() (gptel-api-key-from-auth-source "api.deepseek.com")))
-         )
-  (setq! openrouter-config
-         (gptel-make-openai "OpenRouter"               ;Any name you want
-           :host "openrouter.ai"
-           :endpoint "/api/v1/chat/completions"
-           :stream t
-           :key (lambda() (gptel-api-key-from-auth-source "openrouter.ai"))                   ;can be a function that returns the key
-           :models '(
-                     x-ai/grok-4-fast:free
-                     x-ai/grok-code-fast-1
-                     ))
-         )
+  ;; 根据统一变量动态创建 backend 对象
+  (mapc (lambda (cfg)
+          (let* ((name (car cfg))
+                 (props (cdr cfg))
+                 (type (plist-get props :type))
+                 (key (lambda() (gptel-api-key-from-auth-source (plist-get props :key-key))))
+                 (kwargs (list :host (plist-get props :host)
+                               :endpoint (plist-get props :endpoint)
+                               :stream (plist-get props :stream)
+                               :protocol (plist-get props :protocol)
+                               :key key
+                               :models (plist-get props :models))))
+            (set name
+                 (cond
+                  ((eq type 'openai) (apply #'gptel-make-openai (symbol-name name) kwargs))
+                  ((eq type 'deepseek) (apply #'gptel-make-deepseek (symbol-name name) kwargs))
+                  (t (error "未知类型: %s" type))))))
+        +gptel-models)
 
-  ;; (setq! gptel-model 'deepseek-chat
-  ;;        gptel-backend deepseek-config)
-
-  ;; (setq! gptel-model 'kimi-k2-250711
-  ;;        gptel-backend volcengine-config)
-
-  ;; (setq! gptel-model 'grok-code-fast-1
-  ;;        gptel-backend default-api-master-jsx)
-
+  ;; 用统一配置初始化后的默认选择
   (setq! gptel-model 'gpt-5-chat-latest
          gptel-backend microsoft-api-master-jsx)
 
+  ;; 定义模型配置列表，每个元素是 (名称 后端 模型)
+  ;; 从统一 +gptel-models 动态生成配置列表
+  (setq +gptel-model-configs
+        (apply #'append
+               (mapcar (lambda (cfg)
+                         (let* ((name (car cfg))
+                                (backend (symbol-value name))
+                                (models (plist-get (cdr cfg) :models))
+                                (provider (symbol-name name)))
+                           (mapcar (lambda (m)
+                                     (list provider backend m))
+                                   models)))
+                       +gptel-models)))
+
+  ;; 交互式切换模型
+  (defun +gptel-switch-model ()
+    "交互选择模型并设置 gptel-model 和 gptel-backend."
+    (interactive)
+    (let* ((choices (mapcar (lambda (config)
+                              (format "[%s] %s" (nth 0 config) (nth 2 config)))
+                            +gptel-model-configs))
+           (choice (completing-read "选择模型: " choices))
+           (config (seq-find (lambda (c) 
+                               (string= choice (format "[%s] %s" (nth 0 c) (nth 2 c))))
+                             +gptel-model-configs))
+           (provider (nth 0 config))
+           (backend (nth 1 config))
+           (model (nth 2 config)))
+      (setq gptel-model model)
+      (setq gptel-backend backend)
+      (message "已切换到模型: [%s] %s" provider model)))
 
 
 
-  (gptel-make-preset 'instruction
-                     :system (concat "- 高可用\n"
-                                     "- KISS原则\n"
-                                     "- 清晰\n"))
 
-  (gptel-make-preset 'deepseek-with-fetch                      ;preset name, a symbol
-                     :description "deepseek chat with fetch tool" ;for your reference
-                     :backend deepseek-config                     ;gptel backend or backend name
-                     :model 'deepseek-chat
-                     :tools '("fetch")) ;gptel tools or tool names
+  ;; (gptel-make-preset 'instruction
+  ;;                    :system (concat "- 高可用\n"
+  ;;                                    "- KISS原则\n"
+  ;;                                    "- 清晰\n"))
 
-
-  (gptel-make-preset 'kimi-with-mcp-mysql-hinihao-ai-dev                     ;preset name, a symbol
-                     :description "kimi with mysql mcp" ;for your reference
-                     :backend volcengine-config                     ;gptel backend or backend name
-                     :model 'kimi-k2-250905
-                     :post (lambda () (gptel-mcp-connect '("mysql-hinihao-ai-dev")))
-                     ) ;gptel tools or tool names
+  ;; (gptel-make-preset 'deepseek-with-fetch                      ;preset name, a symbol
+  ;;                    :description "deepseek chat with fetch tool" ;for your reference
+  ;;                    :backend deepseek-config                     ;gptel backend or backend name
+  ;;                    :model 'deepseek-chat
+  ;;                    :tools '("fetch")) ;gptel tools or tool names
 
 
-  (gptel-make-preset 'kimi-with-mcp-mysql-hinihao-ai-prod                     ;preset name, a symbol
-                     :description "kimi with mysql mcp" ;for your reference
-                     :backend volcengine-config                     ;gptel backend or backend name
-                     :model 'kimi-k2-250905
-                     :post (lambda () (gptel-mcp-connect '("mysql-hinihao-ai-prod")))
-                     ) ;gptel tools or tool names
+  ;; (gptel-make-preset 'kimi-with-mcp-mysql-hinihao-ai-dev                     ;preset name, a symbol
+  ;;                    :description "kimi with mysql mcp" ;for your reference
+  ;;                    :backend volcengine-config                     ;gptel backend or backend name
+  ;;                    :model 'kimi-k2-250905
+  ;;                    :post (lambda () (gptel-mcp-connect '("mysql-hinihao-ai-dev")))
+  ;;                    ) ;gptel tools or tool names
+
+
+  ;; (gptel-make-preset 'kimi-with-mcp-mysql-hinihao-ai-prod                     ;preset name, a symbol
+  ;;                    :description "kimi with mysql mcp" ;for your reference
+  ;;                    :backend volcengine-config                     ;gptel backend or backend name
+  ;;                    :model 'kimi-k2-250905
+  ;;                    :post (lambda () (gptel-mcp-connect '("mysql-hinihao-ai-prod")))
+  ;;                    ) ;gptel tools or tool names
 
 
   (require 'shr)
@@ -161,22 +143,22 @@
 
   ;; web tools
 
-  (gptel-make-tool
-   :name "read_url"
-   :function (lambda (url)
-               (with-current-buffer (+gptel-url-retrieve url)
-                 (goto-char (point-min))
-                 (forward-paragraph)
-                 (let ((dom (libxml-parse-html-region (point) (point-max))))
-                   (run-at-time 0 nil #'kill-buffer (current-buffer))
-                   (with-temp-buffer
-                     (shr-insert-document dom)
-                     (buffer-substring-no-properties (point-min) (point-max))))))
-   :description "Fetch and read the contents of a URL"
-   :args (list '(:name "url"
-                 :type string
-                 :description "The URL to read"))
-   :category "web")
+  ;; (gptel-make-tool
+  ;;  :name "read_url"
+  ;;  :function (lambda (url)
+  ;;              (with-current-buffer (+gptel-url-retrieve url)
+  ;;                (goto-char (point-min))
+  ;;                (forward-paragraph)
+  ;;                (let ((dom (libxml-parse-html-region (point) (point-max))))
+  ;;                  (run-at-time 0 nil #'kill-buffer (current-buffer))
+  ;;                  (with-temp-buffer
+  ;;                    (shr-insert-document dom)
+  ;;                    (buffer-substring-no-properties (point-min) (point-max))))))
+  ;;  :description "Fetch and read the contents of a URL"
+  ;;  :args (list '(:name "url"
+  ;;                :type string
+  ;;                :description "The URL to read"))
+  ;;  :category "web")
 
   (defvar url-http-response-status)
 
@@ -211,17 +193,36 @@
               (shr-insert-document dom))
             (buffer-substring-no-properties (point-min) (point-max)))))))
 
-  (gptel-make-tool
-   :name "search_web"
-   :function #'+gptel-search-ddg
-   :description "Perform a web search using the DuckDuckGo search engine"
-   :args (list '(:name "query"
-                 :type string
-                 :description "The search query string.  When searching the web, one should always use English rather than their native language."))
-   :category "web")
+  ;; (gptel-make-tool
+  ;;  :name "search_web"
+  ;;  :function #'+gptel-search-ddg
+  ;;  :description "Perform a web search using the DuckDuckGo search engine"
+  ;;  :args (list '(:name "query"
+  ;;                :type string
+  ;;                :description "The search query string.  When searching the web, one should always use English rather than their native language."))
+  ;;  :category "web")
 
 
   )
+
+
+;;;###autoload
+(defun +gptel-switch-model ()
+  "交互选择模型并设置 `gptel-model' 和 `gptel-backend'."
+  (interactive)
+  (let* ((choices (mapcar (lambda (config)
+                            (format "[%s] %s" (nth 0 config) (nth 2 config)))
+                          +gptel-model-configs))
+         (choice (completing-read "选择模型: " choices))
+         (config (seq-find (lambda (c)
+                             (string= choice (format "[%s] %s" (nth 0 c) (nth 2 c))))
+                           +gptel-model-configs))
+         (provider (nth 0 config))
+         (backend  (nth 1 config))
+         (model    (nth 2 config)))
+    (setq gptel-model model
+          gptel-backend backend)
+    (message "已切换到模型: [%s] %s" provider model)))
 
 
 (defun my/gptel-write-buffer ()
@@ -239,4 +240,4 @@
 
 
 
-(provide 'gptel.el)
+(provide 'gptel)
