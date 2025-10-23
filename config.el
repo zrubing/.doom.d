@@ -392,7 +392,7 @@
 
 ;;(load! "aidermacs")
 
-;;(load! "emigo")
+(load! "emigo")
 
 (load! "lsp-bridge")
 (load! "lsp-proxy")
