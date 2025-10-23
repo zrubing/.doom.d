@@ -63,8 +63,8 @@
       (message "当前使用的模型是: [%s] %s" provider (cadr aider-args))))
 
   ;; 默认加载第一个模型配置
-  (let ((default-config (nth 0 +aider-model-configs)))
-    (+aider-switch-model))
+  ;; (let ((default-config (nth 0 +aider-model-configs)))
+  ;;   (+aider-switch-model))
 
 
 
