@@ -37,7 +37,7 @@
            :stream t
            :protocol "https"
            :key-key "work.console.volcengine.com"
-           :models (kimi-k2-250905))
+           :models (kimi-k2-250905 deepseek-v3-1-terminus))
           (moonshot-config
            :type openai
            :host "https://api.moonshot.cn/v1"
