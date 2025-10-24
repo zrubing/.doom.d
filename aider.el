@@ -1,4 +1,10 @@
-;; -*- lexical-binding: t; -*-
+;;; aider.el --- Aider configuration -*- lexical-binding: t; -*-
+
+;;; Commentary:
+;; Configuration for aider package
+
+;;; Code:
+
 (use-package aider
   :config
   (setq aider-prompt-file-name ".aider.prompt.org")
@@ -6,6 +12,7 @@
 
   ;; 定义模型配置列表，每个元素是 (名称 BASE_URL API_KEY_HOST API_KEY_ENV_VAR)
   ;; default.me.api.master-jsx.top
+  (defvar +aider-model-configs nil)
   (setq +aider-model-configs
         '(
 

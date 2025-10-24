@@ -264,3 +264,10 @@
                              :build (:not compile)
                              ))
 (package! company-box)
+
+
+(package! shell-maker)
+(package! acp :recipe (:host github :repo "xenodium/acp.el"))
+(package! agent-shell :recipe (:host github :repo "xenodium/agent-shell"))
+
+(package! eca :recipe (:host github :repo "editor-code-assistant/eca-emacs" :files ("*.el")))
