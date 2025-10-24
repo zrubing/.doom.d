@@ -110,32 +110,34 @@
 
 
 
-  ;; (gptel-make-preset 'instruction
-  ;;                    :system (concat "- 高可用\n"
-  ;;                                    "- KISS原则\n"
-  ;;                                    "- 清晰\n"))
+  (with-eval-after-load 'gptel
+    (gptel-make-preset 'instruction
+                       :system (concat "- 高可用\n"
+                                       "- KISS原则\n"
+                                       "- 清晰\n"))
 
-  ;; (gptel-make-preset 'deepseek-with-fetch                      ;preset name, a symbol
-  ;;                    :description "deepseek chat with fetch tool" ;for your reference
-  ;;                    :backend deepseek-config                     ;gptel backend or backend name
-  ;;                    :model 'deepseek-chat
-  ;;                    :tools '("fetch")) ;gptel tools or tool names
-
-
-  ;; (gptel-make-preset 'kimi-with-mcp-mysql-hinihao-ai-dev                     ;preset name, a symbol
-  ;;                    :description "kimi with mysql mcp" ;for your reference
-  ;;                    :backend volcengine-config                     ;gptel backend or backend name
-  ;;                    :model 'kimi-k2-250905
-  ;;                    :post (lambda () (gptel-mcp-connect '("mysql-hinihao-ai-dev")))
-  ;;                    ) ;gptel tools or tool names
+    (gptel-make-preset 'deepseek-with-fetch                      ;preset name, a symbol
+                       :description "deepseek chat with fetch tool" ;for your reference
+                       :backend deepseek-config                     ;gptel backend or backend name
+                       :model 'deepseek-chat
+                       :tools '("fetch")) ;gptel tools or tool names
 
 
-  ;; (gptel-make-preset 'kimi-with-mcp-mysql-hinihao-ai-prod                     ;preset name, a symbol
-  ;;                    :description "kimi with mysql mcp" ;for your reference
-  ;;                    :backend volcengine-config                     ;gptel backend or backend name
-  ;;                    :model 'kimi-k2-250905
-  ;;                    :post (lambda () (gptel-mcp-connect '("mysql-hinihao-ai-prod")))
-  ;;                    ) ;gptel tools or tool names
+    (gptel-make-preset 'kimi-with-mcp-mysql-hinihao-ai-dev                     ;preset name, a symbol
+                       :description "kimi with mysql mcp" ;for your reference
+                       :backend volcengine-config                     ;gptel backend or backend name
+                       :model 'kimi-k2-250905
+                       :post (lambda () (gptel-mcp-connect '("mysql-hinihao-ai-dev")))
+                       ) ;gptel tools or tool names
+
+
+    (gptel-make-preset 'kimi-with-mcp-mysql-hinihao-ai-prod                     ;preset name, a symbol
+                       :description "kimi with mysql mcp" ;for your reference
+                       :backend volcengine-config                     ;gptel backend or backend name
+                       :model 'kimi-k2-250905
+                       :post (lambda () (gptel-mcp-connect '("mysql-hinihao-ai-prod")))
+                       ) ;gptel tools or tool names
+  )
 
 
   (require 'shr)
@@ -143,22 +145,24 @@
 
   ;; web tools
 
-  ;; (gptel-make-tool
-  ;;  :name "read_url"
-  ;;  :function (lambda (url)
-  ;;              (with-current-buffer (+gptel-url-retrieve url)
-  ;;                (goto-char (point-min))
-  ;;                (forward-paragraph)
-  ;;                (let ((dom (libxml-parse-html-region (point) (point-max))))
-  ;;                  (run-at-time 0 nil #'kill-buffer (current-buffer))
-  ;;                  (with-temp-buffer
-  ;;                    (shr-insert-document dom)
-  ;;                    (buffer-substring-no-properties (point-min) (point-max))))))
-  ;;  :description "Fetch and read the contents of a URL"
-  ;;  :args (list '(:name "url"
-  ;;                :type string
-  ;;                :description "The URL to read"))
-  ;;  :category "web")
+  (with-eval-after-load 'gptel
+    (gptel-make-tool
+     :name "read_url"
+     :function (lambda (url)
+                 (with-current-buffer (+gptel-url-retrieve url)
+                   (goto-char (point-min))
+                   (forward-paragraph)
+                   (let ((dom (libxml-parse-html-region (point) (point-max))))
+                     (run-at-time 0 nil #'kill-buffer (current-buffer))
+                     (with-temp-buffer
+                       (shr-insert-document dom)
+                       (buffer-substring-no-properties (point-min) (point-max))))))
+     :description "Fetch and read the contents of a URL"
+     :args (list '(:name "url"
+                   :type string
+                   :description "The URL to read"))
+     :category "web")
+  )
 
   (defvar url-http-response-status)
 
@@ -193,14 +197,16 @@
               (shr-insert-document dom))
             (buffer-substring-no-properties (point-min) (point-max)))))))
 
-  ;; (gptel-make-tool
-  ;;  :name "search_web"
-  ;;  :function #'+gptel-search-ddg
-  ;;  :description "Perform a web search using the DuckDuckGo search engine"
-  ;;  :args (list '(:name "query"
-  ;;                :type string
-  ;;                :description "The search query string.  When searching the web, one should always use English rather than their native language."))
-  ;;  :category "web")
+  (with-eval-after-load 'gptel
+    (gptel-make-tool
+     :name "search_web"
+     :function #'+gptel-search-ddg
+     :description "Perform a web search using the DuckDuckGo search engine"
+     :args (list '(:name "query"
+                   :type string
+                   :description "The search query string.  When searching the web, one should always use English rather than their native language."))
+     :category "web")
+  )
 
 
   )
