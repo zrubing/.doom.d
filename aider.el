@@ -7,7 +7,10 @@
   ;; 定义模型配置列表，每个元素是 (名称 BASE_URL API_KEY_HOST API_KEY_ENV_VAR)
   ;; default.me.api.master-jsx.top
   (setq +aider-model-configs
-        '(("api-master" "openai/gpt-5-codex" "https://api.master-jsx.top/v1" "default.me.api.master-jsx.top" "OPENAI_API_KEY")
+        '(
+
+          ("volcengine" "volcengine/deepseek-v3-1-terminus" nil "work.console.volcengine.com" "VOLCENGINE_API_KEY")
+          ("api-master" "openai/gpt-5-codex" "https://api.master-jsx.top/v1" "default.me.api.master-jsx.top" "OPENAI_API_KEY")
           ("api-master" "openai/gpt-5-chat-latest" "https://api.master-jsx.top/v1" "microsoft.me.api.master-jsx.top" "OPENAI_API_KEY")
 
           ("api-master" "openai/grok-4-fast-non-reasoning" "https://api.master-jsx.top/v1" "microsoft.me.api.master-jsx.top" "OPENAI_API_KEY")
@@ -18,11 +21,10 @@
 
           ("bailian" "bailian" "https://dashscope.aliyuncs.com/compatible-mode/v1" "bailian.console.aliyun.com" "OPENAI_API_KEY")
           ("deepseek" "deepseek" nil "api.deepseek.com" "DEEPSEEK_API_KEY")
+
           ("volcengine" "volcengine/kimi-k2-250905" nil "work.console.volcengine.com" "VOLCENGINE_API_KEY")
           ("volcengine" "volcengine/deepseek-v3-250324" nil "work.console.volcengine.com" "VOLCENGINE_API_KEY")
-          ("volcengine" "volcengine/doubao-seed-1-6-250615" nil "work.console.volcengine.com" "VOLCENGINE_API_KEY")
-          ("volcengine" "volcengine/deepseek-r1-250528" nil "work.console.volcengine.com" "VOLCENGINE_API_KEY")
-          ("volcengine" "volcengine/deepseek-v3-1-terminus" nil "work.console.volcengine.com" "VOLCENGINE_API_KEY")))
+          ))
 
   ;; 交互式切换模型
   (defun +aider-switch-model ()
@@ -73,8 +75,31 @@
       (message "当前使用的模型是: [%s] %s" provider (cadr aider-args))))
 
   ;; 默认加载第一个模型配置
-  ;; (let ((default-config (nth 0 +aider-model-configs)))
-  ;;   (+aider-switch-model))
+  (let ((default-config (nth 0 +aider-model-configs)))
+    (when default-config
+      (let* ((provider (nth 0 default-config))
+             (model-name (nth 1 default-config))
+             (base (nth 2 default-config))
+             (host (nth 3 default-config))
+             (env (nth 4 default-config)))
+        (when base
+          (setenv "OPENAI_API_BASE" base))
+        
+        (let* ((auth-source-do-cache nil)
+               (auth-info (car (auth-source-search :host host :require '(:secret))))
+               (secret (plist-get auth-info :secret))
+               (api-key (if (functionp secret)
+                            (funcall secret)
+                          secret)))
+          (when api-key
+            (setenv env (encode-coding-string api-key 'utf-8))))
+        
+        (setq aider-args
+              (list "--model" model-name
+                    "--edit-format" "diff"
+                    "--chat-language" "chinese"
+                    "--no-auto-commits"))
+        (message "已默认加载模型: [%s] %s" provider model-name))))
 
 
 
