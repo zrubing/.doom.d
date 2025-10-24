@@ -26,6 +26,12 @@
           ("volcengine" "volcengine/deepseek-v3-250324" nil "work.console.volcengine.com" "VOLCENGINE_API_KEY")
           ))
 
+  ;; 定义可定制的变量来保存上次选择的模型索引
+  (defcustom +aider-last-model-index 0
+    "上次选择的模型配置在 +aider-model-configs 中的索引。"
+    :type 'integer
+    :group 'aider)
+
   ;; 交互式切换模型
   (defun +aider-switch-model ()
     "交互选择模型并设置 BASE_URL、API_KEY 及 aider-args."
@@ -33,10 +39,9 @@
     (let* ((choices (mapcar (lambda (config)
                               (format "[%s] %s" (nth 0 config) (nth 1 config)))
                             +aider-model-configs))
-           (choice (completing-read "选择模型: " choices))
-           (config (seq-find (lambda (c) 
-                               (string= choice (format "[%s] %s" (nth 0 c) (nth 1 c))))
-                             +aider-model-configs))
+           (choice (completing-read "选择模型: " choices nil t))
+           (index (cl-position choice choices :test 'string=))
+           (config (nth index +aider-model-configs))
            (provider (nth 0 config))
            (model-name (nth 1 config))
            (base (nth 2 config))
@@ -71,17 +76,22 @@
           (when (get-buffer-process buf)
             (kill-process (get-buffer-process buf)))
           (kill-buffer buf)))
+      
+      ;; 保存选择的模型索引到定制变量
+      (setq +aider-last-model-index index)
+      (customize-save-variable '+aider-last-model-index +aider-last-model-index)
+      
       (message "已切换到模型: [%s] %s 并更新 aider-args" provider model-name)
       (message "当前使用的模型是: [%s] %s" provider (cadr aider-args))))
 
-  ;; 默认加载第一个模型配置
-  (let ((default-config (nth 0 +aider-model-configs)))
-    (when default-config
-      (let* ((provider (nth 0 default-config))
-             (model-name (nth 1 default-config))
-             (base (nth 2 default-config))
-             (host (nth 3 default-config))
-             (env (nth 4 default-config)))
+  ;; 加载上次保存的模型配置
+  (let ((config (nth +aider-last-model-index +aider-model-configs)))
+    (when config
+      (let* ((provider (nth 0 config))
+             (model-name (nth 1 config))
+             (base (nth 2 config))
+             (host (nth 3 config))
+             (env (nth 4 config)))
         (when base
           (setenv "OPENAI_API_BASE" base))
         
@@ -99,7 +109,7 @@
                     "--edit-format" "diff"
                     "--chat-language" "chinese"
                     "--no-auto-commits"))
-        (message "已默认加载模型: [%s] %s" provider model-name))))
+        (message "已加载上次使用的模型: [%s] %s" provider model-name))))
 
 
 
