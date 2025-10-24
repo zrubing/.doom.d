@@ -42,8 +42,18 @@
            (env  (nth 4 config)))
       (when base
         (setenv "OPENAI_API_BASE" base))
-      (let ((api-key (funcall (plist-get (car (auth-source-search :host host)) :secret))))
-        (setenv env (encode-coding-string api-key 'utf-8)))
+
+      (let* ((auth-source-do-cache nil)  ;; 禁用缓存
+             (auth-source-debug t)       ;; 如需调试可保留此行
+             (auth-info (car (auth-source-search :host host :require '(:secret))))
+             (secret (plist-get auth-info :secret))
+             (api-key (if (functionp secret)
+                          (funcall secret)
+                        secret)))
+        (when api-key
+          (setenv env (encode-coding-string api-key 'utf-8))
+          (message "已设置环境变量 %s" env)))
+
       ;; 根据模型名称动态设置 aider-args
       (setq aider-args
             (list "--model" model-name
