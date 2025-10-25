@@ -104,7 +104,7 @@
 
     ;; 使用智能合并配置
     (when config-data
-      (let ((merged-config (eca-merge-configs config-data existing-config)))
+      (let ((merged-config (eca-merge-configs config-data existing-config)))  ;; 修复变量作用域问题
         (let ((config (let ((json-encoding-pretty-print t))
                    (json-encode merged-config))))
 
@@ -142,19 +142,22 @@
   "智能合并配置，保留重要的现有配置项
 
 NEW-CONFIG: 新的配置数据 (plist)
-EXISTING-CONFIG: 现有配置数据 (plist)
+EXISTING-CONFIG: 现有配置数据 (plist)，可以为 nil
 
 返回合并后的配置，保留 mcpServers 和其他重要配置"
   (let ((merged-config (copy-sequence new-config)))
+    ;; 如果 existing-config 为 nil，直接返回 new-config
+    (unless existing-config
+      (setq existing-config '()))
+    
     ;; 保留现有配置中的 mcpServers（如果存在）
-    (when (and existing-config (plist-get existing-config :mcpServers))
+    (when (plist-get existing-config :mcpServers)
       (setq merged-config (plist-put merged-config :mcpServers (plist-get existing-config :mcpServers))))
     
     ;; 保留其他可能存在的配置项（除了我们明确要覆盖的）
-    (when existing-config
-      (dolist (key '(:rules :commands :workspaces :customSettings))
-        (when (plist-get existing-config key)
-          (setq merged-config (plist-put merged-config key (plist-get existing-config key))))))
+    (dolist (key '(:rules :commands :workspaces :customSettings))
+      (when (plist-get existing-config key)
+        (setq merged-config (plist-put merged-config key (plist-get existing-config key)))))
     
     merged-config))
 
@@ -167,8 +170,8 @@ CONFIG-DATA 应该是一个 plist，函数会将其与现有配置合并，保�
     (make-directory eca-config-dir t))
 
   ;; 读取现有配置并合并
-  (let ((existing-config (eca-read-current-config))
-        (merged-config (eca-merge-configs config-data existing-config)))
+  (let* ((existing-config (eca-read-current-config))
+         (merged-config (eca-merge-configs config-data existing-config)))  ;; 修复变量作用域问题
 
     ;; 写入配置文件，确保正确处理编码
     (condition-case err
