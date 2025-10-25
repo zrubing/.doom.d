@@ -20,8 +20,8 @@
           ("api-master" "openai/gpt-5-codex" "https://api.master-jsx.top/v1" "default.me.api.master-jsx.top" "OPENAI_API_KEY")
           ("api-master" "openai/gpt-5-chat-latest" "https://api.master-jsx.top/v1" "microsoft.me.api.master-jsx.top" "OPENAI_API_KEY")
 
-          ("api-master" "openai/grok-4-fast-non-reasoning" "https://api.master-jsx.top/v1" "microsoft.me.api.master-jsx.top" "OPENAI_API_KEY")
-          ("api-master" "openai/grok-4-fast-reasoning" "https://api.master-jsx.top/v1" "microsoft.me.api.master-jsx.top" "OPENAI_API_KEY")
+          ("api-master" "openai/grok-4-fast-non-reasoning" "https://api.master-jsx.top/v1" "default.me.api.master-jsx.top" "OPENAI_API_KEY")
+          ("api-master" "openai/grok-4-fast-reasoning" "https://api.master-jsx.top/v1" "default.me.api.master-jsx.top" "OPENAI_API_KEY")
 
           ("moonshot" "openai/kimi-k2-0905-preview" "https://api.moonshot.cn/v1" "api.moonshot.cn" "OPENAI_API_KEY")
           ("moonshot" "openai/kimi-k2-turbo-preview" "https://api.moonshot.cn/v1" "api.moonshot.cn" "OPENAI_API_KEY")

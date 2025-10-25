@@ -1,5 +1,9 @@
-;;; dape.el -*- lexical-binding: t; -*-
-;;;
+;;; dape.el --- DAP Elisp package -*- lexical-binding: t; -*-
+
+;;; Commentary:
+;; Configuration for DAP (Debug Adapter Protocol) integration
+
+;;; Code:
 
 (use-package dape
   :config
@@ -13,3 +17,5 @@
   )
 
 (provide 'dape)
+
+;;; dape.el ends here

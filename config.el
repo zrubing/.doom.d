@@ -454,3 +454,5 @@
 ;; (use-package! direnv
 ;;  :config
 ;;  (direnv-mode))
+
+(load! "eca")

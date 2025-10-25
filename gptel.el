@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t; -*-
 
-(after! gptel
+(use-package! gptel
   :defer t
   :config
   ;; OPTIONAL configuration
@@ -110,60 +110,40 @@
 
 
 
-  (with-eval-after-load 'gptel
+  ;; Define custom presets
+  (when (fboundp 'gptel-make-preset)
     (gptel-make-preset 'instruction
                        :system (concat "- 高可用\n"
                                        "- KISS原则\n"
                                        "- 清晰\n"))
 
-    (gptel-make-preset 'deepseek-with-fetch                      ;preset name, a symbol
-                       :description "deepseek chat with fetch tool" ;for your reference
-                       :backend deepseek-config                     ;gptel backend or backend name
-                       :model 'deepseek-chat
-                       :tools '("fetch")) ;gptel tools or tool names
+    (when (boundp 'deepseek-config)
+      (gptel-make-preset 'deepseek-with-fetch
+                         :description "deepseek chat with fetch tool"
+                         :backend deepseek-config
+                         :model 'deepseek-chat
+                         :tools '("fetch")))
 
+    (when (boundp 'volcengine-config)
+      (gptel-make-preset 'kimi-with-mcp-mysql-hinihao-ai-dev
+                         :description "kimi with mysql mcp"
+                         :backend volcengine-config
+                         :model 'kimi-k2-250905
+                         :post (lambda () (when (fboundp 'gptel-mcp-connect)
+                                            (gptel-mcp-connect '("mysql-hinihao-ai-dev")))))
 
-    (gptel-make-preset 'kimi-with-mcp-mysql-hinihao-ai-dev                     ;preset name, a symbol
-                       :description "kimi with mysql mcp" ;for your reference
-                       :backend volcengine-config                     ;gptel backend or backend name
-                       :model 'kimi-k2-250905
-                       :post (lambda () (gptel-mcp-connect '("mysql-hinihao-ai-dev")))
-                       ) ;gptel tools or tool names
-
-
-    (gptel-make-preset 'kimi-with-mcp-mysql-hinihao-ai-prod                     ;preset name, a symbol
-                       :description "kimi with mysql mcp" ;for your reference
-                       :backend volcengine-config                     ;gptel backend or backend name
-                       :model 'kimi-k2-250905
-                       :post (lambda () (gptel-mcp-connect '("mysql-hinihao-ai-prod")))
-                       ) ;gptel tools or tool names
-  )
+      (gptel-make-preset 'kimi-with-mcp-mysql-hinihao-ai-prod
+                         :description "kimi with mysql mcp"
+                         :backend volcengine-config
+                         :model 'kimi-k2-250905
+                         :post (lambda () (when (fboundp 'gptel-mcp-connect)
+                                            (gptel-mcp-connect '("mysql-hinihao-ai-prod")))))))
 
 
   (require 'shr)
   (defvar shr-external-rendering-functions)
 
-  ;; web tools
-
-  (with-eval-after-load 'gptel
-    (gptel-make-tool
-     :name "read_url"
-     :function (lambda (url)
-                 (with-current-buffer (+gptel-url-retrieve url)
-                   (goto-char (point-min))
-                   (forward-paragraph)
-                   (let ((dom (libxml-parse-html-region (point) (point-max))))
-                     (run-at-time 0 nil #'kill-buffer (current-buffer))
-                     (with-temp-buffer
-                       (shr-insert-document dom)
-                       (buffer-substring-no-properties (point-min) (point-max))))))
-     :description "Fetch and read the contents of a URL"
-     :args (list '(:name "url"
-                   :type string
-                   :description "The URL to read"))
-     :category "web")
-  )
-
+  
   (defvar url-http-response-status)
 
   (defun +gptel-url-retrieve (url)
@@ -197,7 +177,25 @@
               (shr-insert-document dom))
             (buffer-substring-no-properties (point-min) (point-max)))))))
 
-  (with-eval-after-load 'gptel
+  ;; Define custom tools
+  (when (fboundp 'gptel-make-tool)
+    (gptel-make-tool
+     :name "read_url"
+     :function (lambda (url)
+                 (with-current-buffer (+gptel-url-retrieve url)
+                   (goto-char (point-min))
+                   (forward-paragraph)
+                   (let ((dom (libxml-parse-html-region (point) (point-max))))
+                     (run-at-time 0 nil #'kill-buffer (current-buffer))
+                     (with-temp-buffer
+                       (shr-insert-document dom)
+                       (buffer-substring-no-properties (point-min) (point-max))))))
+     :description "Fetch and read the contents of a URL"
+     :args (list '(:name "url"
+                   :type string
+                   :description "The URL to read"))
+     :category "web")
+
     (gptel-make-tool
      :name "search_web"
      :function #'+gptel-search-ddg
@@ -205,31 +203,29 @@
      :args (list '(:name "query"
                    :type string
                    :description "The search query string.  When searching the web, one should always use English rather than their native language."))
-     :category "web")
-  )
+     :category "web"))
 
 
   )
-
 
 ;;;###autoload
 (defun +gptel-switch-model ()
   "交互选择模型并设置 `gptel-model' 和 `gptel-backend'."
   (interactive)
-  (let* ((choices (mapcar (lambda (config)
-                            (format "[%s] %s" (nth 0 config) (nth 2 config)))
-                          +gptel-model-configs))
-         (choice (completing-read "选择模型: " choices))
-         (config (seq-find (lambda (c)
-                             (string= choice (format "[%s] %s" (nth 0 c) (nth 2 c))))
-                           +gptel-model-configs))
-         (provider (nth 0 config))
-         (backend  (nth 1 config))
-         (model    (nth 2 config)))
-    (setq gptel-model model
-          gptel-backend backend)
-    (message "已切换到模型: [%s] %s" provider model)))
-
+  (when (boundp '+gptel-model-configs)
+    (let* ((choices (mapcar (lambda (config)
+                              (format "[%s] %s" (nth 0 config) (nth 2 config)))
+                            +gptel-model-configs))
+           (choice (completing-read "选择模型: " choices))
+           (config (seq-find (lambda (c)
+                               (string= choice (format "[%s] %s" (nth 0 c) (nth 2 c))))
+                             +gptel-model-configs))
+           (provider (nth 0 config))
+           (backend  (nth 1 config))
+           (model    (nth 2 config)))
+      (setq gptel-model model
+            gptel-backend backend)
+      (message "已切换到模型: [%s] %s" provider model))))
 
 (defun my/gptel-write-buffer ()
   "Save buffer to disk when starting gptel"
