@@ -456,3 +456,5 @@
 ;;  (direnv-mode))
 
 (load! "eca")
+
+(load! "agent-shell")

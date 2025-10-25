@@ -47,7 +47,9 @@
            :key-key "api.moonshot.cn"
            :models (kimi-k2-0905-preview kimi-k2-turbo-preview))
           (deepseek-config
-           :type deepseek
+           :type openai
+           :host "https://api.deepseek.com/v1"
+           :endpoint "/chat/completions"
            :stream t
            :key-key "api.deepseek.com"
            :models (deepseek-chat deepseek-reasoner))))

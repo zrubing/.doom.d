@@ -79,10 +79,15 @@
   (unless (file-exists-p (expand-file-name "commands" eca-config-dir))
     (make-directory (expand-file-name "commands" eca-config-dir) t))
 
-  ;; 生成配置数据
-  (let* ((base-config (list :defaultBehavior "agent"
-                            :welcomeMessage "欢迎使用 ECA! 🚀\n\n输入 '/' 查看命令\n\n已配置中文支持"))
-         (config-data (if from-gptel
+  ;; 读取现有配置（如果存在）
+  (let ((existing-config (eca-read-current-config))
+        (base-config (list :defaultBehavior "agent"
+                           :welcomeMessage "欢迎使用 ECA! 🚀\n\n输入 '/' 查看命令\n\n已配置中文支持"
+                           :toolCall (list :approval (list :byDefault "allow"))))
+        config-data)
+
+    ;; 生成配置数据
+    (setq config-data (if from-gptel
                           ;; 从 gptel 配置转换
                           (when (boundp '+gptel-models)
                             (let ((providers (eca-convert-gptel-to-eca +gptel-models)))
@@ -95,32 +100,34 @@
                                             (concat first-provider "/" first-model))
                                   (plist-put base-config :providers providers)))))
                         ;; 使用默认配置
-                        (plist-put base-config :defaultModel "volcengine/kimi-k2-250905"))))
+                        (plist-put base-config :defaultModel "volcengine/kimi-k2-250905")))
 
+    ;; 使用智能合并配置
     (when config-data
-      (let ((config (let ((json-encoding-pretty-print t))
-                 (json-encode config-data))))
+      (let ((merged-config (eca-merge-configs config-data existing-config)))
+        (let ((config (let ((json-encoding-pretty-print t))
+                   (json-encode merged-config))))
 
-        ;; 写入配置文件，确保正确处理编码
-        (condition-case err
-            (progn
-              (with-temp-buffer
-                ;; 设置缓冲区编码为 UTF-8
-                (set-buffer-file-coding-system 'utf-8-unix)
-                (insert config)
-                ;; 使用 write-region 而不是 with-temp-file 来更好地控制编码
-                (let ((coding-system-for-write 'utf-8-unix))
-                  (write-region (point-min) (point-max) eca-config-path nil 'silent)))
-              ;; 仅在交互调用时显示成功消息
-              (when (called-interactively-p 'interactive)
-                (if from-gptel
-                    (message "✅ ECA 配置已从 gptel 生成到: %s" eca-config-path)
-                  (message "✅ ECA 默认配置已生成到: %s" eca-config-path))))
+          ;; 写入配置文件，确保正确处理编码
+          (condition-case err
+              (progn
+                (with-temp-buffer
+                  ;; 设置缓冲区编码为 UTF-8
+                  (set-buffer-file-coding-system 'utf-8-unix)
+                  (insert config)
+                  ;; 使用 write-region 而不是 with-temp-file 来更好地控制编码
+                  (let ((coding-system-for-write 'utf-8-unix))
+                    (write-region (point-min) (point-max) eca-config-path nil 'silent)))
+                ;; 仅在交互调用时显示成功消息
+                (when (called-interactively-p 'interactive)
+                  (if from-gptel
+                      (message "✅ ECA 配置已从 gptel 生成到: %s" eca-config-path)
+                    (message "✅ ECA 默认配置已生成到: %s" eca-config-path))))
 
-          (error
-           ;; 错误处理 - 仅在交互调用时显示错误
-           (when (called-interactively-p 'interactive)
-             (message "❌ ECA 配置生成失败: %s" (error-message-string err)))))))))
+            (error
+             ;; 错误处理 - 仅在交互调用时显示错误
+             (when (called-interactively-p 'interactive)
+               (message "❌ ECA 配置生成失败: %s" (error-message-string err))))))))))
 
 ;;;### 模型切换功能
 (defun eca-read-current-config ()
@@ -131,27 +138,53 @@
       (goto-char (point-min))
       (json-parse-buffer :object-type 'plist))))
 
+(defun eca-merge-configs (new-config existing-config)
+  "智能合并配置，保留重要的现有配置项
+
+NEW-CONFIG: 新的配置数据 (plist)
+EXISTING-CONFIG: 现有配置数据 (plist)
+
+返回合并后的配置，保留 mcpServers 和其他重要配置"
+  (let ((merged-config (copy-sequence new-config)))
+    ;; 保留现有配置中的 mcpServers（如果存在）
+    (when (and existing-config (plist-get existing-config :mcpServers))
+      (setq merged-config (plist-put merged-config :mcpServers (plist-get existing-config :mcpServers))))
+    
+    ;; 保留其他可能存在的配置项（除了我们明确要覆盖的）
+    (when existing-config
+      (dolist (key '(:rules :commands :workspaces :customSettings))
+        (when (plist-get existing-config key)
+          (setq merged-config (plist-put merged-config key (plist-get existing-config key))))))
+    
+    merged-config))
+
 (defun eca-write-config (config-data)
-  "写入配置数据到 ECA 配置文件"
+  "写入配置数据到 ECA 配置文件，支持配置合并而不是完全覆盖
+
+CONFIG-DATA 应该是一个 plist，函数会将其与现有配置合并，保留 mcpServers 等关键配置"
   ;; 确保配置目录存在
   (unless (file-exists-p eca-config-dir)
     (make-directory eca-config-dir t))
 
-  ;; 写入配置文件，确保正确处理编码
-  (condition-case err
-      (let ((config (let ((json-encoding-pretty-print t))
-                 (json-encode config-data))))
-        (with-temp-buffer
-          ;; 设置缓冲区编码为 UTF-8
-          (set-buffer-file-coding-system 'utf-8-unix)
-          (insert config)
-          ;; 使用 write-region 来更好地控制编码
-          (let ((coding-system-for-write 'utf-8-unix))
-            (write-region (point-min) (point-max) eca-config-path nil 'silent)))
-        t)
-    (error
-     (message "❌ 配置文件写入失败: %s" (error-message-string err))
-     nil)))
+  ;; 读取现有配置并合并
+  (let ((existing-config (eca-read-current-config))
+        (merged-config (eca-merge-configs config-data existing-config)))
+
+    ;; 写入配置文件，确保正确处理编码
+    (condition-case err
+        (let ((config (let ((json-encoding-pretty-print t))
+                   (json-encode merged-config))))
+          (with-temp-buffer
+            ;; 设置缓冲区编码为 UTF-8
+            (set-buffer-file-coding-system 'utf-8-unix)
+            (insert config)
+            ;; 使用 write-region 来更好地控制编码
+            (let ((coding-system-for-write 'utf-8-unix))
+              (write-region (point-min) (point-max) eca-config-path nil 'silent)))
+          t)
+      (error
+       (message "❌ 配置文件写入失败: %s" (error-message-string err))
+       nil))))
 
 (defun eca-get-available-models ()
   "获取所有可用的模型列表"
@@ -265,6 +298,27 @@
             (message "✅ 欢迎消息已更新: 当前模型 %s (供应商: %s)" current-model provider)
           (message "❌ 欢迎消息更新失败"))))))
 
+(defun eca-test-config-merge ()
+  "测试配置合并功能"
+  (interactive)
+  (let* ((existing-config (eca-read-current-config))
+         (new-config (list :defaultBehavior "agent"
+                          :welcomeMessage "测试配置"
+                          :defaultModel "test/model"
+                          :providers '()))
+         (merged-config (eca-merge-configs new-config existing-config)))
+    (with-output-to-temp-buffer "*ECA Config Merge Test*"
+      (princ "🤖 ECA 配置合并测试\n\n")
+      (princ "📄 现有配置:\n")
+      (princ (format "  mcpServers: %s\n" (if (plist-get existing-config :mcpServers) "存在" "不存在")))
+      (princ (format "  rules: %s\n" (if (plist-get existing-config :rules) "存在" "不存在")))
+      (princ (format "  commands: %s\n" (if (plist-get existing-config :commands) "存在" "不存在")))
+      (princ "\n🔄 合并后配置:\n")
+      (princ (format "  mcpServers: %s\n" (if (plist-get merged-config :mcpServers) "已保留" "不存在")))
+      (princ (format "  rules: %s\n" (if (plist-get merged-config :rules) "已保留" "不存在")))
+      (princ (format "  commands: %s\n" (if (plist-get merged-config :commands) "已保留" "不存在")))
+      (princ (format "  defaultModel: %s\n" (plist-get merged-config :defaultModel))))))
+
 (defun eca-status ()
   "显示 ECA 当前状态"
   (interactive)
@@ -282,11 +336,13 @@
                      (if process
                          (format "运行中 (PID: %d)" (process-id process))
                        "未运行")))
+      (princ (format "🔧 mcpServers 配置: %s\n" (if (plist-get config :mcpServers) "已配置" "未配置")))
       (princ "\n🔧 可用操作:\n")
       (princ "  • M-x eca-switch-model - 切换模型\n")
       (princ "  • M-x eca-restart-server - 重启服务器\n")
       (princ "  • M-x eca-generate-config - 重新生成配置\n")
-      (princ "  • M-x eca-update-welcome-message - 更新欢迎消息"))))
+      (princ "  • M-x eca-update-welcome-message - 更新欢迎消息\n")
+      (princ "  • M-x eca-test-config-merge - 测试配置合并功能"))))
 
 (defun eca-quick-setup ()
   "快速设置 ECA"
@@ -305,6 +361,7 @@
 (autoload 'eca-status "eca" "显示 ECA 状态" t)
 (autoload 'eca-quick-setup "eca" "快速设置 ECA" t)
 (autoload 'eca-update-welcome-message "eca" "更新欢迎消息" t)
+(autoload 'eca-test-config-merge "eca" "测试配置合并功能" t)
 
 (provide 'eca)
 ;;; eca.el ends here
