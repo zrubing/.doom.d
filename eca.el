@@ -206,7 +206,7 @@
              (selected-model-key (caddr selected-model)))
         (when selected-model
           ;; 更新配置，包括动态更新欢迎消息
-          (let* ((welcome-template "欢迎使用 ECA! 🚀\n\n输入 '/' 查看命令\n\n已配置中文支持\n\n当前默认模型: %s (供应商: %s)")
+          (let* ((welcome-template "欢迎使用 ECA! 🚀\n\n输入 '/' 查看命令\n\n已配置中文支持\n\n当前默认模型: %s")
                  (new-welcome (format welcome-template selected-model-name selected-provider))
                  (new-config (plist-put current-config :defaultModel selected-model-name)))
             (setq new-config (plist-put new-config :welcomeMessage new-welcome))
