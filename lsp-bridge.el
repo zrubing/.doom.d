@@ -14,7 +14,7 @@
 
   (add-to-list 'auto-mode-alist '("\\.php\\'" . php-ts-mode))
 
-  (setq lsp-bridge-log-level 'debug)
+  (setq lsp-bridge-log-level 'info)
 
   (require 'lsp-bridge-jdtls)
   :config

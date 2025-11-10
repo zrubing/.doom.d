@@ -50,11 +50,29 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
+;; (setq doom-theme 'doom-one)
+(setq doom-theme 'alabaster-dark)
+
+;; Add custom theme path for Alabaster Dark
+(add-to-list 'custom-theme-load-path "~/.doom.d/themes/")
+
+;; Ensure theme loads correctly with error handling
+(defun my/load-alabaster-dark-theme ()
+  "Load alabaster-dark theme with error handling."
+  (condition-case err
+      (load-theme 'alabaster-dark t)
+    (error
+     (message "Failed to load alabaster-dark theme: %s" (error-message-string err))
+     (message "Falling back to doom-one theme")
+     (load-theme 'doom-one t))))
+
+;; Override theme loading to use our custom function
+(advice-add 'doom-init-theme-h :override #'my/load-alabaster-dark-theme)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
+
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -458,3 +476,7 @@
 (load! "eca")
 
 (load! "agent-shell")
+
+;; (add-hook 'buffer-list-update-hook (lambda ()
+;;                                      (unless (active-minibuffer-window)
+;;                                        (hide-mode-line-mode))))

@@ -35,6 +35,7 @@
 
   ;; (add-hook 'vue-ts-mode-hook #'lsp-proxy-mode)
 
+  ;; (add-hook 'java-ts-mode-hook #'lsp-proxy-mode)
   )
 
 

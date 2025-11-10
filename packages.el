@@ -271,3 +271,10 @@
 (package! agent-shell :recipe (:host github :repo "xenodium/agent-shell"))
 
 (package! eca :recipe (:host github :repo "editor-code-assistant/eca-emacs" :files ("*.el")))
+
+;; Alabaster themes
+(package! alabaster-theme
+  :recipe (:host github :repo "uzhne/alabaster-emacs" :files ("alabaster-theme.el")))
+
+;; Custom Alabaster Dark theme (local file)
+;; Local file created at: ~/.doom.d/themes/alabaster-dark-theme.el

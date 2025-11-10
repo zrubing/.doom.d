@@ -3,11 +3,28 @@
 
 (require 'json)
 
+
+;;(setq eca-custom-command '("/home/jojo/codeWorkspace/eca/result/bin/eca" "server" "--log-level debug"))
+;;(setq eca-extra-args '("--config" "/home/jojo/.config/eca/config.json"))
+
+;;(setq eca-extra-args '("--log-level" "debug"))
+
+
+
+(let ((path "/home/jojo/.config/eca/config.json"))
+  (with-temp-buffer
+    (insert-file-contents path)
+    (setenv "ECA_CONFIG" (buffer-string))))
+
+
 ;;;### 变量定义
 (defcustom eca-last-model-index 0
   "上次选择的模型配置索引。"
   :type 'integer
   :group 'eca)
+
+
+
 
 (defvar eca-config-dir
   (if (and (fboundp 'doom-project-root) (doom-project-root))
@@ -40,19 +57,26 @@
                        ((string-prefix-p "https://" host) host)
                        (t (concat "https://" host))))
              (path-adjustment (when endpoint
-                               (replace-regexp-in-string "^/v1/chat/completions" "" endpoint))))
+                                (replace-regexp-in-string "^/v1/chat/completions" "" endpoint)))
+             (provider-config (list :api "openai-chat"
+                                    :url api-url
+                                    :keyRc (concat "" key-key)
+                                    :models (mapcar (lambda (model)
+                                                      (cons (symbol-name model)
+                                                            (list :modelName (symbol-name model))))
+                                                    models))))
+
+        ;; 只有当 path-adjustment 存在且不为空时才添加 completionUrlRelativePath
+        (when (and path-adjustment (not (string-empty-p path-adjustment)))
+          (setq provider-config (plist-put provider-config :completionUrlRelativePath path-adjustment)))
+
+        ;; 对 bigmodel 进行特殊处理，添加 thinkTagStart 和 thinkTagEnd
+        (when (string= provider-name "bigmodel")
+          (setq provider-config (plist-put provider-config :thinkTagStart "<think>"))
+          (setq provider-config (plist-put provider-config :thinkTagEnd "</think>")))
 
         ;; 创建 provider 配置
-        (push (cons provider-name
-                    (list :api "openai-chat"
-                          :url api-url
-                          :keyRc (concat "apikey@" key-key)
-                          :completionUrlRelativePath path-adjustment
-                          :models (mapcar (lambda (model)
-                                            (cons (symbol-name model)
-                                                  (list :modelName (symbol-name model))))
-                                          models)))
-              providers)))
+        (push (cons provider-name provider-config) providers)))
     providers))
 
 (defun eca-generate-config (&optional from-gptel)
@@ -97,7 +121,7 @@
                                        (first-models (plist-get (cdar providers) :models))
                                        (first-model (caar first-models)))
                                   (plist-put base-config :defaultModel
-                                            (concat first-provider "/" first-model))
+                                             (concat first-provider "/" first-model))
                                   (plist-put base-config :providers providers)))))
                         ;; 使用默认配置
                         (plist-put base-config :defaultModel "volcengine/kimi-k2-250905")))
@@ -106,7 +130,7 @@
     (when config-data
       (let ((merged-config (eca-merge-configs config-data existing-config)))  ;; 修复变量作用域问题
         (let ((config (let ((json-encoding-pretty-print t))
-                   (json-encode merged-config))))
+                        (json-encode merged-config))))
 
           ;; 写入配置文件，确保正确处理编码
           (condition-case err
@@ -176,7 +200,7 @@ CONFIG-DATA 应该是一个 plist，函数会将其与现有配置合并，保�
     ;; 写入配置文件，确保正确处理编码
     (condition-case err
         (let ((config (let ((json-encoding-pretty-print t))
-                   (json-encode merged-config))))
+                        (json-encode merged-config))))
           (with-temp-buffer
             ;; 设置缓冲区编码为 UTF-8
             (set-buffer-file-coding-system 'utf-8-unix)
@@ -208,8 +232,8 @@ CONFIG-DATA 应该是一个 plist，函数会将其与现有配置合并，保�
                   (let* ((model-key (car model-list))
                          (model-value (cadr model-list)))
                     (push (list (concat (substring (symbol-name provider-key) 1) "/" (substring (symbol-name model-key) 1))
-                               (substring (symbol-name provider-key) 1)
-                               (substring (symbol-name model-key) 1))
+                                (substring (symbol-name provider-key) 1)
+                                (substring (symbol-name model-key) 1))
                           models))
                   (setq model-list (cddr model-list)))))
             (setq provider-list (cddr provider-list))))))
@@ -223,18 +247,18 @@ CONFIG-DATA 应该是一个 plist，函数会将其与现有配置合并，保�
          (current-config (eca-read-current-config))
          (current-model (plist-get current-config :defaultModel))
          (current-index (or (and current-model
-                                (cl-position current-model model-names :test 'equal))
-                           0)))
+                                 (cl-position current-model model-names :test 'equal))
+                            0)))
     (if (null available-models)
         (message "❌ 没有可用的模型配置，请先生成配置")
       (let* ((selected-model-name (completing-read
-                                    (format "选择模型 (当前: %s): " current-model)
-                                    model-names
-                                    nil
-                                    t
-                                    nil
-                                    nil
-                                    current-model))
+                                   (format "选择模型 (当前: %s): " current-model)
+                                   model-names
+                                   nil
+                                   t
+                                   nil
+                                   nil
+                                   current-model))
              (selected-model (cl-find selected-model-name available-models
                                       :key (lambda (model) (car model))
                                       :test 'equal))
@@ -276,7 +300,7 @@ CONFIG-DATA 应该是一个 plist，函数会将其与现有配置合并，保�
                     (run-with-timer 2 nil
                                     (lambda ()
                                       (let ((default-directory (getenv "HOME")))
-                                        (start-process "eca" "*ECA*" "eca" "server")
+                                        (start-process "eca" "*ECA*" "eca" "server" "--log-level debug")
                                         (message "🚀 外部 ECA 服务器已重新启动")))))
                 (message "⚠️  ECA 服务器未运行，尝试启动...")
                 (let ((default-directory (getenv "HOME")))
@@ -306,9 +330,9 @@ CONFIG-DATA 应该是一个 plist，函数会将其与现有配置合并，保�
   (interactive)
   (let* ((existing-config (eca-read-current-config))
          (new-config (list :defaultBehavior "agent"
-                          :welcomeMessage "测试配置"
-                          :defaultModel "test/model"
-                          :providers '()))
+                           :welcomeMessage "测试配置"
+                           :defaultModel "test/model"
+                           :providers '()))
          (merged-config (eca-merge-configs new-config existing-config)))
     (with-output-to-temp-buffer "*ECA Config Merge Test*"
       (princ "🤖 ECA 配置合并测试\n\n")

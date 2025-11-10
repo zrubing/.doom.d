@@ -52,7 +52,15 @@
            :endpoint "/chat/completions"
            :stream t
            :key-key "api.deepseek.com"
-           :models (deepseek-chat deepseek-reasoner))))
+           :models (deepseek-chat deepseek-reasoner))
+          (bigmodel-config
+           :type openai
+           :host "open.bigmodel.cn"
+           :endpoint "/api/coding/paas/v4/chat/completions"
+           :stream t
+           :protocol "https"
+           :key-key "xiaoqiang.open.bigmodel.cn"
+           :models (GLM-4.6 GLM-4.5-Air))))
 
   ;; 根据统一变量动态创建 backend 对象
   (mapc (lambda (cfg)
