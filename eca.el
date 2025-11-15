@@ -27,9 +27,7 @@
 
 
 (defvar eca-config-dir
-  (if (and (fboundp 'doom-project-root) (doom-project-root))
-      (expand-file-name ".eca" (doom-project-root))
-    (expand-file-name ".config/eca" (getenv "HOME")))
+  (expand-file-name ".config/eca" (getenv "HOME"))
   "ECA 配置目录")
 
 (defvar eca-config-path

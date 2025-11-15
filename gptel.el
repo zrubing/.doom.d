@@ -1,20 +1,22 @@
 ;;; -*- lexical-binding: t; -*-
 
-(use-package! gptel
+(use-package gptel
   :defer t
   :config
   ;; OPTIONAL configuration
-  (setq! auth-source-debug t)
-  (setq! gptel-default-mode 'org-mode)
-  (setq! gptel-api-key (lambda()
+  (setq auth-source-debug t)
+  (setq gptel-default-mode 'org-mode)
+  (setq gptel-api-key (lambda()
                          (gptel-api-key-from-auth-source "chatapi.onechats.top") ))
 
-  (setq! gptel-temperature 0)
+  (setq gptel-temperature 0)
   
 
   ;; 模型统一配置表
   (setq +gptel-models
-        '((default-api-master-jsx
+        '(
+
+          (default-api-master-jsx
            :type openai
            :host "api.master-jsx.top"
            :endpoint "/v1/chat/completions"
@@ -40,17 +42,18 @@
            :models (kimi-k2-250905 deepseek-v3-1-terminus))
           (moonshot-config
            :type openai
-           :host "https://api.moonshot.cn/v1"
-           :endpoint "/chat/completions "
+           :host "api.moonshot.cn"
+           :endpoint "/v1/chat/completions"
            :stream t
            :protocol "https"
            :key-key "api.moonshot.cn"
            :models (kimi-k2-0905-preview kimi-k2-turbo-preview))
           (deepseek-config
            :type openai
-           :host "https://api.deepseek.com/v1"
-           :endpoint "/chat/completions"
+           :host "api.deepseek.com"
+           :endpoint "/v1/chat/completions"
            :stream t
+           :protocol "https"
            :key-key "api.deepseek.com"
            :models (deepseek-chat deepseek-reasoner))
           (bigmodel-config
@@ -60,7 +63,15 @@
            :stream t
            :protocol "https"
            :key-key "xiaoqiang.open.bigmodel.cn"
-           :models (GLM-4.6 GLM-4.5-Air))))
+           :models (GLM-4.6 GLM-4.5-Air))
+          (openrouter-config
+           :type openai
+           :host "openrouter.ai"
+           :endpoint "/api/v1/chat/completions"
+           :stream t
+           :protocol "https"
+           :key-key "openrouter.ai"
+           :models (minimax/minimax-m2))))
 
   ;; 根据统一变量动态创建 backend 对象
   (mapc (lambda (cfg)
@@ -82,7 +93,7 @@
         +gptel-models)
 
   ;; 用统一配置初始化后的默认选择
-  (setq! gptel-model 'gpt-5-chat-latest
+  (setq gptel-model 'gpt-5-chat-latest
          gptel-backend microsoft-api-master-jsx)
 
   ;; 定义模型配置列表，每个元素是 (名称 后端 模型)
@@ -147,7 +158,13 @@
                          :backend volcengine-config
                          :model 'kimi-k2-250905
                          :post (lambda () (when (fboundp 'gptel-mcp-connect)
-                                            (gptel-mcp-connect '("mysql-hinihao-ai-prod")))))))
+                                            (gptel-mcp-connect '("mysql-hinihao-ai-prod"))))))
+
+    (when (boundp 'openrouter-minimax-config)
+      (gptel-make-preset 'openrouter-minimax
+                         :description "OpenRouter Minimax Chat"
+                         :backend openrouter-minimax-config
+                         :model 'minimax-text-chat)))
 
 
   (require 'shr)
@@ -218,24 +235,7 @@
 
   )
 
-;;;###autoload
-(defun +gptel-switch-model ()
-  "交互选择模型并设置 `gptel-model' 和 `gptel-backend'."
-  (interactive)
-  (when (boundp '+gptel-model-configs)
-    (let* ((choices (mapcar (lambda (config)
-                              (format "[%s] %s" (nth 0 config) (nth 2 config)))
-                            +gptel-model-configs))
-           (choice (completing-read "选择模型: " choices))
-           (config (seq-find (lambda (c)
-                               (string= choice (format "[%s] %s" (nth 0 c) (nth 2 c))))
-                             +gptel-model-configs))
-           (provider (nth 0 config))
-           (backend  (nth 1 config))
-           (model    (nth 2 config)))
-      (setq gptel-model model
-            gptel-backend backend)
-      (message "已切换到模型: [%s] %s" provider model))))
+
 
 (defun my/gptel-write-buffer ()
   "Save buffer to disk when starting gptel"
