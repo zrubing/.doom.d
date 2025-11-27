@@ -31,7 +31,7 @@
            :stream t
            :protocol "https"
            :key-key "microsoft.me.api.master-jsx.top"
-           :models (gpt-5-chat-latest))
+           :models (gpt-5.1))
           (volcengine-config
            :type openai
            :host "ark.cn-beijing.volces.com"
