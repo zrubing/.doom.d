@@ -83,3 +83,5 @@
 (load! "vterm")
 (load! "rime")
 (load! "org")
+
+(load! "dape")

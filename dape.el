@@ -5,7 +5,7 @@
 
 ;;; Code:
 
-(use-package dape
+(use-package! dape
   :config
   (add-to-list 'dape-configs
                '(java
