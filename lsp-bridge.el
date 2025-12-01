@@ -23,6 +23,7 @@
 
 (after! lsp-bridge
 
+  (setq lsp-bridge-enable-inlay-hint t)
 
   (setq acm-enable-copilot t)
 

@@ -242,6 +242,7 @@
                    (:exclude ".dir-locals.el" "*-tests.el"))))
 ; (package! direnv)
 (package! envrc)
+(package! diff-hl)
 
 (package! claude-code-ide
   :recipe (:host github :repo "manzaltu/claude-code-ide.el"

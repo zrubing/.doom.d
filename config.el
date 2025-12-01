@@ -85,3 +85,4 @@
 (load! "org")
 
 (load! "dape")
+(load! "aider")

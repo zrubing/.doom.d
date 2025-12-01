@@ -63,3 +63,11 @@
 (after! envrc
   (envrc-global-mode)
   )
+
+
+(after! diff-hl
+  (global-diff-hl-mode)
+  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+
+
+  )
