@@ -85,4 +85,7 @@
 (load! "org")
 
 (load! "dape")
-(load! "aider")
+;;(load! "aider")
+(load! "aidermacs")
+
+(load! "eca")

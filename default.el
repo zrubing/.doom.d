@@ -22,6 +22,7 @@
 
 
 (add-to-list 'auto-mode-alist '("\\.php\\'" . php-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-ts-mode))
 (setq major-mode-remap-alist
       '((yaml-mode . yaml-ts-mode)
         (bash-mode . bash-ts-mode)
@@ -63,6 +64,67 @@
 (after! envrc
   (envrc-global-mode)
   )
+
+
+;; AI模型统一配置表 - 供gptel、aidermacs等模块共享使用
+(setq +gptel-models
+      '(
+        (default-api-master-jsx
+         :type openai
+         :host "api.master-jsx.top"
+         :endpoint "/v1/chat/completions"
+         :stream t
+         :protocol "https"
+         :key-key "default.me.api.master-jsx.top"
+         :models (grok-4-fast-non-reasoning grok-4-fast-reasoning gpt-5-codex))
+        (microsoft-api-master-jsx
+         :type openai
+         :host "api.master-jsx.top"
+         :endpoint "/v1/chat/completions"
+         :stream t
+         :protocol "https"
+         :key-key "microsoft.me.api.master-jsx.top"
+         :models (gpt-5.1))
+        (volcengine-config
+         :type openai
+         :host "ark.cn-beijing.volces.com"
+         :endpoint "/api/v3/chat/completions"
+         :stream t
+         :protocol "https"
+         :key-key "work.console.volcengine.com"
+         :models (kimi-k2-thinking-251104 deepseek-v3-2-251201))
+        (moonshot-config
+         :type openai
+         :host "api.moonshot.cn"
+         :endpoint "/v1/chat/completions"
+         :stream t
+         :protocol "https"
+         :key-key "api.moonshot.cn"
+         :models (kimi-k2-0905-preview kimi-k2-turbo-preview))
+        (deepseek-config
+         :type openai
+         :host "api.deepseek.com"
+         :endpoint "/v1/chat/completions"
+         :stream t
+         :protocol "https"
+         :key-key "api.deepseek.com"
+         :models (deepseek-chat deepseek-reasoner))
+        (bigmodel-config
+         :type openai
+         :host "open.bigmodel.cn"
+         :endpoint "/api/coding/paas/v4/chat/completions"
+         :stream t
+         :protocol "https"
+         :key-key "xiaoqiang.open.bigmodel.cn"
+         :models (GLM-4.6 GLM-4.5-Air))
+        (openrouter-config
+         :type openai
+         :host "openrouter.ai"
+         :endpoint "/api/v1/chat/completions"
+         :stream t
+         :protocol "https"
+         :key-key "openrouter.ai"
+         :models (minimax/minimax-m2))))
 
 
 (after! diff-hl
