@@ -282,3 +282,6 @@
 
 ;; Custom Alabaster Dark theme (local file)
 ;; Local file created at: ~/.doom.d/themes/alabaster-dark-theme.el
+
+
+(package! nov)

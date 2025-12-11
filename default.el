@@ -23,6 +23,22 @@
 
 (add-to-list 'auto-mode-alist '("\\.php\\'" . php-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-ts-mode))
+
+(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+
+
+(use-package! nov)
+
+(after! nov
+  (defun my-nov-font-setup ()
+    (face-remap-add-relative 'variable-pitch :family "Liberation Serif"
+                             :height 2.0))
+  (add-hook 'nov-mode-hook 'my-nov-font-setup)
+
+
+  )
+
+
 (setq major-mode-remap-alist
       '((yaml-mode . yaml-ts-mode)
         (bash-mode . bash-ts-mode)
