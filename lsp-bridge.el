@@ -8,7 +8,7 @@
                                          (when (file-directory-p local-conf) local-conf))
                                        "~/.doom.d/lsp-bridge-config"))
                      ;; check if a directory named ".lsp" exists in the projects root
-                     (when-let (proot (projectile-project-root))
+                     (when-let* ((proot (projectile-project-root)))
                        (let ((d (concat proot ".lsp/")))
                          (when (file-directory-p d) (setq confdir d))))
                      (when (file-directory-p confdir)
@@ -22,6 +22,10 @@
 
 
 (after! lsp-bridge
+
+  ;; Fix for coding-system--for-buffer-diff error in newer Emacs versions
+  (unless (boundp 'coding-system--for-buffer-diff)
+    (defvar coding-system--for-buffer-diff nil))
 
   (setq lsp-bridge-enable-inlay-hint t)
 
