@@ -65,7 +65,8 @@
 ;;(package! dired+)
 ;;(package! dired-recent)
 ;; (package! dired-sidebar)
-(package! telega)
+(package! telega
+  :recipe (:host github :repo "zevlg/telega.el") )
 (package! org-modern
   :recipe (:host github :repo "minad/org-modern"
            :files ("org-modern.el")
@@ -240,7 +241,7 @@
                    ("terminfo/65" "terminfo/65/*")
                    ("integration" "integration/*")
                    (:exclude ".dir-locals.el" "*-tests.el"))))
-; (package! direnv)
+                                        ; (package! direnv)
 (package! envrc)
 (package! diff-hl)
 

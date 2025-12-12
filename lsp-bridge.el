@@ -18,7 +18,11 @@
 
 (use-package! lsp-bridge
   :config
-  (global-lsp-bridge-mode))
+  ;;(global-lsp-bridge-mode)
+
+
+  (my/enable-global-lsp-bridge-mode)
+  )
 
 
 (after! lsp-bridge
@@ -42,9 +46,13 @@
   (define-key lsp-bridge-mode-map (kbd "M-k") 'lsp-bridge-popup-documentation-scroll-down)
   (define-key lsp-bridge-mode-map (kbd "M-j") 'lsp-bridge-popup-documentation-scroll-up)
 
+  (setq lsp-bridge-python-multi-lsp-server "ty_ruff")
 
   ;;
   ;; (define-key evil-normal-state-map "ga" #'lsp-bridge-code-action)
+
+
+
 
   )
 
@@ -127,7 +135,6 @@
 ;;   ;;   (when server
 ;;   ;;     (plist-get (lsp-bridge-get-server-capabilities server) :executeCommandProvider)))
 
-;;   ;; (setq lsp-bridge-python-multi-lsp-server "ty_ruff")
 
 ;;   (my/enable-global-lsp-bridge-mode)
 

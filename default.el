@@ -85,6 +85,15 @@
 ;; AI模型统一配置表 - 供gptel、aidermacs等模块共享使用
 (setq +gptel-models
       '(
+        (openrouter-api-master-jsx
+         :type openai
+         :host "api.master-jsx.top"
+         :endpoint "/v1/chat/completions"
+         :stream t
+         :protocol "https"
+         :key-key "openrouter.api.master-jsx.top"
+         :models (openai/gpt-5.2 google/gemini-3-pro-preview))
+
         (default-api-master-jsx
          :type openai
          :host "api.master-jsx.top"
