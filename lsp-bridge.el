@@ -49,7 +49,7 @@
   (setq lsp-bridge-python-multi-lsp-server "ty_ruff")
 
   ;;
-  ;; (define-key evil-normal-state-map "ga" #'lsp-bridge-code-action)
+  (define-key evil-normal-state-map "ga" #'lsp-bridge-code-action)
 
 
 

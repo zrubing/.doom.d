@@ -89,3 +89,5 @@
 (load! "aidermacs")
 
 (load! "eca")
+
+(load! "citre")

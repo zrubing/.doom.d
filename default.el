@@ -47,7 +47,7 @@
         (typescript-mode . typescript-ts-mode)
         (css-mode . css-ts-mode)
         (java-mode . java-ts-mode)
-        (vue-mode . vue-ts-mode)
+        ;;(vue-mode . vue-ts-mode)
         (markdown-mode . markdown-ts-mode)
         (python-mode . python-ts-mode)))
 
@@ -151,10 +151,7 @@
          :key-key "openrouter.ai"
          :models (minimax/minimax-m2))))
 
-
-(after! diff-hl
+(use-package! diff-hl
+  :config
   (global-diff-hl-mode)
-  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
-
-
-  )
+  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))

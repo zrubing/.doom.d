@@ -286,3 +286,5 @@
 
 
 (package! nov)
+
+(package! citre)
