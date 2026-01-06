@@ -164,8 +164,9 @@
 (package! rest-client
   :recipe (:host github :repo "pashky/restclient.el" :build nil))
 
-(package! vue-ts-mode
-  :recipe (:host github :repo "8uff3r/vue-ts-mode" :files ("*.el")))
+;; 使用本地修复版本的 vue-ts-mode
+;; (package! vue-ts-mode
+;;   :recipe (:host github :repo "8uff3r/vue-ts-mode" :files ("*.el")))
 
 ;; (package! dape
 ;;   :recipe (:host github :repo "svaante/dape" :build nil))

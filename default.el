@@ -1,5 +1,22 @@
 ;; lexical-binding: t; -*-
 
+;; 修复 Emacs 31 中 doom-theme 的 gnus 面部继承循环问题
+(defun my-ignore-face-inheritance-cycle (old-fun face &rest args)
+  "忽略面部继承循环错误。"
+  (condition-case err
+      (apply old-fun face args)
+    ((error)
+     (if (string-match-p "Face inheritance results in inheritance cycle"
+                         (error-message-string err))
+         (progn
+           ;; 忽略这个错误，避免 Emacs 崩溃
+           nil)
+       ;; 其他错误正常抛出
+       (signal (car err) (cdr err))))))
+
+;; 在主题加载前设置 advice
+(advice-add 'set-face-attribute :around #'my-ignore-face-inheritance-cycle)
+
 (setq shell-file-name "zsh")
 
 (use-package! exec-path-from-shell
@@ -18,11 +35,22 @@
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 (add-to-list 'treesit-extra-load-path "~/.config/tree-sitter-libs")
 
+(setq treesit-language-source-alist
+      '((vue "https://github.com/ikatyang/tree-sitter-vue")
+        (css "https://github.com/tree-sitter/tree-sitter-css")
+        (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")))
+
+;; 使用修复版的 vue-ts-mode
+(use-package! vue-ts-mode
+  :load-path "~/codeWorkspace/vue-ts-mode")
+
+
 (setq split-width-threshold 50)
 
 
 (add-to-list 'auto-mode-alist '("\\.php\\'" . php-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-ts-mode))
+;; (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-ts-mode))  ;; 由 use-package! 管理
+;; (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-ts-mode))  ;; 暂时禁用，vue-ts-mode 有 bug
 
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 

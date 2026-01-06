@@ -91,3 +91,5 @@
 (load! "eca")
 
 (load! "citre")
+
+(load! "tramp")
