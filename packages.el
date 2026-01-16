@@ -258,6 +258,10 @@
 (package! grid-table
   :recipe (:host github :repo "yibie/grid-table" :files ("*.el" "plugins")))
 
+(package! beads
+  :recipe (:host github :repo "ChristianTietze/beads.el" :files ("lisp/*.el"))
+  )
+
 ;; (package! copilot
 ;;   :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
 

@@ -183,3 +183,7 @@
   :config
   (global-diff-hl-mode)
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
+
+(setq apheleia-remote-algorithm 'local)
+
+(use-package! beads)
