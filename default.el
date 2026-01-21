@@ -187,3 +187,10 @@
 (setq apheleia-remote-algorithm 'local)
 
 (use-package! beads)
+
+;; nginx 格式化配置
+(after! apheleia
+  (add-to-list 'apheleia-formatters
+               '(prettier-nginx . ("prettier" "--write" "--parser" "nginx")))
+  (add-to-list 'apheleia-mode-alist
+               '(nginx-mode . prettier-nginx)))
