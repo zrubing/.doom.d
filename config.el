@@ -93,3 +93,5 @@
 (load! "citre")
 
 (load! "tramp")
+
+(load! "tramp-rpc")

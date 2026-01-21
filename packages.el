@@ -262,6 +262,12 @@
   :recipe (:host github :repo "ChristianTietze/beads.el" :files ("lisp/*.el"))
   )
 
+
+(package! tramp-rpc
+  :recipe (:host github
+           :repo "ArthurHeymans/emacs-tramp-rpc"
+           :files ("lisp/*.el")
+           :build (:not autoloads)))
 ;; (package! copilot
 ;;   :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
 
