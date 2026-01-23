@@ -96,3 +96,4 @@
 
 (load! "tramp-rpc")
 
+(load! "claude-code-ide")
