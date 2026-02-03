@@ -8,6 +8,7 @@
     (claude-code-ide-emacs-tools-setup)
     (setq claude-code-ide-terminal-backend 'vterm)
     (setq claude-code-ide-cli-extra-flags "--dangerously-skip-permissions")
+    (setq claude-code-ide-prevent-reflow-glitch nil)
     )
   )
 

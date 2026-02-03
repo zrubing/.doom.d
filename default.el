@@ -17,19 +17,19 @@
 ;; 在主题加载前设置 advice
 (advice-add 'set-face-attribute :around #'my-ignore-face-inheritance-cycle)
 
-(setq shell-file-name "zsh")
+(setq shell-file-name "bash")
 
-(use-package! exec-path-from-shell
-  :config
+;; (use-package! exec-path-from-shell
+;;   :config
 
-  (when (daemonp)
-    (exec-path-from-shell-initialize))
+;;   (when (daemonp)
+;;     (exec-path-from-shell-initialize))
 
 
-  ;; 设置为fish，nix-config中在fish中设置了环境变量
-  (setq exec-path-from-shell-shell-name "fish")
-  (setq exec-path-from-shell-variables '("ANTHROPIC_API_KEY" "ANTHROPIC_BASE_URL") )
-  (exec-path-from-shell-initialize))
+;;   ;; 设置为fish，nix-config中在fish中设置了环境变量
+;;   (setq exec-path-from-shell-shell-name "fish")
+;;   (setq exec-path-from-shell-variables '("ANTHROPIC_API_KEY" "ANTHROPIC_BASE_URL") )
+;;   (exec-path-from-shell-initialize))
 
 
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))

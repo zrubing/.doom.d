@@ -299,3 +299,6 @@
 (package! nov)
 
 (package! citre)
+
+(package! koishi-theme
+  :recipe (:host github :repo "gynamics/koishi-theme.el" :files ("*.el")))
