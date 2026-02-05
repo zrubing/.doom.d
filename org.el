@@ -28,7 +28,7 @@
 
 ;; (setq org-agenda-include-diary t)
 (setq org-time-stamp-custom-formats '("<%Y-%m-%d %a %H:%M>"))
-(setq org-agenda-files (directory-files-recursively "~/org-roam-dir/" "^2026.*\\.org$"))
+(setq org-agenda-files (directory-files-recursively (expand-file-name "~/org-roam-dir/") "^2026.*\\.org$"))
 
 
 (after! (:and org verb)
