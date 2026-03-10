@@ -24,6 +24,11 @@
 (setq doom-font (font-spec :family "DejaVu Sans Mono" :size 11.0 :weight 'semi-light)
       doom-variable-pitch-font (font-spec :family "DejaVu Sans Mono" :size 13))
 
+;; https://old.reddit.com/r/emacs/comments/1rowm5i/first_hacked_emacs_package/o9hzo8w/
+(setq package-review-policy t
+      package-review-diff-command '("git" "diff" "--no-index" "--color=never" "--diff-filter=d"))
+
+
 
 ;;
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them

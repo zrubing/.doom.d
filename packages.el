@@ -152,11 +152,11 @@
 
 (package! websocket)
 
-(package! kubernetes
-  :recipe (:host github :repo "kubernetes-el/kubernetes-el" :files ("*.el")))
+;; (package! kubernetes
+;;   :recipe (:host github :repo "kubernetes-el/kubernetes-el" :files ("*.el")))
 
-(package! kubernetes-evil
-  :recipe (:host github :repo "kubernetes-el/kubernetes-el" :files ("*.el")))
+;; (package! kubernetes-evil
+;;   :recipe (:host github :repo "kubernetes-el/kubernetes-el" :files ("*.el")))
 
 ;; (package! ejc-sql
 ;;   :recipe (:host github :repo "kostafey/ejc-sql" :build nil))

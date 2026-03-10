@@ -30,6 +30,18 @@
 (setq org-time-stamp-custom-formats '("<%Y-%m-%d %a %H:%M>"))
 (setq org-agenda-files (directory-files-recursively (expand-file-name "~/org-roam-dir/") "^2026.*\\.org$"))
 
+(defvar jojo/code-workspace-root
+  (expand-file-name "~/codeWorkspace/")
+  "Base path for my code workspace.")
+
+(with-eval-after-load 'ol
+  (org-link-set-parameters
+   "cw"
+   :follow (lambda (path in-emacs)
+             (org-link-open-as-file
+              (expand-file-name path jojo/code-workspace-root)
+              in-emacs))
+   :face '(:foreground "orange" :underline t)))
 
 (after! (:and org verb)
   (define-key org-mode-map (kbd "C-c C-r") verb-command-map)
