@@ -152,8 +152,9 @@
 
 (package! websocket)
 
-;; (package! kubernetes
-;;   :recipe (:host github :repo "kubernetes-el/kubernetes-el" :files ("*.el")))
+(package! kubernetes
+  :recipe (:host github :repo "kubernetes-el/kubernetes-el" :files ("*.el"))
+  :pin "036583995bfceb0231738f65dd09c029ad812b02")
 
 ;; (package! kubernetes-evil
 ;;   :recipe (:host github :repo "kubernetes-el/kubernetes-el" :files ("*.el")))
@@ -214,6 +215,8 @@
 ;;(package! persp-mode :pin "f146ddccaf598feb402664bc6848b60321b2dc78")
 ;; (package! persp-mode :pin "40e9993a9711cba5fb56dfec81a507fabeba9668")
 ;; (package! diff-hl :pin "39f076efa85110c4bcc9b73994f30a7d52312c98")
+
+(package! consult :pin "f8c2ef57e83af3d45e345e5c14089f2f9973682b")
 
 
 (package! minuet
