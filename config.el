@@ -102,3 +102,5 @@
 ;; (load! "tramp-rpc")
 
 (load! "claude-code-ide")
+
+(load! "ghostel")

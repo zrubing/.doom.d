@@ -17,9 +17,12 @@
                      (lsp-bridge-mode 1)))))
 
 (use-package! lsp-bridge
+  :init
+  (require 'lsp-bridge-jdtls)
+
   :config
   ;;(global-lsp-bridge-mode)
-  (require 'lsp-bridge-jdtls)
+  (setq lsp-bridge-enable-auto-import t) ;; 开启自动导入依赖，目前没有code action。补全时可以通过这个导入相应的依赖，建议开启。
   (setq lombok-path (substitute-in-file-name "$HOME/.local/share/javalib/lombok.jar"))
   (setq tsdk-path (substitute-in-file-name "$HOME/.config/lsp-bridge-lib/typescript-lib"))
   (setq lsp-bridge-jdtls-jvm-args (list (format "%s%s" "-javaagent:" lombok-path)))
@@ -32,6 +35,7 @@
 
 
 (after! lsp-bridge
+
 
   ;; Fix for coding-system--for-buffer-diff error in newer Emacs versions
   (unless (boundp 'coding-system--for-buffer-diff)
