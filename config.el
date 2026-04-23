@@ -104,3 +104,4 @@
 (load! "claude-code-ide")
 
 (load! "ghostel")
+(load! "kele")

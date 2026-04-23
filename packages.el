@@ -152,9 +152,13 @@
 
 (package! websocket)
 
-(package! kubernetes
-  :recipe (:host github :repo "kubernetes-el/kubernetes-el" :files ("*.el"))
-  :pin "036583995bfceb0231738f65dd09c029ad812b02")
+(package! kele
+  :recipe (:host github :repo "jinnovation/kele.el" :files ("*.el"))
+  :pin "d67d02806f9639ec928f6dbc87cd7b25bfcbfa54")
+
+;; (package! kubernetes
+;;   :recipe (:host github :repo "kubernetes-el/kubernetes-el" :files ("*.el"))
+;;   :pin "036583995bfceb0231738f65dd09c029ad812b02")
 
 ;; (package! kubernetes-evil
 ;;   :recipe (:host github :repo "kubernetes-el/kubernetes-el" :files ("*.el")))
@@ -277,7 +281,7 @@
 (unpin! org-roam)
 (package! org-roam-ui)
 
-(package! eglot)
+;;(package! eglot)
 (package! lsp-proxy :recipe (:host github :repo "jadestrong/lsp-proxy"
                              :files ("*.el")
                              :build (:not compile)
