@@ -270,11 +270,10 @@
   )
 
 
-(package! tramp-rpc
-  :recipe (:host github
-           :repo "ArthurHeymans/emacs-tramp-rpc"
-           :files ("lisp/*.el")
-           :build (:not autoloads)))
+(package! msgpack)
+(package! tramp-rpc :recipe (:host github :repo "ArthurHeymans/emacs-tramp-rpc" :files ("lisp/*.el")))
+
+
 ;; (package! copilot
 ;;   :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
 
