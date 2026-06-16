@@ -32,6 +32,9 @@
                                         ;(package! builtin-package :recipe (:nonrecursive t))
                                         ;(package! builtin-package-2 :recipe (:repo "myfork/package"))
 
+;; Disable Doom's bundled evil-numbers package to avoid fetching its Codeberg dependency.
+(package! evil-numbers :disable t)
+
 ;; Specify a `:branch' to install a package from a particular branch or tag.
 ;; This is required for some packages whose default branch isn't 'master' (which
 ;; our package manager can't deal with; see radian-software/straight.el#279)
@@ -242,14 +245,14 @@
 
 (package! csv-mode)
 
-(package! eat
-  :recipe (:host codeberg :repo "akib/emacs-eat"
-           :files ("*.el" ("term" "term/*.el") "*.texi"
-                   "*.ti" ("terminfo/e" "terminfo/e/*")
-                   ("terminfo/65" "terminfo/65/*")
-                   ("integration" "integration/*")
-                   (:exclude ".dir-locals.el" "*-tests.el"))))
-                                        ; (package! direnv)
+;; (package! eat
+;;   :recipe (:host codeberg :repo "akib/emacs-eat"
+;;            :files ("*.el" ("term" "term/*.el") "*.texi"
+;;                    "*.ti" ("terminfo/e" "terminfo/e/*")
+;;                    ("terminfo/65" "terminfo/65/*")
+;;                    ("integration" "integration/*")
+;;                    (:exclude ".dir-locals.el" "*-tests.el"))))
+;;                                         ; (package! direnv)
 (package! envrc)
 (package! diff-hl)
 

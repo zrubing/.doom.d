@@ -43,7 +43,7 @@
 
   (setq lsp-bridge-enable-inlay-hint t)
 
-  (setq acm-enable-copilot t)
+  ;; (setq acm-enable-copilot t)
 
   (add-to-list '+lookup-definition-functions #'lsp-bridge-find-def)
   (add-to-list '+lookup-implementations-functions #'lsp-bridge-find-impl)

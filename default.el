@@ -161,7 +161,7 @@
          :stream t
          :protocol "https"
          :key-key "api.deepseek.com"
-         :models (deepseek-chat deepseek-reasoner))
+         :models (deepseek-v4-flash deepseek-v4-pro))
         (bigmodel-config
          :type openai
          :host "open.bigmodel.cn"
